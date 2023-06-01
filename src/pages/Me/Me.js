@@ -3,6 +3,7 @@ import { PlusIcon, ChevronDownIcon } from "@heroicons/react/outline";
 import Channel from "./Channel";
 import client from "../../api/client";
 import ChannelModal from "../Modal/ChannelModal";
+import ServerModal from "../Modal/ServerModal";
 
 const Me = () => {
   const [data, setData] = useState([]);
@@ -17,11 +18,10 @@ const Me = () => {
     showModal: false,
     channel: null,
   });
-  // const [serverModal, setServerModal] = useState({
-  //   render: true,
-  //   showModal: false,
-  //   channel: null,
-  // });
+  const [serverModal, setServerModal] = useState({
+    render: true,
+    showModal: false,
+  });
 
   useEffect(() => {
     const fetchServer = async () => {
@@ -29,13 +29,18 @@ const Me = () => {
       setData(res.data.responseWithChannels.allServers);
     };
     fetchServer();
-  }, [channelModal.render]);
+  }, [channelModal.render, serverModal.render]);
 
-  const handleOnClose = () =>
+  const handleOnClose = () => {
     setChannelModal((prevState) => ({
       ...prevState,
       showModal: false,
     }));
+    setServerModal((prevState) => ({
+      ...prevState,
+      showModal: false,
+    }));
+  };
 
   const handleAddTextChannel = async () => {
     setChannelModal((prevState) => ({
@@ -53,7 +58,7 @@ const Me = () => {
     }));
   };
 
-  const handleFormSubmit = async (values) => {
+  const handleChannelSubmit = async (values) => {
     if (!values.channelName) {
       console.error("Enter a channel name");
       return;
@@ -72,10 +77,20 @@ const Me = () => {
     setChannelModal((prevState) => ({
       ...prevState,
       showModal: false,
-    }));
-    setChannelModal((prevState) => ({
-      ...prevState,
       render: !channelModal.render,
+    }));
+  };
+
+  const handleServerSubmit = async (values) => {
+    console.log(values);
+    await client.post("server/createServer", {
+      name: values.serverName,
+      avatar: values.avatarFile,
+    });
+    setServerModal((prevState) => ({
+      ...prevState,
+      showModal: false,
+      render: !serverModal.render,
     }));
   };
 
@@ -84,7 +99,10 @@ const Me = () => {
   };
 
   const addServerHandler = () => {
-    // setShowModal(true);
+    setServerModal((prevState) => ({
+      ...prevState,
+      showModal: true,
+    }));
   };
 
   return (
@@ -199,11 +217,17 @@ const Me = () => {
           </div>
         )}
       </div>
+
       <ChannelModal
         onClose={handleOnClose}
         visible={channelModal.showModal}
         channelName={channelModal.channel}
-        submitHandler={handleFormSubmit}
+        submitHandler={handleChannelSubmit}
+      />
+      <ServerModal
+        onClose={handleOnClose}
+        visible={serverModal.showModal}
+        submitHandler={handleServerSubmit}
       />
     </div>
   );
