@@ -100,7 +100,7 @@ export default function Footer() {
                 </g>
               </svg>
             </span>
-            <span>Download for Mac</span>
+            <span>Download for Windows</span>
           </a>
         </div>
       </div>

@@ -13,7 +13,7 @@ const CustomFileInput = ({ field, form }) => {
   };
 
   return (
-    <div className="relative">
+    <div className="relative ml-18">
       <input
         type="file"
         id={field.name}
@@ -22,25 +22,27 @@ const CustomFileInput = ({ field, form }) => {
         accept="image/*"
         onChange={handleFileChange}
       />
-      <label
-        htmlFor={field.name}
-        className="w-16 h-16 rounded-full overflow-hidden border-2 border-dashed border-blue-400 cursor-pointer flex justify-center items-center"
-      >
-        {field.value ? (
-          <img
-            src={URL.createObjectURL(field.value)}
-            alt="Avatar Preview"
-            className="w-full h-full object-cover"
-          />
-        ) : (
-          <span
-            className="text-blue-400 text-4xl absolute rounded-full -top--1 -right--4 transform translate-x-1/2 -translate-y-1/2 translate-y-0.5 flex justify-center items-center w-8 h-8"
-            style={{ zIndex: 10 }}
-          >
-            +
-          </span>
-        )}
-      </label>
+      <div className="ml-18">
+        <label
+          htmlFor={field.name}
+          className="w-16 h-16 rounded-full overflow-hidden border-2 border-dashed border-blue-400 cursor-pointer "
+        >
+          {field.value ? (
+            <img
+              src={URL.createObjectURL(field.value)}
+              alt="Avatar Preview"
+              className="w-full h-full object-cover"
+            />
+          ) : (
+            <span
+              className="text-blue-400 text-4xl absolute rounded-full -top--1 -right--4 transform translate-x-1/2 -translate-y-1/2 translate-y-0.5 flex justify-center items-center w-8 h-8"
+              style={{ zIndex: 10 }}
+            >
+              +
+            </span>
+          )}
+        </label>
+      </div>
     </div>
   );
 };

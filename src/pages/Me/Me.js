@@ -83,10 +83,19 @@ const Me = () => {
 
   const handleServerSubmit = async (values) => {
     console.log(values);
-    await client.post("server/createServer", {
-      name: values.serverName,
-      avatar: values.avatarFile,
-    });
+    await client.post(
+      "server/createServer",
+      {
+        name: values.serverName,
+        avatar: values.avatarFile,
+      },
+      {
+        headers: {
+          "Content-type": "multipart/form-data",
+        },
+      }
+    );
+
     setServerModal((prevState) => ({
       ...prevState,
       showModal: false,
@@ -109,7 +118,7 @@ const Me = () => {
     <div className="flex h-screen">
       <div
         className="flex flex-col space-y-3 bg-discord-900 p-3"
-        style={{ width: "75px" }}
+        style={{ width: "70px" }}
       >
         {/* TODO discord icon hover:rounded-2xl */}
         <div className="h-12 bg-discord-600 rounded-full flex justify-center items-center cursor-pointer transition-none duration-100 ease-out hover:bg-discord-indigo ">
@@ -143,11 +152,12 @@ const Me = () => {
               channelToggle: !prevState.channelToggle,
             }));
           }}
-          className="flex text-white cursor-pointer font-bold text-sm items-center justify-between border-b border-gray-800 p-4 hover:bg-gray-600"
+          className="flex text-white cursor-pointer font-bold text-sl items-center justify-between border-b border-gray-800 p-3 pt-4 pl-5 hover:bg-gray-600"
         >
           {data[index]?.name}
           <ChevronDownIcon className="h-5 ml-2 " />
         </h2>
+        <hr className=" border-y-discord-transparentBlack1 border w-full mx-auto" />
         {toggle.channelToggle && (
           <div className="text-discord-200 flex-grow overflow-y-scroll scrollbar-hide">
             <div className="flex items-center p-2 pb-0 mb-0">

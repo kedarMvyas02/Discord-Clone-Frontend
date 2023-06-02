@@ -1,7 +1,6 @@
 import React from "react";
 import TextField from "../../components/shared/Inputs/TextField";
-import { ErrorMessage, Field, Form, Formik, validateYupSchema } from "formik";
-import { Link } from "react-router-dom";
+import { ErrorMessage, Field, Form, Formik } from "formik";
 import * as Yup from "yup";
 
 const ServerModal = ({ visible, onClose, submitHandler }) => {
@@ -25,9 +24,8 @@ const ServerModal = ({ visible, onClose, submitHandler }) => {
       const file = event.currentTarget.files[0];
       form.setFieldValue(field.name, file);
     };
-
     return (
-      <div className="relative  place-items-center ">
+      <div className="relative m-auto mt-6 ">
         <input
           type="file"
           id={field.name}
@@ -36,10 +34,10 @@ const ServerModal = ({ visible, onClose, submitHandler }) => {
           accept="image/*"
           onChange={handleFileChange}
         />
-        <div className="">
+        <div className="relative">
           <label
             htmlFor={field.name}
-            className="w-16  h-16 rounded-full overflow-hidden border-2 border-dashed border-blue-400 cursor-pointer flex justify-center items-center"
+            className="w-20 h-20 rounded-full overflow-hidden border-2 border-dashed border-blue-400 cursor-pointer flex justify-center items-center"
           >
             {field.value ? (
               <img
@@ -49,13 +47,13 @@ const ServerModal = ({ visible, onClose, submitHandler }) => {
               />
             ) : (
               <>
-                <span
-                  className="text-blue-400 text-4xl absolute rounded-full -top-1 -right-1 transform translate-x-1/2 -translate-y-1/2 flex justify-center items-center w-8 h-8"
-                  style={{ zIndex: 10 }}
-                >
-                  +
-                </span>
-                <span className="absolute w-6 h-6 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+                <div className="  ml-12 mb-16 w-6 absolute">
+                  <img
+                    src="https://freeiconshop.com/wp-content/uploads/edd/plus-flat.png"
+                    alt=""
+                  />
+                </div>
+                <div className="absolute w-6 mb-4">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     fill="#000000"
@@ -75,8 +73,8 @@ const ServerModal = ({ visible, onClose, submitHandler }) => {
                       </g>
                     </g>
                   </svg>
-                </span>
-                <span className="font-hairline text-xs pt-5 text-discord-100">
+                </div>
+                <span className="font-semibold text-xs  absolute mt-6 text-discord-100">
                   UPLOAD
                 </span>
               </>

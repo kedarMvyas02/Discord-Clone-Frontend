@@ -146,7 +146,7 @@ export default function Index() {
             Log in with QR Code
           </h3>
           <p className="text-discord-mainText mt-4 w-64 text-center mt-">
-            Scan this with the <strong>Discord mobile app</strong>
+            Scan this with the <strong>Discord mobile app </strong>
             to log in instantly.
           </p>
         </div>

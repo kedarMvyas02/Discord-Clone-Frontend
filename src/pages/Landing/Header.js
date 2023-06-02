@@ -137,7 +137,9 @@ export default function Header() {
             </a>
           </li>
           <li className="p-2 rounded-lg">
-            <a href="#">Download</a>
+            <a href="discord.com/api/downloads/distributions/app/installers/latest?channel=stable&platform=win&arch=x86">
+              Download
+            </a>
           </li>
           <li className="p-2 rounded-lg">
             <a href="#">Nitro</a>
@@ -165,7 +167,7 @@ export default function Header() {
               </g>
             </svg>
           </span>
-          Download for Mac
+          Download for Windows
         </a>
       </nav>
 
@@ -209,14 +211,16 @@ export default function Header() {
                   </g>
                 </svg>
               </span>
-              <span>Download for Mac</span>
+              <a href="discord.com/api/downloads/distributions/app/installers/latest?channel=stable&platform=win&arch=x86">
+                Download for Windows
+              </a>
             </a>
-            <a
-              href="#"
-              className="bg-black w-36 sm:w-6/12 md:w-5/12 lg:w-4/12 lx:w-2/12 2xl:w-72  bg-discord-notQuiteDark text-white py-3 px-6 rounded-full text-base mt-4 md:mt-0 text-center"
+            <Link
+              to="/login"
+              className=" w-36 sm:w-6/12 md:w-5/12 lg:w-4/12 lx:w-2/12 2xl:w-72  bg-discord-notQuiteDark text-white py-3 px-6 rounded-full text-base mt-4 md:mt-0 text-center"
             >
               Open Discord in your browser
-            </a>
+            </Link>
           </div>
         </div>
       </section>
