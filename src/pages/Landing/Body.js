@@ -89,7 +89,9 @@ export default function Footer() {
             Ready to start your journey?
           </h2>
           <a
-            href="#"
+            href="https://discord.com/api/downloads/distributions/app/installers/latest?channel=stable&platform=win&arch=x86"
+            target="_blank"
+            rel="noopener noreferrer"
             className="w-full sm:w-85 md:w-72 flex justify-center items-center bg-discord-indigo hover:bg-discord-experiment500Hover hover:shadow-md  text-white py-4 px-6 mt-10 rounded-full text-lg"
           >
             <span className="inline-block mx-2">

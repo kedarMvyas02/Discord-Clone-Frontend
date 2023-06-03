@@ -1,5 +1,5 @@
 import React from "react";
-import USAFlag from "../../assets/usa_flag.png";
+import IndiaFlag from "../../assets/indian_flag.svg";
 import TwitterIcon from "../../assets/twitter_icon.svg";
 import InstagramIcon from "../../assets/instagram_icon.svg";
 import FacebookIcon from "../../assets/facebook_icon.svg";
@@ -9,7 +9,7 @@ import { Link } from "react-router-dom";
 export default function Footer() {
   return (
     <div
-      className="bg-discord-notQuiteDark flex flex-col py-16 sm:px-20 px-6 bg-gray-700"
+      className="bg-discord-notQuiteDark flex flex-col py-16 pb-4 sm:px-20 px-6"
       style={{ backgroundColor: "#232728" }}
     >
       <div className="flex flex-col md:flex-row sm:justify-between sm:justify-items-center">
@@ -20,42 +20,65 @@ export default function Footer() {
           <p className="text-white mt-6 font-light">
             <span>
               <img
-                src={USAFlag}
-                alt="USA language"
-                className="w-6 h-4 inline-block mr-2"
+                src={IndiaFlag}
+                alt="India language"
+                className="w-6 h-6 inline-block mr-2"
               />
             </span>
-            English, USA
+            English, India
           </p>
           <div className="mt-4 flex flex-row items-start justify-between">
-            <p className="text-white font-light">
+            <a
+              target="_blank"
+              rel="noreferrer"
+              href="https://twitter.com/discord"
+              className="text-white font-light"
+            >
               <img
                 alt="twitter"
                 src={TwitterIcon}
                 className="fill-current mr-4 w-6 h-6"
               />
-            </p>
-            <p className="text-white font-light">
+            </a>
+            <a
+              target="_blank"
+              rel="noreferrer"
+              href="https://www.instagram.com/discord/"
+              className="text-white font-light"
+            >
               <img
                 alt="instagram"
                 src={InstagramIcon}
                 className="fill-current mr-4 w-6 h-6"
               />
-            </p>
-            <p className="text-white font-light">
+            </a>
+
+            <a
+              target="_blank"
+              rel="noreferrer"
+              href="https://www.facebook.com/discord/"
+              className="text-white font-light"
+            >
               <img
                 alt="facebook"
                 src={FacebookIcon}
-                className="fill-current mr-4 w-6 h-6"
+                className="fill-current bg-white mr-4 w-6 h-6"
               />
-            </p>
-            <p className="text-white font-light">
-              <img
-                alt="youtube"
-                src={YoutubeIcon}
-                className="fill-current mr-4 w-6 h-6"
-              />
-            </p>
+            </a>
+            <a
+              href="https://www.youtube.com/discord"
+              target="_blank"
+              rel="noreferrer"
+              className="text-white font-light flex items-center"
+            >
+              <div className="h-6">
+                <img
+                  alt="youtube"
+                  src={YoutubeIcon}
+                  className="fill-current mr-4 w-6 h-6"
+                />
+              </div>
+            </a>
           </div>
         </div>
         <div className="flex flex-col md:flex-row md:flex-1 md:justify-between md:ml-20">
@@ -66,7 +89,14 @@ export default function Footer() {
                   <p>Product</p>
                 </li>
                 <li className="mt-2">
-                  <p className="text-white text-sm">Download</p>
+                  <a
+                    href="https://discord.com/api/downloads/distributions/app/installers/latest?channel=stable&platform=win&arch=x86"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-white text-sm"
+                  >
+                    Download
+                  </a>
                 </li>
                 <li className="mt-2">
                   <p className="text-white text-sm">Nitro</p>
@@ -164,7 +194,14 @@ export default function Footer() {
                 <p className="text-discord-experiment500 text-sm">Product</p>
               </li>
               <li className="mt-2">
-                <p className="text-white text-sm">Download</p>
+                <a
+                  href="https://discord.com/api/downloads/distributions/app/installers/latest?channel=stable&platform=win&arch=x86"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-white text-sm"
+                >
+                  Download
+                </a>
               </li>
               <li className="mt-2">
                 <p className="text-white text-sm">Nitro</p>
@@ -279,6 +316,9 @@ export default function Footer() {
         >
           Sign up
         </Link>
+      </div>
+      <div className="text-white flex items-center justify-center pt-12">
+        Made with God's Grace 🙏🏻 by Kedar Vyas
       </div>
     </div>
   );

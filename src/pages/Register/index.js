@@ -1,7 +1,7 @@
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { Formik, Form } from "formik";
+import { Formik, Form, ErrorMessage, Field } from "formik";
 import RegisterSchema from "../../validation/register.schema";
 import TextField from "../../components/shared/Inputs/TextField";
 import { register } from "../../api/auth";
@@ -9,16 +9,19 @@ import { ME_PAGE } from "../../constants/history.constants";
 import apiErrorHandler from "../../utils/apiErrorHandler";
 import { loginSuccess } from "../../store/user";
 import LoginBg from "../../assets/login_bg.svg";
+import upload from "../../utils/upload";
 
 export default function Index() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
   async function handleRegisterSubmit(values, { setErrors }) {
+    const avatar = await upload(values?.userImage);
     try {
       const { data } = await register({
         name: values.username,
         email: values.email,
+        userImage: avatar,
         password: values.password,
         passwordConfirm: values.password,
       });
@@ -31,6 +34,72 @@ export default function Index() {
       setErrors(apiErrorHandler(error));
     }
   }
+
+  const CustomFileInput = ({ field, form }) => {
+    const handleFileChange = (event) => {
+      const file = event.currentTarget.files[0];
+      form.setFieldValue(field.name, file);
+    };
+    return (
+      <div className="relative m-auto mt-6 ">
+        <input
+          type="file"
+          id={field.name}
+          name={field.name}
+          className="hidden"
+          accept="image/*"
+          onChange={handleFileChange}
+        />
+        <div className="relative">
+          <label
+            htmlFor={field.name}
+            className="w-20 h-20 rounded-full overflow-hidden border-2 border-dashed border-blue-400 cursor-pointer flex justify-center items-center"
+          >
+            {field.value ? (
+              <img
+                src={URL.createObjectURL(field.value)}
+                alt="Avatar Preview"
+                className="w-full h-full object-cover"
+              />
+            ) : (
+              <>
+                <div className="  ml-12 mb-16 w-6 absolute">
+                  <img
+                    src="https://freeiconshop.com/wp-content/uploads/edd/plus-flat.png"
+                    alt=""
+                  />
+                </div>
+                <div className="absolute w-6 mb-4">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="#000000"
+                    height="100%"
+                    width="100%"
+                    version="1.1"
+                    viewBox="0 0 491.6 491.6"
+                    xmlSpace="preserve"
+                  >
+                    <g>
+                      <g>
+                        <g>
+                          <path d="M245.8,351.45c-41,0-74.5-33.2-74.5-74.5c0-41,33.2-74.5,74.5-74.5c41,0,74.5,33.2,74.5,74.5S286.8,351.45,245.8,351.45z" />
+                          <path d="M482.6,116.25H87.4v-33.2H33.2v33.2H9c-5.1,0-9,3.9-9,9v303.5c0,5.1,3.9,9,9,9h473.6c5.1,0,9-3.9,9-9v-303.5C491.6,120.15,487.7,116.25,482.6,116.25z M245.8,393.95c-64.4,0-117-52.7-117-117s52.7-117,117-117s117,52.7,117,117S310.2,393.95,245.8,393.95z M422.5,200.85c-13.7,0-25-11.3-25-25s11.3-25,25-25s25,11.3,25,25S436.2,200.85,422.5,200.85z" />
+                          <polygon points="313.3,53.85 178.3,53.85 163.5,96.35 328.1,96.35" />
+                        </g>
+                      </g>
+                    </g>
+                  </svg>
+                </div>
+                <span className="font-semibold text-xs  absolute mt-6 text-discord-100">
+                  UPLOAD
+                </span>
+              </>
+            )}
+          </label>
+        </div>
+      </div>
+    );
+  };
 
   return (
     <div className="flex flex-col   relative bg-discord-semi600 h-screen w-full">
@@ -58,7 +127,6 @@ export default function Index() {
           </g>
         </svg>
       </Link>
-
       <div className="z-10 bg-discord-semi600 w-full sm:w-4/6 md:w-4/6 lg:w-2/6 rounded-md p-5 m-12 flex flex-row mx-auto mt-16">
         <div className="flex flex-col w-full">
           <h4 className="text-xl text-white font-semibold text-center">
@@ -72,6 +140,14 @@ export default function Index() {
           >
             {({ isSubmitting }) => (
               <Form>
+                <div className="flex items-center mb-4">
+                  <Field name="userImage" component={CustomFileInput} />
+                  <ErrorMessage
+                    name="userImage"
+                    component="div"
+                    className="text-red-500 text-sm"
+                  />
+                </div>
                 <TextField
                   fieldClass="mb-4 mt-4"
                   labelClass="block text-discord-sideBarChannels font-semibold text-xs mb-2"

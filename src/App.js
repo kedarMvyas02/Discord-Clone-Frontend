@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import "./app.styles.scss";
 import Landing from "./pages/Landing";
 import Login from "./pages/Login";
@@ -8,6 +8,7 @@ import OnlineUsers from "./components/OnlineUsers";
 import ForgotPassword from "./pages/ForgotPassword/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword/ResetPassword";
 import Me from "./pages/Me/Me";
+import NotFound from "./pages/404/NotFound";
 
 const App = () => {
   return (
@@ -20,7 +21,8 @@ const App = () => {
         <Route path="/resetPassword/:token?" element={<ResetPassword />} />
         <Route path="/channels" element={<OnlineUsers />} />
         <Route path="/channels/me" element={<Me />} />
-        {/* <Route path="/channels/me/:dmId" element={<Me />} /> */}
+        <Route path="/channels/me/:dmId" element={<Me />} />
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>
   );
