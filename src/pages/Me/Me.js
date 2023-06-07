@@ -1,17 +1,14 @@
 import React, { useEffect, useState } from "react";
 import TextChannel from "./TextChannel";
 import VoiceChannel from "./VoiceChannel";
-import mic_open from "../../assets/mic_open.svg";
-import mic_closed from "../../assets/mic_closed.svg";
-import headphones from "../../assets/headphones.svg";
-import mic_pelanu from "../../assets/mark_icon.svg";
 import client from "../../api/client";
 import ChannelModal from "../Modal/ChannelModal";
 import ServerModal from "../Modal/ServerModal";
 import upload from "../../utils/upload";
 import { useDispatch, useSelector } from "react-redux";
 import { Navigate, useNavigate } from "react-router";
-import { getUserDetails, logoutSuccess } from "../../store/user";
+import { getUserDetails } from "../../store/user";
+import Chat from "./Chat";
 
 const Me = () => {
   const [data, setData] = useState([]);
@@ -31,6 +28,7 @@ const Me = () => {
     showModal: false,
   });
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchServer = async () => {
@@ -122,6 +120,10 @@ const Me = () => {
     }));
   };
 
+  const dmHandler = () => {
+    navigate("/channels/dm");
+  };
+
   return (
     <>
       <div className="flex h-screen">
@@ -131,7 +133,10 @@ const Me = () => {
         >
           {/* TODO discord icon hover:rounded-2xl (last option: hover:rounded-xlg)*/}
           {/* TODO sidebar shouldn't collapse when mobile comes */}
-          <div className="h-12  bg-discord-600 rounded-full flex justify-center items-center cursor-pointer transition-none duration-100 ease-out hover:bg-discord-indigo ">
+          <div
+            onClick={dmHandler}
+            className="h-12  bg-discord-600 rounded-full flex justify-center items-center cursor-pointer transition-none duration-100 ease-out hover:bg-discord-indigo "
+          >
             <img src="https://rb.gy/kuaslg" alt="" className="h-5 " />
           </div>
           <hr className=" border-gray-700 border w-8 mx-auto" />
@@ -195,7 +200,7 @@ const Me = () => {
           </h2>
           <hr className=" border-y-discord-transparentBlack1 border w-full mx-auto" />
           {toggle.channelToggle && (
-            <div className="text-discord-200 flex-grow overflow-y-scroll scrollbar-hide">
+            <div className=" text-discord-sideBarChannels flex-grow overflow-y-scroll scrollbar-hide">
               <div className="flex items-center p-2 pb-0 mb-0">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -304,14 +309,15 @@ const Me = () => {
               </div>
             </div>
           )}
-          <div className="bg-discord-800 mt-auto p-2 flex justify-between items-center space-x-8 ">
+
+          {/* USER SECTION */}
+          <div className=" bg-discord-secondPrimary mt-auto p-2 flex justify-between items-center space-x-8 ">
             <div className="flex items-center space-x-1">
               <img
                 src={user?.userImage}
                 loading="lazy"
                 alt="userImage"
                 className="h-8 rounded-full"
-                // onClick={() => logoutHandler}
               />
               <h4 className="text-white text-xs font-medium">
                 {user?.name}
@@ -322,7 +328,7 @@ const Me = () => {
             </div>
 
             <div className="text-gray-400 flex items-center">
-              <div className="hover:bg-discord-700 cursor-pointer hover:text-discord-500 p-2 rounded-md">
+              <div className="hover:bg-discord-iconHover cursor-pointer hover:text-discord-mainTextHover p-2 rounded-md">
                 <svg
                   aria-hidden="true"
                   role="img"
@@ -332,14 +338,14 @@ const Me = () => {
                   className="opacity-50"
                 >
                   <path
-                    fill-rule="evenodd"
-                    clip-rule="evenodd"
+                    fillRule="evenodd"
+                    clipRule="evenodd"
                     d="M14.99 11C14.99 12.66 13.66 14 12 14C10.34 14 9 12.66 9 11V5C9 3.34 10.34 2 12 2C13.66 2 15 3.34 15 5L14.99 11ZM12 16.1C14.76 16.1 17.3 14 17.3 11H19C19 14.42 16.28 17.24 13 17.72V21H11V17.72C7.72 17.23 5 14.41 5 11H6.7C6.7 14 9.24 16.1 12 16.1ZM12 4C11.2 4 11 4.66667 11 5V11C11 11.3333 11.2 12 12 12C12.8 12 13 11.3333 13 11V5C13 4.66667 12.8 4 12 4Z"
                     fill="currentColor"
                   ></path>
                 </svg>
               </div>
-              <div className="hover:bg-discord-700 cursor-pointer hover:text-discord-500 p-2 rounded-md">
+              <div className="hover:bg-discord-iconHover cursor-pointer hover:text-discord-mainTextHover p-2 rounded-md">
                 <svg
                   className="opacity-50 h-5"
                   width="24"
@@ -352,7 +358,7 @@ const Me = () => {
                   ></path>
                 </svg>
               </div>
-              <div className="hover:bg-discord-700 cursor-pointer hover:text-discord-500 p-2 rounded-md">
+              <div className="hover:bg-discord-iconHover cursor-pointer hover:text-discord-mainTextHover p-2 rounded-md">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 20 20"
@@ -368,6 +374,10 @@ const Me = () => {
               </div>
             </div>
           </div>
+        </div>
+        {/* MESSAGE SECTION */}
+        <div className="bg-discord-semi600 flex-grow-default">
+          <Chat />
         </div>
 
         <ChannelModal

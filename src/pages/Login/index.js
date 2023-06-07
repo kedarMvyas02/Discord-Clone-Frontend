@@ -5,7 +5,6 @@ import { Formik, Form } from "formik";
 import LoginSchema from "../../validation/login.schema";
 import TextField from "../../components/shared/Inputs/TextField";
 import { login } from "../../api/auth";
-import { ME_PAGE } from "../../constants/history.constants";
 import apiErrorHandler from "../../utils/apiErrorHandler";
 import { loginSuccess } from "../../store/user";
 import LoadingCircle from "../../assets/loading_circle_icon.svg";
@@ -22,7 +21,7 @@ export default function Index() {
 
       if (data) {
         dispatch(loginSuccess(data));
-        navigate(ME_PAGE);
+        navigate("/channels/dm");
       }
     } catch (error) {
       console.log("error: ", error);
