@@ -3,6 +3,7 @@ import { selectChannelId, selectChannelName } from "../../store/channel";
 import { useSelector } from "react-redux";
 import user from "../../store/user";
 import Header from "./Header";
+import Message from "../Dms/Message";
 
 const Chat = () => {
   const channelId = useSelector(selectChannelId);
@@ -28,7 +29,9 @@ const Chat = () => {
           <Header channelName={channelName} />
         </header>
         <hr className=" border-y-discord-transparentBlack1 border w-full mx-auto" />
-        <main className="flex-grow overflow-y-scroll scrollbar-hide"></main>
+        <main className="flex-grow overflow-y-scroll scrollbar-hide">
+          <Message />
+        </main>
       </div>
       <div className="flex items-center bg-discord-chatInputBg mx-4 mb-5 rounded-lg justify-end mt-auto">
         <svg

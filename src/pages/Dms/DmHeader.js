@@ -1,39 +1,18 @@
 import React from "react";
 
-const DmHeader = () => {
+const DmHeader = ({ data }) => {
   return (
     <div className="flex-1 flex items-center justify-between bg-discord-600 border-b  px-4 py-3 border-b border-discord-900">
       <div className="flex items-center">
         <div className="text-discord-200 text-2xl">
           <img
-            src="http://res.cloudinary.com/dbi3rrybd/image/upload/v1686030050/Discord/up7j60ht83jtqwrnd1vy.jpg"
+            src={data?.userImage}
             alt=""
-            className="h-6 w-6 rounded-xlg"
+            loading="lazy"
+            className="h-6 w-6 rounded-full"
           />
         </div>
-        <div className="ml-2 text-m text-white font-semibold">Friend_Name</div>
-        {/* VERTICAL LINE */}
-        <div className="h-full flex items-center">
-          <div className="w-px h-6 bg-discord-200 mx-4"></div>
-        </div>
-
-        <div className="flex">
-          <div className="text-discord-100 cursor-pointer opacity-75 px-2 font-medium  ">
-            <span className="px-3 py-1 hover:bg-discord-200 rounded-mdx hover:bg-opacity-25">
-              All
-            </span>
-          </div>
-          <div className="text-discord-100 cursor-pointer opacity-75 px-2 font-medium  ">
-            <span className="px-3 py-1 hover:bg-discord-200 rounded-mdx hover:bg-opacity-25">
-              Pending
-            </span>
-          </div>
-          <div className="text-white cursor-pointer opacity-75 px-2 font-medium  ">
-            <span className="px-3 py-1 bg-green-700 rounded-mdx ">
-              Add Friend
-            </span>
-          </div>
-        </div>
+        <div className="ml-2 text-m text-white font-semibold">{`${data?.name} #${data?.uniqueCode}`}</div>
 
         {/* <hr className=" border-y-discord-transparentBlack1 border w-full mx-auto" /> */}
       </div>
@@ -52,7 +31,7 @@ const DmHeader = () => {
             <path
               fill="currentColor"
               fillRule="evenodd"
-              clip-rule="evenodd"
+              clipRule="evenodd"
               d="M11 5V3C16.515 3 21 7.486 21 13H19C19 8.589 15.411 5 11 5ZM17 13H15C15 10.795 13.206 9 11 9V7C14.309 7 17 9.691 17 13ZM11 11V13H13C13 11.896 12.105 11 11 11ZM14 16H18C18.553 16 19 16.447 19 17V21C19 21.553 18.553 22 18 22H13C6.925 22 2 17.075 2 11V6C2 5.447 2.448 5 3 5H7C7.553 5 8 5.447 8 6V10C8 10.553 7.553 11 7 11H6C6.063 14.938 9 18 13 18V17C13 16.447 13.447 16 14 16Z"
             ></path>
           </svg>
@@ -80,7 +59,7 @@ const DmHeader = () => {
               type="text"
               placeholder="Search"
               className="w-40 rounded-default bg-gray-900 placeholder-discord-200 placeholder:text-sm p-1 font-normal text-discord-500 focus:outline-none leading-normal text-xs"
-            // className="w-40 rounded bg-gray-900 placeholder-discord-200 p-1 focus:outline-none leading-normal text-xs"
+              // className="w-40 rounded bg-gray-900 placeholder-discord-200 p-1 focus:outline-none leading-normal text-xs"
             />
             <span>
               <svg

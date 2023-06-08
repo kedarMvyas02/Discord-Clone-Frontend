@@ -1,25 +1,78 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getUserDetails } from "../../store/user";
 import { useNavigate } from "react-router";
+import client from "../../api/client";
+import AddDmModal from "../Modal/AddDmModal";
+import ErrorModal from "../Modal/ErrorModal";
+import { hideErrorModal, showErrorModal } from "../../store/error";
+import { setRender } from "../../store/channel";
 
 const Friends = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [dmFriend, setDmFriend] = useState(null);
+  const [isUpdated, setIsUpdated] = useState(false);
+  const [modal, setModal] = useState(false);
+  const { visible, heading, subHeading } = useSelector(
+    (state) => state.errorModal
+  );
 
   useEffect(() => {
     const fetchServer = async () => {
       dispatch(getUserDetails());
+      const res = await client.get("/server/getDmFriends");
+      setDmFriend(res?.data?.dmFriends);
     };
     fetchServer();
-  }, [dispatch]);
+  }, [dispatch, isUpdated]);
 
   const friendsNavigateHandler = () => {
     navigate("/channels/dm");
   };
 
+  const addToDmClickHandler = () => {
+    setModal(true);
+  };
+
+  const addToDmHandler = async (values) => {
+    try {
+      await client.post(`/server/addToDm/${values._id}`);
+    } catch (error) {
+      const heading = `${error?.response?.data?.status}`;
+      const subHeading = `${error?.response?.data?.message}`;
+      dispatch(showErrorModal({ heading, subHeading }));
+    }
+    dispatch(setRender("truee"));
+    setIsUpdated(!isUpdated);
+    setModal(false);
+  };
+
+  const removeFromDm = async (id) => {
+    try {
+      await client.post(`/server/removeFromDm/${id}`);
+    } catch (error) {
+      const heading = `${error?.response?.data?.status}`;
+      const subHeading = `${error?.response?.data?.message}`;
+      dispatch(showErrorModal({ heading, subHeading }));
+    }
+    setIsUpdated(!isUpdated);
+  };
+
+  const openFriendDm = (dmId) => {
+    navigate(`/channels/dm/${dmId}`);
+  };
+
   const temp = useSelector((state) => state.user);
   const user = temp?.user?.data?.userWithLogin;
+
+  const handleOnClose = () => {
+    setModal(false);
+  };
+
+  const handleCloseErrorModal = () => {
+    dispatch(hideErrorModal());
+  };
 
   return (
     <div className="flex h-screen">
@@ -53,7 +106,7 @@ const Friends = () => {
         >
           <div className="mr-1">
             <svg
-              className="linkButtonIcon-7rsZcu h-8 w-7 mx-3 mr-2"
+              className="linkButtonIcon-7rsZcu h-8 w-7 mx-3 ml-2 mr-2"
               aria-hidden="true"
               role="img"
               width="16"
@@ -73,12 +126,15 @@ const Friends = () => {
           </div>
           Friends
         </div>
+
+        {/* DM PART */}
         <div className="select-none font-medium flex items-center p-1 rounded-md text-discord-200 space-y-2 px-2 mt-2 text-xs">
           <span className="hover:text-discord-500">DIRECT MESSAGES</span>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 24 24"
             fill="currentColor"
+            onClick={addToDmClickHandler}
             className="h-6 ml-auto cursor-pointer hover:text-discord-500"
           >
             <path
@@ -89,30 +145,29 @@ const Friends = () => {
           </svg>
         </div>
         {/* FRIENDS LIST */}
-        <div className="select-none font-medium flex items-center text-discord-500 cursor-pointer hover:bg-gray-600 p-2 mt-2 mt-0 mx-2 rounded-md hover:text-white text-base">
-          <img
-            src="http://res.cloudinary.com/dbi3rrybd/image/upload/v1686030050/Discord/up7j60ht83jtqwrnd1vy.jpg"
-            alt=""
-            className="h-8 w-8 mx-3 rounded-2xlg mr-3"
-          />
-          Kedar
-        </div>
-        <div className="select-none font-medium flex items-center text-discord-500 cursor-pointer hover:bg-gray-600 p-2 mt-2 mt-0 mx-2 rounded-md hover:text-white text-base">
-          <img
-            src="http://res.cloudinary.com/dbi3rrybd/image/upload/v1686030050/Discord/up7j60ht83jtqwrnd1vy.jpg"
-            alt=""
-            className="h-8 w-8 mx-3 rounded-2xlg mr-3"
-          />
-          Kedar
-        </div>
-        <div className="select-none font-medium flex items-center text-discord-500 cursor-pointer hover:bg-gray-600 p-2 mt-2 mt-0 mx-2 rounded-md hover:text-white text-base">
-          <img
-            src="http://res.cloudinary.com/dbi3rrybd/image/upload/v1686030050/Discord/up7j60ht83jtqwrnd1vy.jpg"
-            alt=""
-            className="h-8 w-8 mx-3 rounded-2xlg mr-3"
-          />
-          Kedar
-        </div>
+        {dmFriend?.map((data) => (
+          <div
+            key={data._id}
+            onClick={() => openFriendDm(data._id)}
+            className="select-none font-medium flex items-center text-discord-500 cursor-pointer hover:bg-gray-600  hover:text-white p-2 pl-0 mt-2  mx-2 rounded-md text-base"
+          >
+            <img
+              src={data.userImage}
+              alt=""
+              className="h-8 w-8 mx-3 rounded-2xlg mr-3"
+            />
+            {data.name}
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+              className="w-5 h-5 ml-auto text-discord-500 hover:text-white"
+              onClick={() => removeFromDm(data._id)}
+            >
+              <path d="M6.28 5.22a.75.75 0 00-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 101.06 1.06L10 11.06l3.72 3.72a.75.75 0 101.06-1.06L11.06 10l3.72-3.72a.75.75 0 00-1.06-1.06L10 8.94 6.28 5.22z" />
+            </svg>
+          </div>
+        ))}
 
         {/* USER SECTION */}
         <div className=" bg-discord-secondPrimary mt-auto p-2 flex justify-between items-center space-x-8 ">
@@ -126,7 +181,7 @@ const Friends = () => {
             <h4 className="text-white text-xs font-medium">
               {user?.name}
               <span className="text-discord-200 block">
-                #{user?._id.substring(0, 4)}
+                #{user?.uniqueCode}
               </span>
             </h4>
           </div>
@@ -179,6 +234,17 @@ const Friends = () => {
           </div>
         </div>
       </div>
+      <ErrorModal
+        visible={visible}
+        onClose={handleCloseErrorModal}
+        heading={heading}
+        subHeading={subHeading}
+      />
+      <AddDmModal
+        onClose={handleOnClose}
+        visible={modal}
+        submitHandler={addToDmHandler}
+      />
     </div>
   );
 };

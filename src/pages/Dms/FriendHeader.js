@@ -73,7 +73,6 @@ const FriendHeader = ({ setCurrentBody }) => {
       const subHeading = `${error.response.data.message}`;
       dispatch(showErrorModal({ heading, subHeading }));
     }
-
     setModal(false);
   };
 
@@ -126,45 +125,45 @@ const FriendHeader = ({ setCurrentBody }) => {
           <div className="w-px h-6 bg-discord-200 mx-4"></div>
         </div>
 
-        <div className="flex">
+        <div className="flex ">
           <div
             onClick={allFriendsHandler}
-            className="text-discord-100 cursor-pointer opacity-75 px-2 font-medium  "
+            className="text-discord-100 cursor-pointer opacity-75  font-medium  "
           >
-            <span className="px-3 py-1 select-none hover:bg-discord-200 rounded-mdx hover:bg-opacity-25">
+            <span className="px-2 py-1 select-none hover:bg-discord-200 rounded-mdx hover:bg-opacity-25">
               All
             </span>
           </div>
           <div
             onClick={pendingHandler}
-            className="text-discord-100 cursor-pointer opacity-75 px-2 font-medium  "
+            className="text-discord-100 cursor-pointer opacity-75  font-medium  "
           >
-            <span className="px-3 py-1 select-none hover:bg-discord-200 rounded-mdx hover:bg-opacity-25">
+            <span className="px-2 py-1 select-none hover:bg-discord-200 rounded-mdx hover:bg-opacity-25">
               Pending
             </span>
           </div>
           <div
             onClick={arrivedHandler}
-            className="text-discord-100 cursor-pointer opacity-75 px-2 font-medium  "
+            className="text-discord-100 cursor-pointer opacity-75  font-medium  "
           >
-            <span className="px-3 py-1 select-none hover:bg-discord-200 rounded-mdx hover:bg-opacity-25">
+            <span className="px-2 py-1 select-none hover:bg-discord-200 rounded-mdx hover:bg-opacity-25">
               Arrived
             </span>
           </div>
           <div
             onClick={addFriendClickHandler}
-            className="text-white cursor-pointer opacity-75 px-2 font-medium  "
+            className="text-white cursor-pointer opacity-75 px-2  font-medium  "
           >
-            <span className="px-3 py-1 select-none bg-green-700 rounded-mdx ">
+            <span className="px-2 py-1 select-none bg-green-700 rounded-mdx  ">
               Add Friend
             </span>
           </div>
         </div>
 
-        {/* <hr className="border-y-discord-transparentBlack1 border w-full mx-auto" /> */}
+        {/* ok<hr className="border-y-discord-transparentBlack1 border w-full mx-auto" /> */}
       </div>
-      <div className="flex items-center">
-        <a href="#" className="ml-3">
+      <div className="sm:hidden lg:flex md:hidden static mr-0 ">
+        {/* <a href="#" className="ml-3">
           <svg
             className="w-6 h-6 text-discord-topIcons hover:text-gray-200"
             aria-hidden="false"
@@ -194,8 +193,9 @@ const FriendHeader = ({ setCurrentBody }) => {
               d="M22 12L12.101 2.10101L10.686 3.51401L12.101 4.92901L7.15096 9.87801V9.88001L5.73596 8.46501L4.32196 9.88001L8.56496 14.122L2.90796 19.778L4.32196 21.192L9.97896 15.536L14.222 19.778L15.636 18.364L14.222 16.95L19.171 12H19.172L20.586 13.414L22 12Z"
             ></path>
           </svg>
-        </a>
-        <a href="#" className="ml-3">
+        </a> */}
+
+        <a href="#" className="ml-3 ">
           <svg
             className="w-6 h-6 text-discord-topIcons hover:text-gray-200"
             aria-hidden="false"
@@ -225,12 +225,12 @@ const FriendHeader = ({ setCurrentBody }) => {
             ></path>
           </svg>
         </a>
-        <a href="#" className="ml-3">
+        <p href="#" className="ml-3">
           <form className="relative">
             <input
               type="text"
               placeholder="Search"
-              className="w-40 rounded bg-gray-900 placeholder-discord-200 p-1 focus:outline-none leading-normal text-xs"
+              className="w-32 rounded bg-gray-900 placeholder-discord-200 p-1 focus:outline-none leading-normal text-xs"
             />
             <span>
               <svg
@@ -248,8 +248,9 @@ const FriendHeader = ({ setCurrentBody }) => {
               </svg>
             </span>
           </form>
-        </a>
-        <a href="#" className="ml-3">
+        </p>
+
+        <a href="#" className="ml-3 ">
           <svg
             className="w-6 h-6 text-discord-topIcons hover:text-gray-200"
             aria-hidden="false"

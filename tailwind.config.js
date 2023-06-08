@@ -44,6 +44,7 @@ module.exports = {
           grayDeep: "#4f545c",
           deepGrayHover: "#5d6269",
           redNotif: "rgb(237, 66, 69)",
+          messageBg: "#32353b",
           hoverHeader: "hsl(var(--primary-500-hsl))",
           100: "#dcddde",
           200: "#72767c",
@@ -52,7 +53,7 @@ module.exports = {
           700: "#2f3136",
           800: "#36393f",
           900: "#202225",
-        },
+        }, 
       },
       fontSize: {
         xxxs: "0.60rem",

@@ -10,7 +10,7 @@ const initialUser = {
   name: "",
   accessToken: "",
   email: "",
-  // photoURL: "",
+  photoURL: "",
 };
 
 export const getUserDetails = createAsyncThunk(

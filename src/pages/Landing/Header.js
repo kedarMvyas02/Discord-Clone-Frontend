@@ -190,7 +190,7 @@ export default function Header() {
             <a href="#">Careers</a>
           </li>
         </ul>
-
+{/* bas aa j che  are aa landing page ma che */}
         <a
           href="https://discord.com/api/downloads/distributions/app/installers/latest?channel=stable&platform=win&arch=x86"
           target="_blank"
