@@ -10,6 +10,7 @@ import { loginSuccess } from "../../store/user";
 import LoadingCircle from "../../assets/loading_circle_icon.svg";
 import QrCode from "../../assets/qr_code.png";
 import LoginBg from "../../assets/login_bg.svg";
+import { useSocket } from "../../socket";
 
 export default function Index() {
   const navigate = useNavigate();
@@ -18,7 +19,6 @@ export default function Index() {
   async function handleLoginSubmit(values, { setErrors }) {
     try {
       const { data } = await login(values);
-
       if (data) {
         dispatch(loginSuccess(data));
         navigate("/channels/dm");
@@ -64,7 +64,7 @@ export default function Index() {
         </svg>
       </Link>
 
-      <div className="bg-gray-600 z-10 bg-discord-semi600 w-full sm:w-4/6 md:w-4/6 lg:w-4/6 xl:w-2/5 rounded-md p-5 m-12 flex flex-row mx-auto mt-16">
+      <div className="z-10 bg-discord-semi600 w-full sm:w-4/6 md:w-4/6 lg:w-4/6 xl:w-2/5 rounded-md p-5 m-12 flex flex-row mx-auto mt-16">
         <div className="flex flex-col w-full lg:w-2/4">
           <h4 className="text-xl text-white font-semibold">Welcome back!</h4>
           <p className="text-sm text-discord-mainText">

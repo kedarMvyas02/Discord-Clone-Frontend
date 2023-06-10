@@ -35,6 +35,7 @@ const SideBar = ({ onIdChange }) => {
   };
 
   const dmHandler = () => {
+    // TODO emit join operation here
     navigate("/channels/dm");
   };
 

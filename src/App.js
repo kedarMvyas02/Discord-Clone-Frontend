@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "./app.styles.scss";
 import Landing from "./pages/Landing";
@@ -11,9 +11,20 @@ import ResetPassword from "./pages/ResetPassword/ResetPassword";
 import NotFound from "./pages/404/NotFound";
 import Index from "./pages/Servers/Index";
 import IndexDM from "./pages/Dms/IndexDM";
+import { useSocket } from "./socket";
+import { useSelector } from "react-redux";
 // import Dm from "./pages/Dm/Dm.js";
 
 const App = () => {
+  const temp = useSelector((state) => state.user);
+  const user = temp?.user?.data?.userWithLogin;
+  const { getSocket } = useSocket();
+
+  useEffect(() => {
+    const socket = getSocket();
+    socket.emit("add-user", { user_id: user?._id });
+  }, [user, getSocket]);
+
   return (
     <BrowserRouter>
       <Routes>

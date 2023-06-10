@@ -5,38 +5,29 @@ import { useSelector } from "react-redux";
 import { useParams } from "react-router";
 import client from "../../api/client";
 import Message from "./Message";
-import { socket, connectSocket } from "../../socket";
+import { useSocket } from "../../socket";
 import Emoji from "./Emoji";
 
 const DmChat = () => {
-  const temp = useSelector((state) => state.user);
-  const user = temp?.user?.data?.userWithLogin;
   const { dmId } = useParams();
   const [data, setData] = useState(null);
+  const [messages, setMessages] = useState(null);
   const [msg, setMsg] = useState("");
   const chatRef = useRef();
-  const user_id = user?._id;
+  const temp = useSelector((state) => state.user);
+  const user = temp?.user?.data?.userWithLogin;
+  const { getSocket } = useSocket();
+  const socket = getSocket();
 
   useEffect(() => {
     const fetchDmUserData = async () => {
       const res = await client.get(`/users/getUser/${dmId}`);
       setData(res?.data?.userWithId);
+      const temp = await client.get(`/server/getDmMessages/${dmId}`);
+      setMessages(temp?.data?.messages);
     };
     fetchDmUserData();
-  }, []);
-
-  useEffect(() => {
-    connectSocket(user_id, dmId);
-    socket.on("connect", () => {
-      console.log(socket.id);
-      console.log(user_id, dmId);
-    });
-
-    // Clean up the event listeners on component unmount
-    return () => {
-      socket.off("connect");
-    };
-  }, []);
+  }, [chatRef, dmId]);
 
   const scrollToBottom = () => {
     chatRef.current.scrollIntoView({
@@ -45,30 +36,44 @@ const DmChat = () => {
     });
   };
 
+  const handleNavoMessage = (data) => {
+    console.log("message recieved", data?.populatedChat);
+    const temp = data?.populatedChat;
+    setMessages((prevState) => {
+      const filteredMessages = prevState.filter((msg) => msg._id !== temp?._id);
+
+      return [...filteredMessages, temp];
+    });
+  };
+
+  useEffect(() => {
+    socket?.on("navoMessage", handleNavoMessage);
+    scrollToBottom();
+
+    return () => {
+      socket?.off("navoMessage", handleNavoMessage);
+    };
+  }, []);
+
   const sendMessage = (e) => {
     e.preventDefault();
 
     if (msg !== "") {
-      console.log({
-        from: user?._id,
-        to: dmId,
-        message: msg,
-        socketId: socket.id,
+      socket?.emit("text_message", { from: user?._id, to: dmId, message: msg });
+      setMessages((prevState) => {
+        return [
+          ...prevState,
+          {
+            reciever: data,
+            sender: user,
+            createdAt: Date.now(),
+            content: msg,
+            _id: Date.now(),
+          },
+        ];
       });
-      socket.emit("text_message", { from: user?._id, to: dmId, message: msg });
     }
 
-    socket.on("new_message", (data) => {
-      console.log(data.chat);
-      console.log(data.message);
-    });
-
-    // socket.on("kedar", (message) => {
-    //   const messages = document.getElementById("messages");
-    //   const li = document.getElementById("li");
-    //   li.textContent = message;
-    //   messages.appendChild(li);
-    // });
     setMsg("");
     scrollToBottom();
   };
@@ -82,18 +87,38 @@ const DmChat = () => {
         <hr className=" border-y-discord-transparentBlack1 border w-full mx-auto" />
       </div>
       <main className="flex-grow overflow-y-scroll scrollbar-hide">
-        <Message />
-        {/* <div className="flex items-center justify-center mt-10">
-          <img src={wumpus} alt="" />
-        </div>
-        <span className="flex items-center justify-center text-discord-200 mt-2">
-          No one's around here to play with Wumpus
-        </span> */}
-        <div ref={chatRef} className="pb-16" />
+        {messages === "null" || messages?.length === 0 ? (
+          <>
+            <div className="flex items-center justify-center mt-10">
+              <img src={wumpus} alt="" />
+            </div>
+            <span className="flex items-center text-xl justify-center text-discord-200 mt-4">
+              {`There are no messages with you and ${data?.name}#${data?.uniqueCode}`}
+            </span>
+          </>
+        ) : (
+          messages?.map((msg) => {
+            const { name, uniqueCode, userImage } = msg?.sender;
+
+            return (
+              <React.Fragment key={msg?._id}>
+                <Message
+                  name={name}
+                  createdAt={msg?.createdAt}
+                  uniqueCode={uniqueCode}
+                  userImage={userImage}
+                  _id={msg?._id}
+                  content={msg?.content}
+                />
+              </React.Fragment>
+            );
+          })
+        )}
+        <div ref={chatRef} className="pb-16" /> {/* className="pb-16" */}
       </main>
-      <div className="h-16 w-16" style={{ zIndex: 10 }}>
-        {/* <Emoji /> */}
-      </div>
+      {/* <div className="h-16 w-16" style={{ zIndex: 10 }}>
+         <Emoji /> 
+      </div> */}
       <div className="flex items-center bg-discord-chatInputBg mx-4 mb-5 rounded-lg justify-end mt-auto">
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -161,3 +186,4 @@ const DmChat = () => {
 };
 
 export default DmChat;
+// https://www.youtube.com/watch?v=YArQVBscgHg

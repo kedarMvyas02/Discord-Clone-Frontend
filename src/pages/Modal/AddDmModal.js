@@ -1,21 +1,39 @@
 import React, { useEffect, useState } from "react";
 import client from "../../api/client";
-import { setRender } from "../../store/channel";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { getAllFriends } from "../../store/dmFriends";
 
 const AddDmModal = ({ visible, onClose, submitHandler }) => {
   const [data, setData] = useState(null);
-  const render = useSelector((state) => state.channel.render);
+  const allFriends = useSelector((state) => state.dmFriends.allFriends);
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    const fetchFriends = async () => {
-      try {
-        const res = await client.get("/users/getFriends/");
-        setData(res?.data?.allFriends);
-      } catch (error) {}
-    };
-    fetchFriends();
-  }, [render]);
+    dispatch(getAllFriends());
+  }, []);
+  useEffect(() => {
+    setData(allFriends);
+    // const fetchServer = async () => {
+    //   // socket.emit("get_dm_friends", { user: user_id });
+
+    //   // const res = await client.get("/server/getDmFriends");
+    //   // console.log(res?.data?.dmFriends);
+    //   // socket.on("got_dm_friends", (data) => {
+    //   //   console.log(data);
+    //   // });
+    // };
+    // // fetchServer();
+  }, [allFriends]);
+
+  // useEffect(() => {
+  //   const fetchFriends = async () => {
+  //     try {
+  //       const res = await client.get("/users/getFriends/");
+  //       setData(res?.data?.allFriends);
+  //     } catch (error) {}
+  //   };
+  //   fetchFriends();
+  // }, [render]);
 
   if (!visible) return null;
 

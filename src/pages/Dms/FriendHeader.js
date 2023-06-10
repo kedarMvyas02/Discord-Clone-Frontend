@@ -4,6 +4,7 @@ import client from "../../api/client";
 import { useSelector, useDispatch } from "react-redux";
 import { hideErrorModal, showErrorModal } from "../../store/error";
 import ErrorModal from "../Modal/ErrorModal";
+import { getAllFriends } from "../../store/dmFriends";
 
 const FriendHeader = ({ setCurrentBody }) => {
   const [modal, setModal] = useState(false);
@@ -11,28 +12,22 @@ const FriendHeader = ({ setCurrentBody }) => {
   const { visible, heading, subHeading } = useSelector(
     (state) => state.errorModal
   );
+  const allFriends = useSelector((state) => state.dmFriends);
   const dispatch = useDispatch();
 
   useEffect(() => {
+    dispatch(getAllFriends());
+    setCurrentBody(allFriends);
+    setData(allFriends);
     if (data) {
       setCurrentBody(data);
+      setData(data);
     }
   }, [data, setCurrentBody]);
 
   const fetchPendingData = async () => {
     try {
       const res = await client.get("/users/getPendingRequests");
-      setData(res?.data);
-      setCurrentBody(res?.data);
-    } catch (error) {
-      setData(error?.response?.data);
-      setCurrentBody(error?.response?.data);
-    }
-  };
-
-  const fetchAllFriends = async () => {
-    try {
-      const res = await client.get("/users/getFriends");
       setData(res?.data);
       setCurrentBody(res?.data);
     } catch (error) {
@@ -65,6 +60,7 @@ const FriendHeader = ({ setCurrentBody }) => {
       const res = await client.post("/users/sendFriendRequest", {
         uniqueCode: values.uniqueCode,
       });
+      dispatch(getAllFriends());
       const heading = `Success`;
       const subHeading = `${res.data.msg}`;
       dispatch(showErrorModal({ heading, subHeading }));
@@ -87,8 +83,10 @@ const FriendHeader = ({ setCurrentBody }) => {
   };
 
   const allFriendsHandler = async () => {
-    await fetchAllFriends();
-    setCurrentBody(data);
+    dispatch(getAllFriends());
+    setCurrentBody(allFriends);
+    setData(allFriends);
+    // setCurrentBody(data);
   };
 
   const arrivedHandler = async () => {
@@ -154,7 +152,7 @@ const FriendHeader = ({ setCurrentBody }) => {
             onClick={addFriendClickHandler}
             className="text-white cursor-pointer opacity-75 px-2  font-medium  "
           >
-            <span className="px-2 py-1 select-none bg-green-700 rounded-mdx  ">
+            <span className="py-1 px-2 md:invisible sm:invisible lg:visible select-none  bg-green-700 rounded-mdx ">
               Add Friend
             </span>
           </div>
@@ -225,30 +223,28 @@ const FriendHeader = ({ setCurrentBody }) => {
             ></path>
           </svg>
         </a>
-        <p href="#" className="ml-3">
-          <form className="relative">
-            <input
-              type="text"
-              placeholder="Search"
-              className="w-32 rounded bg-gray-900 placeholder-discord-200 p-1 focus:outline-none leading-normal text-xs"
-            />
-            <span>
-              <svg
-                className="absolute right-0 top-0 w-4 h-4 text-discord-200 mr-2"
-                style={{ top: "6px" }}
-                aria-hidden="false"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  fill="currentColor"
-                  d="M21.707 20.293L16.314 14.9C17.403 13.504 18 11.799 18 10C18 7.863 17.167 5.854 15.656 4.344C14.146 2.832 12.137 2 10 2C7.863 2 5.854 2.832 4.344 4.344C2.833 5.854 2 7.863 2 10C2 12.137 2.833 14.146 4.344 15.656C5.854 17.168 7.863 18 10 18C11.799 18 13.504 17.404 14.9 16.314L20.293 21.706L21.707 20.293ZM10 16C8.397 16 6.891 15.376 5.758 14.243C4.624 13.11 4 11.603 4 10C4 8.398 4.624 6.891 5.758 5.758C6.891 4.624 8.397 4 10 4C11.603 4 13.109 4.624 14.242 5.758C15.376 6.891 16 8.398 16 10C16 11.603 15.376 13.11 14.242 14.243C13.109 15.376 11.603 16 10 16Z"
-                ></path>
-              </svg>
-            </span>
-          </form>
-        </p>
+        <form className="relative ml-3">
+          <input
+            type="text"
+            placeholder="Search"
+            className="w-32 rounded bg-gray-900 placeholder-discord-200 p-1 focus:outline-none leading-normal text-xs"
+          />
+          <span>
+            <svg
+              className="absolute right-0 top-0 w-4 h-4 text-discord-200 mr-2"
+              style={{ top: "6px" }}
+              aria-hidden="false"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+            >
+              <path
+                fill="currentColor"
+                d="M21.707 20.293L16.314 14.9C17.403 13.504 18 11.799 18 10C18 7.863 17.167 5.854 15.656 4.344C14.146 2.832 12.137 2 10 2C7.863 2 5.854 2.832 4.344 4.344C2.833 5.854 2 7.863 2 10C2 12.137 2.833 14.146 4.344 15.656C5.854 17.168 7.863 18 10 18C11.799 18 13.504 17.404 14.9 16.314L20.293 21.706L21.707 20.293ZM10 16C8.397 16 6.891 15.376 5.758 14.243C4.624 13.11 4 11.603 4 10C4 8.398 4.624 6.891 5.758 5.758C6.891 4.624 8.397 4 10 4C11.603 4 13.109 4.624 14.242 5.758C15.376 6.891 16 8.398 16 10C16 11.603 15.376 13.11 14.242 14.243C13.109 15.376 11.603 16 10 16Z"
+              ></path>
+            </svg>
+          </span>
+        </form>
 
         <a href="#" className="ml-3 ">
           <svg

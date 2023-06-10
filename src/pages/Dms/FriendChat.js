@@ -6,6 +6,7 @@ import ErrorModal from "../Modal/ErrorModal";
 import { useDispatch, useSelector } from "react-redux";
 import { hideErrorModal, showErrorModal } from "../../store/error";
 import { useNavigate } from "react-router";
+import { getDmFriends } from "../../store/dmFriends";
 
 const FriendChat = () => {
   const [currentBody, setCurrentBody] = useState(null);
@@ -100,24 +101,26 @@ const FriendChat = () => {
     console.log("Hii");
   };
 
-  const navigateDmHandler = (dmId) => {
+  const navigateDmHandler = async (dmId) => {
+    await client.post(`/server/addToDm/${dmId}`);
+    dispatch(getDmFriends());
     navigate(`/channels/dm/${dmId}`);
   };
 
   return (
-    <div className="flex flex-col h-screen">
+    <div className="flex flex-col h-screen ">
       <div className="flex flex-col flex-grow">
         <header>
           <FriendHeader setCurrentBody={setCurrentBody} />
         </header>
-        <hr className=" border-y-discord-transparentBlack1 border w-full mx-auto" />
+        <hr className=" border-y-discord-transparentBlack1 border w-full  mx-auto" />
       </div>
       {!currentBody && (
         <main className="flex-grow overflow-y-scroll scrollbar-hide">
           <div className="flex justify-center items-center h-screen">
-            <div className="">
-              <img src={wumpus} alt="" />
-              <span className="ml-12 text-discord-200 ">
+            <div className=" ">
+              <img className="" src={wumpus} alt="" />
+              <span className="ml-12 text-discord-200 flex invisible lg:visible">
                 No one's around here to play with Wumpus
               </span>
             </div>

@@ -89,7 +89,7 @@ const Channels = ({ newId }) => {
             channelToggle: !prevState.channelToggle,
           }));
         }}
-        className="select-none flex text-white cursor-pointer font-bold text-sl items-center justify-between border-b border-gray-800 p-3 pt-4 pl-5 hover:bg-gray-600"
+        className="select-none flex text-white cursor-pointer font-bold text-sm  items-center justify-between border-b border-gray-800 p-3 pt-4 pl-5 hover:bg-gray-600"
       >
         {data?.name}
         <svg

@@ -1,29 +1,25 @@
 import React from "react";
-import { useSelector } from "react-redux";
 
-const Message = () => {
-  const temp = useSelector((state) => state.user);
-  const user = temp?.user?.data?.userWithLogin;
-
+const Message = ({ name, uniqueCode, content, createdAt, userImage, _id }) => {
   const deleteMessageHandler = () => {};
 
   return (
     <div className="flex items-center p-1 pl-5 my-5 mr-2 hover:bg-discord-messageBg group">
       <img
-        src={user?.userImage}
+        src={userImage}
         alt=""
         className="h-10 rounded-full cursor-pointer mr-3 hover:shadow-2xl"
       />
       <div className="flex flex-col ">
         <h4 className="flex items-center space-x-2 font-medium">
           <span className="hover:underline text-white text-sm cursor-pointer">
-            {user?.name}
+            {`${name}#${uniqueCode}`}
           </span>
           <span className="text-discord-popOutHeader text-xs">
-            {new Date(user?.createdAt).toLocaleString()}
+            {new Date(createdAt).toLocaleString()}
           </span>
         </h4>
-        <p className="text-sm text-discord-100">THE_MESSAGE</p>
+        <p className="text-sm text-discord-100">{content}</p>
       </div>
       {/* {user?.email === email && ()} */}
       <div

@@ -6,7 +6,7 @@ import client from "../../api/client";
 import AddDmModal from "../Modal/AddDmModal";
 import ErrorModal from "../Modal/ErrorModal";
 import { hideErrorModal, showErrorModal } from "../../store/error";
-import { setRender } from "../../store/channel";
+import { getDmFriends } from "../../store/dmFriends";
 
 const Friends = () => {
   const dispatch = useDispatch();
@@ -17,15 +17,18 @@ const Friends = () => {
   const { visible, heading, subHeading } = useSelector(
     (state) => state.errorModal
   );
+  const { dmFriends: dmFriend1 } = useSelector((state) => state.dmFriends);
+  const temp = useSelector((state) => state.user);
+  const user = temp?.user?.data?.userWithLogin;
 
   useEffect(() => {
-    const fetchServer = async () => {
-      dispatch(getUserDetails());
-      const res = await client.get("/server/getDmFriends");
-      setDmFriend(res?.data?.dmFriends);
-    };
-    fetchServer();
-  }, [dispatch, isUpdated]);
+    dispatch(getDmFriends());
+    dispatch(getUserDetails());
+  }, [dispatch]);
+
+  useEffect(() => {
+    setDmFriend(dmFriend1);
+  }, [dmFriend1]);
 
   const friendsNavigateHandler = () => {
     navigate("/channels/dm");
@@ -38,19 +41,21 @@ const Friends = () => {
   const addToDmHandler = async (values) => {
     try {
       await client.post(`/server/addToDm/${values._id}`);
+      dispatch(getDmFriends());
     } catch (error) {
       const heading = `${error?.response?.data?.status}`;
       const subHeading = `${error?.response?.data?.message}`;
       dispatch(showErrorModal({ heading, subHeading }));
     }
-    dispatch(setRender("truee"));
     setIsUpdated(!isUpdated);
     setModal(false);
   };
 
   const removeFromDm = async (id) => {
     try {
+      navigate("/channels/dm");
       await client.post(`/server/removeFromDm/${id}`);
+      dispatch(getDmFriends());
     } catch (error) {
       const heading = `${error?.response?.data?.status}`;
       const subHeading = `${error?.response?.data?.message}`;
@@ -62,9 +67,6 @@ const Friends = () => {
   const openFriendDm = (dmId) => {
     navigate(`/channels/dm/${dmId}`);
   };
-
-  const temp = useSelector((state) => state.user);
-  const user = temp?.user?.data?.userWithLogin;
 
   const handleOnClose = () => {
     setModal(false);
@@ -149,12 +151,12 @@ const Friends = () => {
           <div
             key={data._id}
             onClick={() => openFriendDm(data._id)}
-            className="select-none font-medium flex items-center text-discord-500 cursor-pointer hover:bg-gray-600  hover:text-white p-2 pl-0 mt-2  mx-2 rounded-md text-base"
+            className="select-none font-medium flex items-center text-discord-500 cursor-pointer hover:bg-gray-600  hover:text-white p-2 pl-0 mt-2  mx-2 rounded-full text-base"
           >
             <img
               src={data.userImage}
               alt=""
-              className="h-8 w-8 mx-3 rounded-2xlg mr-3"
+              className="h-8 w-8 mx-3 rounded-full mr-3"
             />
             {data.name}
             <svg
@@ -240,11 +242,13 @@ const Friends = () => {
         heading={heading}
         subHeading={subHeading}
       />
-      <AddDmModal
-        onClose={handleOnClose}
-        visible={modal}
-        submitHandler={addToDmHandler}
-      />
+      {modal && (
+        <AddDmModal
+          onClose={handleOnClose}
+          visible={modal}
+          submitHandler={addToDmHandler}
+        />
+      )}
     </div>
   );
 };
