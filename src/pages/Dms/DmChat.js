@@ -1,12 +1,13 @@
 import React, { useEffect, useRef, useState } from "react";
 import DmHeader from "./DmHeader";
 import wumpus from "../../assets/wumpus.svg";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router";
 import client from "../../api/client";
 import Message from "./Message";
 import { useSocket } from "../../socket";
 import Emoji from "./Emoji";
+import { getDmFriends } from "../../store/dmFriends";
 
 const DmChat = () => {
   const { dmId } = useParams();
@@ -16,6 +17,7 @@ const DmChat = () => {
   const chatRef = useRef();
   const temp = useSelector((state) => state.user);
   const user = temp?.user?.data?.userWithLogin;
+  const dispatch = useDispatch();
   const { getSocket } = useSocket();
   const socket = getSocket();
 
@@ -37,7 +39,7 @@ const DmChat = () => {
   };
 
   const handleNavoMessage = (data) => {
-    console.log("message recieved", data?.populatedChat);
+    dispatch(getDmFriends());
     const temp = data?.populatedChat;
     setMessages((prevState) => {
       const filteredMessages = prevState.filter((msg) => msg._id !== temp?._id);

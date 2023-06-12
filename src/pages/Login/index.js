@@ -21,7 +21,7 @@ export default function Index() {
       const { data } = await login(values);
       if (data) {
         dispatch(loginSuccess(data));
-        navigate("/channels/dm");
+        navigate("/channels/@me");
       }
     } catch (error) {
       console.log("error: ", error);
@@ -32,7 +32,7 @@ export default function Index() {
       }
     }
   }
-  //
+
   return (
     <div className="flex flex-col    relative bg-discord-semi600 h-screen w-full">
       <img

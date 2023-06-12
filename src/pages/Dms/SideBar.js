@@ -4,7 +4,7 @@ import ServerModal from "../Modal/ServerModal";
 import upload from "../../utils/upload";
 import client from "../../api/client";
 
-const SideBar = ({ onIdChange }) => {
+const SideBar = () => {
   const navigate = useNavigate();
   const [data, setData] = useState([]);
   const [serverModal, setServerModal] = useState({
@@ -14,13 +14,9 @@ const SideBar = ({ onIdChange }) => {
 
   useEffect(() => {
     const fetchServer = async () => {
-      try {
-        const res = await client.get(`/server/joinedServers/`);
-        if (res?.data?.responseWithChannels?.allServers) {
-          setData(res?.data?.responseWithChannels?.allServers);
-        }
-      } catch (error) {
-        console.log(error);
+      const res = await client.get(`/server/joinedServers/`);
+      if (res?.data?.responseWithChannels?.allServers) {
+        setData(res?.data?.responseWithChannels?.allServers);
       }
     };
     fetchServer();
@@ -28,7 +24,7 @@ const SideBar = ({ onIdChange }) => {
 
   const serverClickHandler = (e, id) => {
     e.preventDefault();
-    onIdChange(id);
+    navigate(`/channels/${id}`);
   };
 
   const addServerHandler = () => {
@@ -36,11 +32,6 @@ const SideBar = ({ onIdChange }) => {
       ...prevState,
       showModal: true,
     }));
-  };
-
-  const dmHandler = () => {
-    // TODO emit join operation here
-    navigate(`/channels/@me`);
   };
 
   const handleOnClose = () => {
@@ -52,14 +43,10 @@ const SideBar = ({ onIdChange }) => {
 
   const handleServerSubmit = async (values) => {
     const avatar = await upload(values?.avatarFile);
-    try {
-      await client.post("server/createServer", {
-        name: values.serverName,
-        avatar,
-      });
-    } catch (error) {
-      console.log(error);
-    }
+    await client.post("server/createServer", {
+      name: values.serverName,
+      avatar,
+    });
 
     setServerModal((prevState) => ({
       ...prevState,
@@ -76,10 +63,7 @@ const SideBar = ({ onIdChange }) => {
       >
         {/* TODO discord icon hover:rounded-2xl (last option: hover:rounded-xlg)*/}
         {/* TODO sidebar shouldn't collapse when mobile comes */}
-        <div
-          onClick={dmHandler}
-          className="h-12  bg-discord-600 rounded-full flex justify-center items-center cursor-pointer transition-none duration-100 ease-out hover:bg-discord-indigo "
-        >
+        <div className="h-12  bg-discord-600 rounded-full flex justify-center items-center cursor-pointer transition-none duration-100 ease-out hover:bg-discord-indigo ">
           <img src="https://rb.gy/kuaslg" alt="" className="h-5 " />
         </div>
         <hr className=" border-gray-700 border w-8 mx-auto" />

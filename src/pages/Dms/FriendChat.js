@@ -98,13 +98,16 @@ const FriendChat = () => {
       dispatch(showErrorModal({ heading, subHeading }));
       setCurrentBody({});
     }
-    console.log("Hii");
   };
 
   const navigateDmHandler = async (dmId) => {
-    await client.post(`/server/addToDm/${dmId}`);
+    try {
+      await client.post(`/server/addToDm/${dmId}`);
+    } catch (error) {
+      navigate(`/channels/@me/${dmId}`);
+    }
     dispatch(getDmFriends());
-    navigate(`/channels/dm/${dmId}`);
+    navigate(`/channels/@me/${dmId}`);
   };
 
   return (

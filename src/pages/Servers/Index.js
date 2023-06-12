@@ -3,13 +3,13 @@ import SideBar from "./SideBar";
 import Channels from "./Channels";
 import { useSelector } from "react-redux";
 import { Navigate, useParams } from "react-router";
-import Chat from "../Me/Chat";
+import Chat from "./Chat";
 
 const Index = () => {
-  const [newId, setNewId] = useState("");
-  const { dmId } = useParams();
+  const { serverId } = useParams();
+  const [newId, setNewId] = useState(serverId);
 
-  const temp = useSelector((state) => state.user);
+  const temp = useSelector((state) => state?.user);
   if (!temp) return <Navigate to="/login" />;
 
   const handleNewId = (id) => {
@@ -19,7 +19,7 @@ const Index = () => {
   return (
     <div className="flex h-screen">
       <SideBar onIdChange={handleNewId} />
-      {newId || dmId ? <Channels newId={newId || dmId} /> : null}
+      <Channels newId={newId} />
       <div className="bg-discord-semi600 flex-grow-default">
         <Chat />
       </div>

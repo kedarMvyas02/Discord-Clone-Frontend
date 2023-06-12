@@ -31,7 +31,7 @@ const Friends = () => {
   }, [dmFriend1]);
 
   const friendsNavigateHandler = () => {
-    navigate("/channels/dm");
+    navigate("/channels/@me");
   };
 
   const addToDmClickHandler = () => {
@@ -53,7 +53,7 @@ const Friends = () => {
 
   const removeFromDm = async (id) => {
     try {
-      navigate("/channels/dm");
+      navigate("/channels/@me");
       await client.post(`/server/removeFromDm/${id}`);
       dispatch(getDmFriends());
     } catch (error) {
@@ -65,7 +65,7 @@ const Friends = () => {
   };
 
   const openFriendDm = (dmId) => {
-    navigate(`/channels/dm/${dmId}`);
+    navigate(`/channels/@me/${dmId}`);
   };
 
   const handleOnClose = () => {

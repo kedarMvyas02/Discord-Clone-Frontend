@@ -1,11 +1,16 @@
 import React from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { setChannelInfo } from "../../store/channel";
+import { useSocket } from "../../socket";
 
-const TextChannel = ({ dmId, channelName }) => {
+const TextChannel = ({ dmId, channelName, serverId }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { getSocket } = useSocket();
+  const socket = getSocket();
+  // const temp = useSelector((state) => state.user);
+  // const user = temp?.user?.data?.userWithLogin;
 
   const setTextChannel = () => {
     dispatch(
@@ -15,7 +20,11 @@ const TextChannel = ({ dmId, channelName }) => {
       })
     );
 
-    navigate(`/channels/me/${dmId}`);
+    socket?.emit("join-room", {
+      roomName: dmId,
+    });
+
+    navigate(`/channels/${serverId}/${dmId}`);
   };
 
   return (

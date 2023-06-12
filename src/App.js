@@ -33,11 +33,10 @@ const App = () => {
         <Route path="/register" element={<Register />} />
         <Route path="/forgotPassword" element={<ForgotPassword />} />
         <Route path="/resetPassword/:token?" element={<ResetPassword />} />
-        <Route path="/channels" element={<OnlineUsers />} />
-        <Route path="/channels/me" element={<Index />} />
-        <Route path="/channels/me/:dmId" element={<Index />} />
-        <Route path="/channels/dm" element={<IndexDM />} />
-        <Route path="/channels/dm/:dmId" element={<IndexDM />} />
+        <Route path="/channels/:serverId" element={<Index />} />
+        <Route path="/channels/:serverId/:dmId" element={<Index />} />
+        <Route path="/channels/@me" element={<IndexDM />} />
+        <Route path="/channels/@me/:dmId" element={<IndexDM />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>
@@ -45,3 +44,5 @@ const App = () => {
 };
 
 export default App;
+
+// {/* <Route path="/channels" element={<OnlineUsers />} /> */}

@@ -1,21 +1,12 @@
 import React from "react";
-import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router";
-import { setChannelInfo } from "../../store/channel";
+import client from "../../api/client";
 
-const VoiceChannel = ({ dmId, channelName }) => {
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
-
-  const setVoiceChannel = () => {
-    dispatch(
-      setChannelInfo({
-        channelId: dmId,
-        channelName: channelName,
-      })
-    );
-
-    navigate(`/channels/me/${dmId}`);
+const VoiceChannel = ({ channelName, dmId }) => {
+  const setVoiceChannel = async () => {
+    // TODO make users join
+    try {
+      const res = await client.post(`/server/joinVoice/${dmId}`);
+    } catch (error) {}
   };
 
   return (
