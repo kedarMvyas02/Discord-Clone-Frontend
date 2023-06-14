@@ -78,11 +78,9 @@ const SideBar = ({ onIdChange }) => {
         className="flex flex-col space-y-3 bg-discord-900 p-3"
         style={{ width: "70px" }}
       >
-        {/* TODO discord icon hover:rounded-2xl (last option: hover:rounded-xlg)*/}
-        {/* TODO sidebar shouldn't collapse when mobile comes */}
         <div
           onClick={dmHandler}
-          className="h-12  bg-discord-600 rounded-full flex justify-center items-center cursor-pointer transition-none duration-100 ease-out hover:bg-discord-indigo "
+          className="h-12  bg-discord-600 hover:rounded-2xlg rounded-full flex justify-center items-center cursor-pointer transition-none duration-100 ease-out hover:bg-discord-indigo "
         >
           <img src="https://rb.gy/kuaslg" alt="" className="h-5 " />
         </div>
@@ -95,13 +93,13 @@ const SideBar = ({ onIdChange }) => {
             onClick={(e) => {
               serverClickHandler(e, item?._id);
             }}
-            className="h-10 cursor-pointer rounded-full transition-all duration-100 ease-out hover:rounded-2xl"
+            className="h-12 cursor-pointer rounded-full hover:rounded-2xlg transition-all duration-100 ease-out hover:rounded-2xl"
           />
         ))}
         {/* TODO discord plus icon hover:rounded-2xl */}
         <div
           onClick={addServerHandler}
-          className="h-12 bg-discord-600 rounded-full flex justify-center items-center cursor-pointer transition-none duration-100 ease-out hover:bg-discord-green group"
+          className="h-12 bg-discord-600 rounded-full hover:rounded-2xlg flex justify-center items-center cursor-pointer transition-none duration-100 ease-out hover:bg-discord-green group"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -118,7 +116,7 @@ const SideBar = ({ onIdChange }) => {
         </div>
         <div
           onClick={navigateToDiscover}
-          className="h-12 bg-discord-600 rounded-full flex justify-center items-center cursor-pointer transition-none duration-100 ease-out hover:bg-discord-green group"
+          className="h-12 bg-discord-600 rounded-full hover:rounded-2xlg flex justify-center items-center cursor-pointer transition-none duration-100 ease-out hover:bg-discord-green group"
         >
           <svg
             aria-hidden="true"

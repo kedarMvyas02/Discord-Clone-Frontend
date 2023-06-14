@@ -1,5 +1,5 @@
 import React from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { setChannelInfo } from "../../store/channel";
 import { useSocket } from "../../socket";
@@ -9,8 +9,6 @@ const TextChannel = ({ dmId, channelName, serverId }) => {
   const navigate = useNavigate();
   const { getSocket } = useSocket();
   const socket = getSocket();
-  // const temp = useSelector((state) => state.user);
-  // const user = temp?.user?.data?.userWithLogin;
 
   const setTextChannel = () => {
     dispatch(

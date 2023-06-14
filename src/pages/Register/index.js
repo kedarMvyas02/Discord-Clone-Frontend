@@ -35,6 +35,10 @@ export default function Index() {
 
       if (data) {
         dispatch(loginSuccess(data));
+
+        const heading = `You have logged in successfully ${values?.username} :)`;
+        dispatch(showErrorModal({ heading }));
+
         navigate("/channels/@me");
       }
     } catch (error) {
@@ -111,11 +115,11 @@ export default function Index() {
   };
 
   return (
-    <div className="flex flex-col   relative bg-discord-semi600 h-screen w-full">
+    <div className="flex flex-col relative bg-discord-semi600 h-screen w-full">
       <img
         alt=""
         src={LoginBg}
-        className="z-0 hidden object-cover object-center sm:block absolute top-0 bottom-0 w-full h-screen"
+        className="z-0 hidden select-none object-cover object-center sm:block absolute top-0 bottom-0 w-full h-screen"
       />
 
       <Link

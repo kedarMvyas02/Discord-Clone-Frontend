@@ -1,26 +1,32 @@
 import React from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { Formik, Form } from "formik";
 import ForgotPasswordSchema from "../../validation/forgotPassword.schema";
 import TextField from "../../components";
 import { forgotPassword } from "../../api/auth";
 import LoginBg from "../../assets/login_bg.svg";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { hideErrorModal, showErrorModal } from "../../store/error";
+import ErrorModal from "../Modal/ErrorModal";
 
 const ForgotPassword = () => {
-  const navigate = useNavigate();
   const dispatch = useDispatch();
+  const { visible, heading, subHeading } = useSelector(
+    (state) => state.errorModal
+  );
 
-  async function submitHandler(values, { setErrors }) {
+  const handleCloseErrorModal = () => {
+    dispatch(hideErrorModal());
+  };
+
+  async function submitHandler(values) {
     try {
-      const { data } = await forgotPassword({
+      await forgotPassword({
         email: values.email,
       });
-
-      // if (data) {
-      //   navigate("/resetPassword");
-      // }
+      const heading = `We have sent you an email on ${values?.email}`;
+      const subHeading = `open your mail box and click the link to reset your password`;
+      dispatch(showErrorModal({ heading, subHeading }));
     } catch (error) {
       const heading = `${error.response.data.status}`;
       const subHeading = `${error.response.data.message}`;
@@ -29,11 +35,11 @@ const ForgotPassword = () => {
   }
 
   return (
-    <div className="flex flex-col   relative bg-discord-semi600 h-screen w-full">
+    <div className="flex flex-col relative bg-discord-semi600 h-screen w-full">
       <img
         alt=""
         src={LoginBg}
-        className="z-0 hidden object-cover object-center sm:block absolute top-0 bottom-0 w-full h-screen"
+        className="z-0 hidden select-none object-cover object-center sm:block absolute top-0 bottom-0 w-full h-screen"
       />
 
       <Link
@@ -114,17 +120,29 @@ const ForgotPassword = () => {
               </Form>
             )}
           </Formik>
-          <div className="mt-2">
+          <div className="mt-3 flex">
+            <div className="text-xs text-discord-sideBarChannels ">
+              Didn't receive an email?{" "}
+              <span className="text-discord-textLink hover:underline hover:cursor-pointer">
+                Send email again!
+              </span>
+            </div>
             <Link
               to="/login"
               href="#"
-              className="text-xs text-discord-textLink hover:underline"
+              className="text-xs text-discord-textLink hover:underline ml-auto"
             >
               Remembered your credentials?
             </Link>
           </div>
         </div>
       </div>
+      <ErrorModal
+        visible={visible}
+        onClose={handleCloseErrorModal}
+        heading={heading}
+        subHeading={subHeading}
+      />
     </div>
   );
 };

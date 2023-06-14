@@ -53,7 +53,7 @@ module.exports = {
           700: "#2f3136",
           800: "#36393f",
           900: "#202225",
-        }, 
+        },
       },
       fontSize: {
         xxxs: "0.60rem",
@@ -256,6 +256,7 @@ module.exports = {
       lg: "0.5rem",
       xlg: "0.75rem",
       "2xlg": "1rem",
+      "4xlg": "1.5rem",
       full: "9999px",
     },
     borderWidth: {

@@ -128,7 +128,10 @@ const FriendHeader = ({ setCurrentBody }) => {
             onClick={allFriendsHandler}
             className="text-discord-100 cursor-pointer opacity-75  font-medium  "
           >
-            <span className="px-2 py-1 select-none hover:bg-discord-200 rounded-mdx hover:bg-opacity-25">
+            <span
+              tabIndex="0"
+              className="px-2 py-1 select-none hover:bg-discord-200 focus:bg-discord-200 focus:text-white focus:bg-opacity-50 rounded-mdx hover:bg-opacity-25"
+            >
               All
             </span>
           </div>
@@ -136,7 +139,10 @@ const FriendHeader = ({ setCurrentBody }) => {
             onClick={pendingHandler}
             className="text-discord-100 cursor-pointer opacity-75  font-medium  "
           >
-            <span className="px-2 py-1 select-none hover:bg-discord-200 rounded-mdx hover:bg-opacity-25">
+            <span
+              tabIndex="0"
+              className="px-2 py-1 select-none hover:bg-discord-200 focus:bg-discord-200 focus:text-white focus:bg-opacity-50 rounded-mdx hover:bg-opacity-25"
+            >
               Pending
             </span>
           </div>
@@ -144,7 +150,10 @@ const FriendHeader = ({ setCurrentBody }) => {
             onClick={arrivedHandler}
             className="text-discord-100 cursor-pointer opacity-75  font-medium  "
           >
-            <span className="px-2 py-1 select-none hover:bg-discord-200 rounded-mdx hover:bg-opacity-25">
+            <span
+              tabIndex="0"
+              className="px-2 py-1 select-none hover:bg-discord-200 focus:bg-discord-200 focus:text-white focus:bg-opacity-50 rounded-mdx hover:bg-opacity-25"
+            >
               Arrived
             </span>
           </div>

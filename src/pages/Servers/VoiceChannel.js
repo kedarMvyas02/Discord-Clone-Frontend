@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from "react";
 import client from "../../api/client";
-import { useSelector } from "react-redux";
+import { GetUser } from "../../hooks/redux";
 
 const VoiceChannel = ({ channelName, dmId }) => {
   const [current, setCurrent] = useState([]);
-  const temp = useSelector((state) => state.user);
-  const user = temp?.user?.data?.userWithLogin;
+  const user = GetUser();
 
   useEffect(() => {
     const joinedMembers = async () => {

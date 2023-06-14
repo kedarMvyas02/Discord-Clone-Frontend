@@ -1,12 +1,11 @@
 import React from "react";
-import picture2 from "../photos/lmfao.jpg";
-import picture1 from "../photos/background2.jpg";
+import picture2 from "./photos/lmfao.jpg";
+import picture1 from "./photos/background2.jpg";
 import Card from "./Card";
-import bg1 from "../photos/bg01.jpg";
-import bg2 from "../photos/bg02.jpg";
-import bg3 from "../photos/bg03.jpg";
-import bg4 from "../photos/bg04.jpg";
-import { Outlet, Link } from "react-router-dom";
+import bg1 from "./photos/bg01.jpg";
+import bg2 from "./photos/bg02.jpg";
+import bg3 from "./photos/bg03.jpg";
+import bg4 from "./photos/bg04.jpg";
 
 const Featured = () => {
   const cards = [

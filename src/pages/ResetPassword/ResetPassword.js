@@ -22,7 +22,7 @@ const ResetPassword = () => {
     dispatch(hideErrorModal());
   };
 
-  async function submitHandler(values, { setErrors }) {
+  async function submitHandler(values) {
     try {
       const { data } = await resetPassword(token, {
         password: values.password,
@@ -30,6 +30,8 @@ const ResetPassword = () => {
       });
 
       if (data) {
+        const heading = `Your password was changed Successfully :)`;
+        dispatch(showErrorModal({ heading }));
         navigate("/login");
       }
     } catch (error) {
@@ -40,11 +42,11 @@ const ResetPassword = () => {
   }
 
   return (
-    <div className="flex flex-col   relative bg-discord-semi600 h-screen w-full">
+    <div className="flex flex-col relative bg-discord-semi600 h-screen w-full">
       <img
         alt=""
         src={LoginBg}
-        className="z-0 hidden object-cover object-center sm:block absolute top-0 bottom-0 w-full h-screen"
+        className="z-0 hidden object-cover select-none object-center sm:block absolute top-0 bottom-0 w-full h-screen"
       />
 
       <Link
@@ -133,11 +135,14 @@ const ResetPassword = () => {
             )}
           </Formik>
           <div className="mt-2">
-            <div className="text-xm text-discord-sideBarChannels ">
+            <div className="text-xs text-discord-sideBarChannels ">
               Didn't receive an email?{" "}
-              <span className="text-discord-textLink hover:underline hover:cursor-pointer">
+              <Link
+                to="/forgotPassword"
+                className="text-discord-textLink hover:underline hover:cursor-pointer"
+              >
                 Send email again!
-              </span>
+              </Link>
             </div>
           </div>
         </div>

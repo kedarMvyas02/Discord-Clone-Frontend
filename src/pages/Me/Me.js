@@ -5,10 +5,11 @@ import client from "../../api/client";
 import ChannelModal from "../Modal/ChannelModal";
 import ServerModal from "../Modal/ServerModal";
 import upload from "../../utils/upload";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { Navigate, useNavigate } from "react-router";
 import { getUserDetails } from "../../store/user";
 import Chat from "./Chat";
+import { GetUser } from "../../hooks/redux";
 
 const Me = () => {
   const [data, setData] = useState([]);
@@ -41,9 +42,8 @@ const Me = () => {
     fetchServer();
   }, [channelModal.render, serverModal.render, dispatch]);
 
-  const temp = useSelector((state) => state.user);
-  const user = temp?.user?.data?.userWithLogin;
-  if (!temp) return <Navigate to="/login" />;
+  const user = GetUser();
+  if (!user) return <Navigate to="/login" />;
 
   const handleOnClose = () => {
     setChannelModal((prevState) => ({

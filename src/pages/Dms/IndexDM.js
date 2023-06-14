@@ -1,15 +1,15 @@
 import React from "react";
-import { useSelector } from "react-redux";
-import { Navigate, useNavigate, useParams } from "react-router";
+import { Navigate, useParams } from "react-router";
 import Friends from "./Friends";
 import SideBar from "./SideBar";
 import FriendChat from "./FriendChat";
 import DmChat from "./DmChat";
+import { GetMe } from "../../hooks/redux";
 
 const IndexDM = () => {
   const { dmId } = useParams();
-  const temp = useSelector((state) => state.user);
-  if (!temp) return <Navigate to="/login" />;
+  const me = GetMe();
+  if (!me) return <Navigate to="/login" />;
 
   return (
     <div className="flex h-screen">

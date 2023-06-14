@@ -8,6 +8,7 @@ import ChannelModal from "../Modal/ChannelModal";
 import { Menu, MenuItem, MenuButton, SubMenu } from "@szhsin/react-menu";
 import AddFriendsToServer from "../Modal/AddFriendsToServerModal";
 import { showErrorModal } from "../../store/error";
+import { GetUser } from "../../hooks/redux";
 
 const Channels = ({ newId }) => {
   const [toggle, setToggle] = useState({
@@ -38,8 +39,7 @@ const Channels = ({ newId }) => {
     fetchServer();
   }, [newId, dispatch, channelModal.render]);
 
-  const temp = useSelector((state) => state.user);
-  const user = temp?.user?.data?.userWithLogin;
+  const user = GetUser();
 
   const handleAddTextChannel = async () => {
     setChannelModal((prevState) => ({

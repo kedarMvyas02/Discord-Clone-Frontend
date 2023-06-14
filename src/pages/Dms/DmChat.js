@@ -1,13 +1,14 @@
 import React, { useEffect, useRef, useState } from "react";
 import DmHeader from "./DmHeader";
 import wumpus from "../../assets/wumpus.svg";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { useParams } from "react-router";
 import client from "../../api/client";
 import Message from "./Message";
 import { useSocket } from "../../socket";
 import Emoji from "./Emoji";
 import { getDmFriends } from "../../store/dmFriends";
+import { GetUser } from "../../hooks/redux";
 
 const DmChat = () => {
   const { dmId } = useParams();
@@ -15,8 +16,7 @@ const DmChat = () => {
   const [messages, setMessages] = useState(null);
   const [msg, setMsg] = useState("");
   const chatRef = useRef();
-  const temp = useSelector((state) => state.user);
-  const user = temp?.user?.data?.userWithLogin;
+  const user = GetUser();
   const dispatch = useDispatch();
   const { getSocket } = useSocket();
   const socket = getSocket();

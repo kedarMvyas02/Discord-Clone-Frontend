@@ -7,14 +7,14 @@ import { useSocket } from "../../socket";
 import wumpus from "../../assets/wumpus.svg";
 import client from "../../api/client";
 import { useParams } from "react-router";
+import { GetUser } from "../../hooks/redux";
 
 const Chat = () => {
   const { serverId } = useParams();
   const [msg, setMsg] = useState("");
   const channelId = useSelector(selectChannelId);
   const channelName = useSelector(selectChannelName);
-  const temp = useSelector((state) => state.user);
-  const user = temp?.user?.data?.userWithLogin;
+  const user = GetUser();
   const chatRef = useRef();
   const { getSocket } = useSocket();
   const socket = getSocket();
@@ -24,8 +24,6 @@ const Chat = () => {
     const handleNavoMessage = (data) => {
       const temp = data?.populatedChat;
 
-      console.log(temp.channel._id);
-      console.log("channelId", channelId);
       if (temp.channel._id === channelId) {
         setMessages((prevState) => {
           const filteredMessages = prevState.filter(
@@ -43,7 +41,7 @@ const Chat = () => {
     return () => {
       socket?.off("message", handleNavoMessage);
     };
-  }, [channelId, temp, socket]);
+  }, [channelId, user, socket]);
 
   // useEffect(() => {}, []);
 

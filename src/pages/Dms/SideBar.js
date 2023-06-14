@@ -73,7 +73,8 @@ const SideBar = () => {
         {/* TODO sidebar shouldn't collapse when mobile comes */}
         <div
           onClick={navigateToDm}
-          className="h-12  bg-discord-600 rounded-full flex justify-center items-center cursor-pointer transition-none duration-100 ease-out hover:bg-discord-indigo "
+          tabIndex="0"
+          className="h-12  bg-discord-600 rounded-full flex justify-center items-center cursor-pointer transition-none duration-100 ease-out hover:bg-discord-indigo focus:bg-discord-indigo focus:rounded-2xlg focus:text-white hover:rounded-2xlg"
         >
           <img src="https://rb.gy/kuaslg" alt="" className="h-5 " />
         </div>
@@ -86,13 +87,14 @@ const SideBar = () => {
             onClick={(e) => {
               serverClickHandler(e, item?._id);
             }}
-            className="h-10 cursor-pointer rounded-full transition-all duration-100 ease-out hover:rounded-2xl"
+            className="h-10 cursor-pointer rounded-full transition-all duration-100 ease-out hover:rounded-2xlg"
           />
         ))}
         {/* TODO discord plus icon hover:rounded-2xl */}
         <div
+          tabIndex="0"
           onClick={addServerHandler}
-          className="h-12 bg-discord-600 rounded-full flex justify-center items-center cursor-pointer transition-none duration-100 ease-out hover:bg-discord-green group"
+          className="h-12 bg-discord-600 rounded-full hover:rounded-2xlg flex justify-center items-center cursor-pointer transition-none duration-100 ease-out hover:bg-discord-green focus:rounded-2xlg group"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -109,12 +111,13 @@ const SideBar = () => {
         </div>
         <div
           onClick={navigateToDiscover}
-          className="h-12 bg-discord-600 rounded-full flex justify-center items-center cursor-pointer transition-none duration-100 ease-out hover:bg-discord-green group"
+          tabIndex="0"
+          className="h-12 bg-discord-600 rounded-full hover:rounded-2xlg focus:bg-discord-green focus:text-white focus:rounded-2xlg flex justify-center items-center cursor-pointer transition-none duration-100 ease-out hover:bg-discord-green group"
         >
           <svg
             aria-hidden="true"
             role="img"
-            className="text-discord-green h-6 group-hover:text-white"
+            className="text-discord-green h-6 group-hover:text-white group-focus:text-white"
             width="24"
             height="24"
             viewBox="0 0 24 24"

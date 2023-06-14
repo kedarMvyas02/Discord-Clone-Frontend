@@ -97,15 +97,15 @@ export default function Header() {
         <div className="flex flex-row justify-between">
           {me ? (
             <Link
-              to="/register"
+              to="/channels/@me"
               className="sm:px-4 px-2 sm:py-2 flex justify-center items-center duration-300 hover:shadow-lg hover:text-discord-indigo rounded-full bg-white text-black sm:text-sm text-xs"
               href="#"
             >
-              Sign Up
+              Open Discord
             </Link>
           ) : (
             <Link
-              to={"/login"}
+              to="/login"
               className="px-4 py-2 duration-300 hover:shadow-lg hover:text-discord-indigo rounded-full bg-white text-black text-sm"
               href="#"
             >

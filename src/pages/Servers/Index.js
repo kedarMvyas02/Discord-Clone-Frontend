@@ -1,16 +1,16 @@
 import React, { useState } from "react";
 import SideBar from "./SideBar";
 import Channels from "./Channels";
-import { useSelector } from "react-redux";
 import { Navigate, useParams } from "react-router";
 import Chat from "./Chat";
+import { GetMe } from "../../hooks/redux";
 
 const Index = () => {
   const { serverId } = useParams();
   const [newId, setNewId] = useState(serverId);
 
-  const temp = useSelector((state) => state?.user);
-  if (!temp) return <Navigate to="/login" />;
+  const me = GetMe();
+  if (!me) return <Navigate to="/login" />;
 
   const handleNewId = (id) => {
     setNewId(id);

@@ -2,8 +2,13 @@ import React from "react";
 import MainComponent from "./MainComponent";
 import SideBar from "../Dms/SideBar";
 import Discover from "./Discover";
+import { Navigate } from "react-router";
+import { GetMe } from "../../hooks/redux";
 
 const Home = () => {
+  const me = GetMe();
+  if (!me) return <Navigate to="/login" />;
+
   return (
     <div className="flex bg-[#393943] ">
       <SideBar />

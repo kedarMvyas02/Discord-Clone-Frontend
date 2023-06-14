@@ -7,7 +7,6 @@ import TextField from "../../components";
 import { login } from "../../api/auth";
 import { loginSuccess } from "../../store/user";
 import LoadingCircle from "../../assets/loading_circle_icon.svg";
-import QrCode from "../../assets/qr_code.png";
 import LoginBg from "../../assets/login_bg.svg";
 import { hideErrorModal, showErrorModal } from "../../store/error";
 import ErrorModal from "../Modal/ErrorModal";
@@ -38,11 +37,11 @@ export default function Index() {
   }
 
   return (
-    <div className="flex flex-col    relative bg-discord-semi600 h-screen w-full">
+    <div className="flex flex-col relative bg-discord-semi600 h-screen w-full">
       <img
         alt=""
         src={LoginBg}
-        className="z-0 hidden object-cover object-center sm:block absolute top-0 bottom-0 w-full h-screen"
+        className="z-0 hidden select-none object-cover object-center sm:block absolute top-0 bottom-0 w-full h-screen"
       />
       {/* <img
         src={loginBg}
@@ -68,8 +67,8 @@ export default function Index() {
         </svg>
       </Link>
 
-      <div className="z-10 bg-discord-semi600 w-full sm:w-4/6 md:w-4/6 lg:w-4/6 xl:w-2/5 rounded-md p-5 m-12 flex flex-row mx-auto mt-16">
-        <div className="flex flex-col w-full lg:w-2/4">
+      <div className="z-10 bg-discord-semi600 w-full sm:w-3/6 md:w-3/6 lg:w-3/6 xl:w-2/6 rounded-md p-5 m-12 flex flex-row mx-auto mt-16">
+        <div className="flex flex-col w-full md:2/5">
           <h4 className="text-xl text-white font-semibold">Welcome back!</h4>
           <p className="text-sm text-discord-mainText">
             We're so excited to see you again!
@@ -126,7 +125,6 @@ export default function Index() {
               </Form>
             )}
           </Formik>
-
           <div className="mt-2">
             <span className="text-xs text-discord-popOutHeader mr-2">
               Need an account?
@@ -139,7 +137,21 @@ export default function Index() {
             </Link>
           </div>
         </div>
-        <div className="flex flex-col justify-center items-center p-2 hidden lg:block mx-auto ">
+      </div>
+      <ErrorModal
+        visible={visible}
+        onClose={handleCloseErrorModal}
+        heading={heading}
+        subHeading={subHeading}
+      />
+    </div>
+  );
+}
+
+/*
+import QrCode from "../../assets/qr_code.png";
+
+<div className="flex flex-col justify-center items-center p-2 hidden lg:block mx-auto ">
           <img
             src={QrCode}
             className="w-40 h-40 mt-10 mx-auto rounded-md border-white border-8"
@@ -153,13 +165,4 @@ export default function Index() {
             to log in instantly.
           </p>
         </div>
-      </div>
-      <ErrorModal
-        visible={visible}
-        onClose={handleCloseErrorModal}
-        heading={heading}
-        subHeading={subHeading}
-      />
-    </div>
-  );
-}
+ */

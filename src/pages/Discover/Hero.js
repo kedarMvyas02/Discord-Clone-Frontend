@@ -1,5 +1,5 @@
 import React from "react";
-import hero from "../photos/hero2.webp";
+import hero from "./photos/hero2.webp";
 import { FiSearch } from "react-icons/fi";
 
 const Hero = () => {
