@@ -4,7 +4,6 @@ import "./app.styles.scss";
 import Landing from "./pages/Landing";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
-import OnlineUsers from "./components/OnlineUsers";
 import ForgotPassword from "./pages/ForgotPassword/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword/ResetPassword";
 // import Me from "./pages/Me/Me";
@@ -13,6 +12,8 @@ import Index from "./pages/Servers/Index";
 import IndexDM from "./pages/Dms/IndexDM";
 import { useSocket } from "./socket";
 import { useSelector } from "react-redux";
+import Home from "./pages/Discover/Home";
+import JoinForm from "./pages/100ms/JoinForm";
 // import Dm from "./pages/Dm/Dm.js";
 
 const App = () => {
@@ -28,7 +29,7 @@ const App = () => {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Landing />} />
+        <Route path="/" element={<JoinForm />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/forgotPassword" element={<ForgotPassword />} />
@@ -37,6 +38,7 @@ const App = () => {
         <Route path="/channels/:serverId/:dmId" element={<Index />} />
         <Route path="/channels/@me" element={<IndexDM />} />
         <Route path="/channels/@me/:dmId" element={<IndexDM />} />
+        <Route path="/discover" element={<Home />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>

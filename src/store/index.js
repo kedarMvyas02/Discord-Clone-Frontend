@@ -12,7 +12,7 @@ const store = configureStore({
     user,
     channel,
     errorModal,
-    dmFriends:dmFriendsReducer,
+    dmFriends: dmFriendsReducer,
   },
   middleware,
 });

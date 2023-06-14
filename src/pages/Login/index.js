@@ -1,22 +1,29 @@
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Formik, Form } from "formik";
 import LoginSchema from "../../validation/login.schema";
-import TextField from "../../components/shared/Inputs/TextField";
+import TextField from "../../components";
 import { login } from "../../api/auth";
-import apiErrorHandler from "../../utils/apiErrorHandler";
 import { loginSuccess } from "../../store/user";
 import LoadingCircle from "../../assets/loading_circle_icon.svg";
 import QrCode from "../../assets/qr_code.png";
 import LoginBg from "../../assets/login_bg.svg";
-import { useSocket } from "../../socket";
+import { hideErrorModal, showErrorModal } from "../../store/error";
+import ErrorModal from "../Modal/ErrorModal";
 
 export default function Index() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const { visible, heading, subHeading } = useSelector(
+    (state) => state.errorModal
+  );
 
-  async function handleLoginSubmit(values, { setErrors }) {
+  const handleCloseErrorModal = () => {
+    dispatch(hideErrorModal());
+  };
+
+  async function handleLoginSubmit(values) {
     try {
       const { data } = await login(values);
       if (data) {
@@ -24,12 +31,9 @@ export default function Index() {
         navigate("/channels/@me");
       }
     } catch (error) {
-      console.log("error: ", error);
-      if (error.response.status === 401) {
-        setErrors({ email: error.response.data.message });
-      } else {
-        setErrors(apiErrorHandler(error));
-      }
+      const heading = `${error.response.data.status}`;
+      const subHeading = `${error.response.data.message}`;
+      dispatch(showErrorModal({ heading, subHeading }));
     }
   }
 
@@ -150,6 +154,12 @@ export default function Index() {
           </p>
         </div>
       </div>
+      <ErrorModal
+        visible={visible}
+        onClose={handleCloseErrorModal}
+        heading={heading}
+        subHeading={subHeading}
+      />
     </div>
   );
 }

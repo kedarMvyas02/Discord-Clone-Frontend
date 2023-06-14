@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import { LOGIN_PAGE } from "../../constants/history.constants";
 import { GetMe } from "../../hooks/redux";
 import classNames from "classnames";
 import Not_Found from "../../assets/404_Not_Found.gif";
@@ -105,7 +104,7 @@ const NotFound = () => {
               </Link>
             ) : (
               <Link
-                to={LOGIN_PAGE}
+                to={"/login"}
                 className="px-4 py-2 duration-300 hover:shadow-lg hover:text-discord-indigo rounded-full bg-white text-black text-sm"
                 href="#"
               >

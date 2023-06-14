@@ -1,7 +1,7 @@
-import { useSelector } from 'react-redux'
+import { useSelector } from "react-redux";
 
 export function GetMe() {
-  const user = useSelector((state) => state.user?.user)
-
-  return user
+  const temp = useSelector((state) => state.user);
+  const user = temp?.user?.data?.userWithLogin;
+  return user;
 }

@@ -1,19 +1,26 @@
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Formik, Form, ErrorMessage, Field } from "formik";
 import RegisterSchema from "../../validation/register.schema";
-import TextField from "../../components/shared/Inputs/TextField";
+import TextField from "../../components";
 import { register } from "../../api/auth";
-import { ME_PAGE } from "../../constants/history.constants";
-import apiErrorHandler from "../../utils/apiErrorHandler";
 import { loginSuccess } from "../../store/user";
 import LoginBg from "../../assets/login_bg.svg";
 import upload from "../../utils/upload";
+import { hideErrorModal, showErrorModal } from "../../store/error";
+import ErrorModal from "../Modal/ErrorModal";
 
 export default function Index() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const { visible, heading, subHeading } = useSelector(
+    (state) => state.errorModal
+  );
+
+  const handleCloseErrorModal = () => {
+    dispatch(hideErrorModal());
+  };
 
   async function handleRegisterSubmit(values, { setErrors }) {
     const avatar = await upload(values?.userImage);
@@ -28,10 +35,12 @@ export default function Index() {
 
       if (data) {
         dispatch(loginSuccess(data));
-        navigate(ME_PAGE);
+        navigate("/channels/@me");
       }
     } catch (error) {
-      setErrors(apiErrorHandler(error));
+      const heading = `${error.response.data.status}`;
+      const subHeading = `${error.response.data.message}`;
+      dispatch(showErrorModal({ heading, subHeading }));
     }
   }
 
@@ -224,6 +233,36 @@ export default function Index() {
           </div>
         </div>
       </div>
+      <ErrorModal
+        visible={visible}
+        onClose={handleCloseErrorModal}
+        heading={heading}
+        subHeading={subHeading}
+      />
     </div>
   );
 }
+/**
+ * 
+ *   const { visible, heading, subHeading } = useSelector(
+    (state) => state.errorModal
+  );
+
+
+<ErrorModal
+        visible={visible}
+        onClose={handleCloseErrorModal}
+        heading={heading}
+        subHeading={subHeading}
+      />
+
+
+const handleCloseErrorModal = () => {
+    dispatch(hideErrorModal());
+  };
+
+
+const heading = `${error.response.data.status}`;
+      const subHeading = `${error.response.data.message}`;
+      dispatch(showErrorModal({ heading, subHeading }));
+ */

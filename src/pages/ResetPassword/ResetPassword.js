@@ -2,15 +2,25 @@ import React from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Formik, Form } from "formik";
 import ResetPasswordSchema from "../../validation/resetPassword.schema";
-import TextField from "../../components/shared/Inputs/TextField";
+import TextField from "../../components";
 import { resetPassword } from "../../api/auth";
-import apiErrorHandler from "../../utils/apiErrorHandler";
 import LoginBg from "../../assets/login_bg.svg";
+import ErrorModal from "../Modal/ErrorModal";
+import { useDispatch, useSelector } from "react-redux";
+import { hideErrorModal, showErrorModal } from "../../store/error";
 
 const ResetPassword = () => {
   const navigate = useNavigate();
   const { pathname } = useLocation();
   const token = pathname.split("/")[2];
+  const { visible, heading, subHeading } = useSelector(
+    (state) => state.errorModal
+  );
+  const dispatch = useDispatch();
+
+  const handleCloseErrorModal = () => {
+    dispatch(hideErrorModal());
+  };
 
   async function submitHandler(values, { setErrors }) {
     try {
@@ -23,7 +33,9 @@ const ResetPassword = () => {
         navigate("/login");
       }
     } catch (error) {
-      setErrors(apiErrorHandler(error));
+      const heading = `${error.response.data.status}`;
+      const subHeading = `${error.response.data.message}`;
+      dispatch(showErrorModal({ heading, subHeading }));
     }
   }
 
@@ -130,6 +142,12 @@ const ResetPassword = () => {
           </div>
         </div>
       </div>
+      <ErrorModal
+        visible={visible}
+        onClose={handleCloseErrorModal}
+        heading={heading}
+        subHeading={subHeading}
+      />
     </div>
   );
 };

@@ -175,7 +175,7 @@ const DmChat = () => {
           strokeWidth="2"
           strokeLinecap="round"
           strokeLinejoin="round"
-          // class=""
+          // className=""
           onClick={sendMessage}
           className="feather feather-send hover:bg-discord-iconHover cursor-pointer text-discord-mainTextHover opacity-75 hover:opacity-100 py-2 rounded-md w-10 h-10"
         >

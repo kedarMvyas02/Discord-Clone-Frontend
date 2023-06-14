@@ -2,13 +2,15 @@ import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Formik, Form } from "formik";
 import ForgotPasswordSchema from "../../validation/forgotPassword.schema";
-import TextField from "../../components/shared/Inputs/TextField";
+import TextField from "../../components";
 import { forgotPassword } from "../../api/auth";
-import apiErrorHandler from "../../utils/apiErrorHandler";
 import LoginBg from "../../assets/login_bg.svg";
+import { useDispatch } from "react-redux";
+import { hideErrorModal, showErrorModal } from "../../store/error";
 
 const ForgotPassword = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   async function submitHandler(values, { setErrors }) {
     try {
@@ -20,7 +22,9 @@ const ForgotPassword = () => {
       //   navigate("/resetPassword");
       // }
     } catch (error) {
-      setErrors(apiErrorHandler(error));
+      const heading = `${error.response.data.status}`;
+      const subHeading = `${error.response.data.message}`;
+      dispatch(showErrorModal({ heading, subHeading }));
     }
   }
 

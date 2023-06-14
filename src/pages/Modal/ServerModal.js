@@ -1,5 +1,5 @@
 import React from "react";
-import TextField from "../../components/shared/Inputs/TextField";
+import TextField from "../../components";
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import * as Yup from "yup";
 

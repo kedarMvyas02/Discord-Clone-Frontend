@@ -5,7 +5,6 @@ import LeftHeaderImage from "../../assets/left_bg_landing_header.svg";
 import RightHeaderImage from "../../assets/right_bg_landing_header.svg";
 import CenterHeaderImage from "../../assets/center_bg_landing_header.svg";
 import { GetMe } from "../../hooks/redux";
-import { LOGIN_PAGE, ME_PAGE } from "../../constants/history.constants";
 
 export default function Header() {
   const [open, setOpen] = useState(false);
@@ -106,7 +105,7 @@ export default function Header() {
             </Link>
           ) : (
             <Link
-              to={LOGIN_PAGE}
+              to={"/login"}
               className="px-4 py-2 duration-300 hover:shadow-lg hover:text-discord-indigo rounded-full bg-white text-black text-sm"
               href="#"
             >
@@ -190,7 +189,7 @@ export default function Header() {
             <a href="#">Careers</a>
           </li>
         </ul>
-{/* bas aa j che  are aa landing page ma che */}
+        {/* bas aa j che  are aa landing page ma che */}
         <a
           href="https://discord.com/api/downloads/distributions/app/installers/latest?channel=stable&platform=win&arch=x86"
           target="_blank"

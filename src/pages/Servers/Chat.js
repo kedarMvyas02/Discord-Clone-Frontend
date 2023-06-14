@@ -55,7 +55,7 @@ const Chat = () => {
           setMessages(res?.data?.messages);
         }
       } catch (error) {
-        console.log(error);
+        // console.log(error);
       }
     };
     fetchMessages();
