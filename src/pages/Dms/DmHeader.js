@@ -31,6 +31,7 @@ const DmHeader = ({ data }) => {
 
         {/* <hr className=" border-y-discord-transparentBlack1 border w-full mx-auto" /> */}
       </div>
+      
       <div className="flex items-center">
         <div onClick={startCallHandler} className="ml-3">
           <svg
