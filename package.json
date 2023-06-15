@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@100mslive/hms-virtual-background": "^1.11.6",
     "@100mslive/react-sdk": "^0.8.6",
     "@emoji-mart/data": "^1.1.2",
     "@emoji-mart/react": "^1.1.1",

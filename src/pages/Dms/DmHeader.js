@@ -1,12 +1,65 @@
 import { useHMSActions } from "@100mslive/react-sdk";
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { useSocket } from "../../socket";
+import { GetUser } from "../../hooks/redux";
+import { useParams } from "react-router";
+import IncomingCall from "../Modal/IncomingCallModal";
+import { useDispatch, useSelector } from "react-redux";
+import { getAllFriends } from "../../store/dmFriends";
 
 const DmHeader = ({ data }) => {
+  const [showModal, setShowModal] = useState(false);
   const hmsActions = useHMSActions();
+  const { getSocket } = useSocket();
+  const socket = getSocket();
+  const user = GetUser();
+  const { dmId } = useParams();
+  const allFriends = useSelector((state) => state?.dmFriends?.allFriends);
+  // console.log(allFriends);
+  const dispatch = useDispatch();
+
+  const friendToFind = allFriends?.find((friend) => friend?._id === data?._id);
+
+  useEffect(() => {
+    dispatch(getAllFriends());
+  }, []);
+
+  const handleCloseModal = () => {
+    setShowModal(false);
+  };
+
+  const handleIncomingCall = () => {
+    console.log("an incoming call");
+    setShowModal(true);
+  };
+
+  const acceptCall = async () => {
+    const authToken = await hmsActions.getAuthTokenByRoomCode({
+      roomCode: friendToFind.roomCode, //xyf-mlsw-qlh
+    });
+
+    handleCloseModal();
+    try {
+      await hmsActions.join({ userName: data?.name, authToken });
+      console.log("call started successfully");
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  useEffect(() => {
+    socket?.on("incoming-call", handleIncomingCall);
+
+    return () => {
+      socket?.off("incoming-call", handleIncomingCall);
+    };
+  }, []);
 
   const startCallHandler = async () => {
+    socket.emit("private-call", { from: user?._id, to: dmId });
+
     const authToken = await hmsActions.getAuthTokenByRoomCode({
-      roomCode: "xyf-mlsw-qlh",
+      roomCode: friendToFind.roomCode,
     });
 
     try {
@@ -52,7 +105,7 @@ const DmHeader = ({ data }) => {
             ></path>
           </svg>
         </div>
-        <div className="ml-3 cursor-pointer">
+        <div onClick={startCallHandler} className="ml-3 cursor-pointer">
           <svg
             x="0"
             y="0"
@@ -69,7 +122,7 @@ const DmHeader = ({ data }) => {
             ></path>
           </svg>
         </div>
-        <a href="#" className="ml-3">
+        <div className="ml-3">
           <form className="relative">
             <input
               type="text"
@@ -93,7 +146,7 @@ const DmHeader = ({ data }) => {
               </svg>
             </span>
           </form>
-        </a>
+        </div>
         <a href="#" className="ml-3">
           <svg
             className="w-6 h-6 text-discord-topIcons hover:text-gray-200"
@@ -129,6 +182,14 @@ const DmHeader = ({ data }) => {
           </svg>
         </a>
       </div>
+      <IncomingCall
+        visible={showModal}
+        onClose={handleCloseModal}
+        callerName={user?.name}
+        callerImage={user?.userImage}
+        onAcceptCall={acceptCall}
+        onRejectCall={handleCloseModal}
+      />
     </div>
   );
 };
