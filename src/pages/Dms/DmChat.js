@@ -7,6 +7,8 @@ import client from "../../api/client";
 import Message from "./Message";
 import { useSocket } from "../../socket";
 import Emoji from "./Emoji";
+// import "./styles.css";
+
 import { getDmFriends } from "../../store/dmFriends";
 import { GetUser } from "../../hooks/redux";
 import {
@@ -15,6 +17,7 @@ import {
   useHMSActions,
   useHMSStore,
 } from "@100mslive/react-sdk";
+import Conference from "./Conference";
 
 const DmChat = () => {
   const { dmId } = useParams();
@@ -105,8 +108,10 @@ const DmChat = () => {
       </div>
       <main className="flex-grow overflow-y-scroll scrollbar-hide">
         {isConnected ? (
-          <div className="bg-black" style={{ height: "250px" }}>
-            <div className="flex">
+          <div className="bg-black">
+            <Conference />
+
+            {/* <div className="flex">
               <div className="z-10 flex m-auto mt-12">
                 <div>
                   <img
@@ -125,9 +130,9 @@ const DmChat = () => {
                   <span className="text-white">{data?.name}</span>
                 </div>
               </div>
-            </div>
-            <div className="flex">
-              <div className="z-10 m-auto flex mt-10">
+            </div> */}
+            <div className="flex justify-center items-center">
+              <div className="z-10  flex my-5">
                 {/* VIDEO  */}
                 <div
                   onClick={toggleVideo}
