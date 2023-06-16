@@ -93,7 +93,7 @@ const SideBar = ({ onIdChange }) => {
             onClick={(e) => {
               serverClickHandler(e, item?._id);
             }}
-            className="h-12 cursor-pointer rounded-full hover:rounded-2xlg transition-all duration-100 ease-out hover:rounded-2xl"
+            className="h-10 cursor-pointer rounded-full transition-all duration-100 ease-out hover:rounded-2xlg"
           />
         ))}
         {/* TODO discord plus icon hover:rounded-2xl */}

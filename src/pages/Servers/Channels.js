@@ -3,11 +3,10 @@ import VoiceChannel from "./VoiceChannel";
 import TextChannel from "./TextChannel";
 import client from "../../api/client";
 import { getUserDetails } from "../../store/user";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import ChannelModal from "../Modal/ChannelModal";
-import { Menu, MenuItem, MenuButton, SubMenu } from "@szhsin/react-menu";
+import { Menu, MenuItem, MenuButton } from "@szhsin/react-menu";
 import AddFriendsToServer from "../Modal/AddFriendsToServerModal";
-import { showErrorModal } from "../../store/error";
 import { GetUser } from "../../hooks/redux";
 
 const Channels = ({ newId }) => {
@@ -338,13 +337,14 @@ const Channels = ({ newId }) => {
         </div>
         <div className="flex flex-col space-y-2 px-2 mb-4">
           {toggle.voiceToggle &&
-            data?.voiceChannels?.map((item, itemIndex) => (
-              <React.Fragment key={`${item._id}-${itemIndex}`}>
+            data?.voiceChannels?.map((item) => (
+              <React.Fragment key={item._id}>
                 {item && (
                   <VoiceChannel
+                    roomCode={item?.roomCode}
                     serverId={data?._id}
                     key={item._id}
-                    dmId={item._id}
+                    channelId={item._id}
                     channelName={item.name}
                     className="pl-4 list-outside list-none"
                   />

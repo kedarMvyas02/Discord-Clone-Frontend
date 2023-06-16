@@ -19,6 +19,7 @@ import {
   useScreenShare,
 } from "@100mslive/react-sdk";
 import Conference from "./Conference";
+import ScreenShareComponent from "./ScreenShare";
 
 const DmChat = () => {
   const { dmId } = useParams();
@@ -96,27 +97,7 @@ const DmChat = () => {
 
   const hmsActions = useHMSActions();
 
-  const {
-    amIScreenSharing,
-    screenShareAudioTrackId,
-    screenShareVideoTrackId,
-    screenSharingPeerId,
-    screenSharingPeerName,
-    toggleScreenShare,
-  } = useScreenShare();
-
-  const startScreenShareHandler = async () => {
-    try {
-      const ss = await hmsActions.setScreenShareEnabled(true);
-      if (ss) {
-        console.log("screen sharing started");
-      } else {
-        console.log("ss not started");
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  const { toggleScreenShare } = useScreenShare();
 
   return (
     <div className="flex flex-col h-screen">
@@ -130,7 +111,7 @@ const DmChat = () => {
         {isConnected ? (
           <div className="bg-black">
             <Conference data={data} />
-
+            {/* <ScreenShareComponent /> */}
             {/* <div className="flex">
               <div className="z-10 flex m-auto mt-12">
                 <div>
@@ -198,7 +179,7 @@ const DmChat = () => {
                   onClick={toggleAudio}
                   className="bg-discord-800 mx-4 p-3 rounded-full cursor-pointer text-white hover:text-opacity-100 hover:bg-discord-900"
                 >
-                  {isLocalAudioEnabled ? (
+                  {!isLocalAudioEnabled ? (
                     <svg
                       aria-hidden="true"
                       role="img"

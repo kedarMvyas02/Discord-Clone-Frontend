@@ -13,6 +13,7 @@ import { useSocket } from "./socket";
 import Home from "./pages/Discover/Home";
 import { useHMSActions } from "@100mslive/react-sdk";
 import { GetUser } from "./hooks/redux/index";
+import Setting from "./pages/Setting";
 
 const App = () => {
   const user = GetUser();
@@ -44,6 +45,7 @@ const App = () => {
         <Route path="/channels/@me" element={<IndexDM />} />
         <Route path="/channels/@me/:dmId" element={<IndexDM />} />
         <Route path="/discover" element={<Home />} />
+        <Route path="/userSettings" element={<Setting />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>

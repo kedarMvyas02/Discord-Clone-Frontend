@@ -204,6 +204,7 @@ const Chat = () => {
 };
 
 export default Chat;
+
 /*
 <div className="flex flex-col h-screen">
       <div className="flex flex-col flex-grow">
@@ -211,53 +212,52 @@ export default Chat;
           <Header channelName={channelName} />
         </header>
         <hr className=" border-y-discord-transparentBlack1 border w-full mx-auto" />
-        <main className="flex-grow overflow-y-scroll scrollbar-hide">
-          {!channelId ? (
-            <>
-              <div className="flex items-center justify-center mt-10">
-                <img src={wumpus} alt="" />
-              </div>
-              <span className="flex items-center text-xl justify-center text-discord-200 mt-4">
-                {`Please Select a channel to continue chatting`}
-              </span>
-            </>
-          ) : messages === null || messages.length === 0 ? (
-            <>
-              <div className="flex items-center justify-center mt-10">
-                <img src={wumpus} alt="" />
-              </div>
-              <span className="flex items-center text-xl justify-center text-discord-200 mt-4">
-                {`There are no messages in #${channelName}`}
-              </span>
-            </>
-          ) : (
-            messages.map((msg) => {
-              const { name, uniqueCode, userImage } = msg.sender;
-
-              return (
-                <React.Fragment key={msg._id}>
-                  <Message
-                    name={name}
-                    createdAt={msg.createdAt}
-                    uniqueCode={uniqueCode}
-                    userImage={userImage}
-                    _id={msg._id}
-                    content={msg.content}
-                  />
-                </React.Fragment>
-              );
-            })
-          )}
-
-          <div ref={chatRef} className="pb-16" />
-        </main>
       </div>
+      <main className="flex-grow overflow-y-scroll scrollbar-hide">
+        {!channelId ? (
+          <>
+            <div className="flex items-center justify-center mt-10">
+              <img src={wumpus} alt="" />
+            </div>
+            <span className="flex items-center text-xl justify-center text-discord-200 mt-4">
+              {`Please Select a channel to continue chatting`}
+            </span>
+          </>
+        ) : messages === null || messages.length === 0 ? (
+          <>
+            <div className="flex items-center justify-center mt-10">
+              <img src={wumpus} alt="" />
+            </div>
+            <span className="flex items-center text-xl justify-center text-discord-200 mt-4">
+              {`There are no messages in #${channelName}`}
+            </span>
+          </>
+        ) : (
+          messages.map((msg) => {
+            const { name, uniqueCode, userImage } = msg.sender;
+
+            return (
+              <React.Fragment key={msg._id}>
+                <Message
+                  name={name}
+                  createdAt={msg.createdAt}
+                  uniqueCode={uniqueCode}
+                  userImage={userImage}
+                  _id={msg._id}
+                  content={msg.content}
+                />
+              </React.Fragment>
+            );
+          })
+        )}
+        <div ref={chatRef} className="pb-16" />
+      </main>
       <div className="flex items-center bg-discord-chatInputBg mx-4 mb-5 rounded-lg justify-end mt-auto">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 20 20"
           fill="currentColor"
-          className="hover:bg-discord-iconHover cursor-pointer text-discord-mainTextHover opacity-75 hover:opacity-100 mr-4 p-2 rounded-md w-10 h-10"
+          className="hover:bg-discord-iconHover cursor-pointer text-discord-mainTextHover opacity-75 hover:opacity-100 mr-4 ml-1 my-1 p-1 rounded-md w-8 h-8"
         >
           <path
             fillRule="evenodd"
@@ -276,10 +276,25 @@ export default Chat;
             value={msg}
             onChange={(e) => setMsg(e.target.value)}
           />
+
           <button hidden type="submit" onClick={sendMessage}>
             Send
           </button>
         </form>
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          strokeWidth={1.5}
+          stroke="currentColor"
+          className="hover:bg-discord-iconHover cursor-pointer text-discord-mainTextHover opacity-75 hover:opacity-100 py-2 rounded-md w-10 h-10"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="M15.182 15.182a4.5 4.5 0 01-6.364 0M21 12a9 9 0 11-18 0 9 9 0 0118 0zM9.75 9.75c0 .414-.168.75-.375.75S9 10.164 9 9.75 9.168 9 9.375 9s.375.336.375.75zm-.375 0h.008v.015h-.008V9.75zm5.625 0c0 .414-.168.75-.375.75s-.375-.336-.375-.75.168-.75.375-.75.375.336.375.75zm-.375 0h.008v.015h-.008V9.75z"
+          />
+        </svg>
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="24"
@@ -299,4 +314,4 @@ export default Chat;
         </svg>
       </div>
     </div>
- */
+*/

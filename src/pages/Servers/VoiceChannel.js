@@ -1,34 +1,50 @@
 import React, { useEffect, useState } from "react";
 import client from "../../api/client";
 import { GetUser } from "../../hooks/redux";
+import { useHMSActions } from "@100mslive/react-sdk";
 
-const VoiceChannel = ({ channelName, dmId }) => {
+const VoiceChannel = ({ channelName, channelId, roomCode }) => {
   const [current, setCurrent] = useState([]);
   const user = GetUser();
+  const hmsActions = useHMSActions();
 
-  useEffect(() => {
-    const joinedMembers = async () => {
-      try {
-        const res = await client.get(`/server/getJoinedInVoiceChannel/${dmId}`);
-        console.log("joined already", res?.data?.joinedMembers);
-        setCurrent((prevState) => {
-          return [...prevState, res?.data?.joinedMembers[0]];
-        });
-      } catch (error) {}
-    };
-    joinedMembers();
-  }, [dmId]);
+  // useEffect(() => {
+  //   const joinedMembers = async () => {
+  //     try {
+  //       const res = await client.get(`/server/getJoinedInVoiceChannel/${channelId}`);
+  //       console.log("joined already", res?.data?.joinedMembers);
+  //       setCurrent((prevState) => {
+  //         return [...prevState, res?.data?.joinedMembers[0]];
+  //       });
+  //     } catch (error) {}
+  //   };
+  //   joinedMembers();
+  // }, [channelId]);
 
-  const setVoiceChannel = async () => {
-    try {
-      const res = await client.post(`/server/joinVoiceChannel/${dmId}`);
-      console.log("currently joined", res?.data?.updated?.current);
-      setCurrent((prevState) => {
-        return [...prevState, res?.data?.updated?.current[0]];
-      });
-    } catch (error) {
-      // console.log(error);
-    }
+  // const setVoiceChannel = async () => {
+  //   try {
+  //     const res = await client.post(`/server/joinVoiceChannel/${channelId}`);
+  //     console.log("currently joined", res?.data?.updated?.current);
+  //     setCurrent((prevState) => {
+  //       return [...prevState, res?.data?.updated?.current[0]];
+  //     });
+  //   } catch (error) {
+  //     // console.log(error);
+  //   }
+  // };
+
+  const joinVoiceChannel = async (roomCode) => {
+    console.log(roomCode);
+    // const authToken = await hmsActions.getAuthTokenByRoomCode({
+    //   roomCode: roomCode,
+    // });
+
+    // try {
+    //   await hmsActions.join({ userName: user?.name, authToken });
+    //   console.log("call started successfully");
+    // } catch (e) {
+    //   console.error(e);
+    // }
   };
 
   return (
@@ -36,7 +52,7 @@ const VoiceChannel = ({ channelName, dmId }) => {
       <div
         className="select-none font-medium flex items-center cursor-pointer hover:bg-gray-600 p-1 rounded-md hover:text-white"
         style={{ marginTop: 0 }}
-        onClick={setVoiceChannel}
+        onClick={() => joinVoiceChannel(roomCode)}
       >
         <div className="h-4 mr-1">
           <svg

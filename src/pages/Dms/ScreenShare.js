@@ -1,29 +1,26 @@
-import { useVideo } from "@100mslive/react-sdk";
-import { GetUser } from "../../hooks/redux";
+import React from "react";
+import { useScreenShare } from "@100mslive/react-sdk";
 
-function ScreenShare({ peer }) {
-  const { videoRef } = useVideo({
-    trackId: peer.videoTrack,
-  });
-
-  const user = GetUser();
+const ScreenShareComponent = () => {
+  const { videoRef, isScreenSharing, startScreenShare, stopScreenShare } =
+    useScreenShare();
 
   return (
-    <div className="w-[38%] h-auto p-5 m-auto">
-      <div className="flex justify-end w-full">
-        <video
-          className="w-[400px]"
-          ref={videoRef}
-          autoPlay
-          muted
-          playsInline
-        />
-      </div>
-      <div className="text-sm py-4 text-center text-white">
-        {peer.name} {!peer.isLocal ? "(You)" : ""}
-      </div>
+    <div>
+      {isScreenSharing ? (
+        <div>
+          <h3>Screen is being shared</h3>
+          <button onClick={stopScreenShare}>Stop Sharing</button>
+          <video ref={videoRef} autoPlay playsInline />
+        </div>
+      ) : (
+        <div>
+          <h3>Screen Share</h3>
+          <button onClick={startScreenShare}>Share Screen</button>
+        </div>
+      )}
     </div>
   );
-}
+};
 
-export default ScreenShare;
+export default ScreenShareComponent;

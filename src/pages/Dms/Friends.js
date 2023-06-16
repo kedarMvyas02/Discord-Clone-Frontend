@@ -8,7 +8,12 @@ import ErrorModal from "../Modal/ErrorModal";
 import { hideErrorModal, showErrorModal } from "../../store/error";
 import { getDmFriends } from "../../store/dmFriends";
 import { GetUser } from "../../hooks/redux";
-import { useAVToggle, useHMSActions } from "@100mslive/react-sdk";
+import {
+  selectIsConnectedToRoom,
+  useAVToggle,
+  useHMSActions,
+  useHMSStore,
+} from "@100mslive/react-sdk";
 
 const Friends = () => {
   const dispatch = useDispatch();
@@ -74,12 +79,18 @@ const Friends = () => {
     setModal(false);
   };
 
+  const settingNavigateHandler = () => {
+    navigate("/userSettings");
+  };
+
   const handleCloseErrorModal = () => {
     dispatch(hideErrorModal());
   };
 
   const { isLocalAudioEnabled, isLocalVideoEnabled, toggleAudio, toggleVideo } =
     useAVToggle();
+
+  const isConnectedToRoom = useHMSStore(selectIsConnectedToRoom);
 
   return (
     <div className="flex h-screen">
@@ -178,7 +189,7 @@ const Friends = () => {
 
         {/* USER SECTION */}
         {/* Profile Settings */}
-        {isLocalAudioEnabled && (
+        {isConnectedToRoom && (
           <>
             <div className="mt-auto bg-discord-secondPrimary p-2 flex justify-between items-center space-x-8">
               <svg
@@ -294,7 +305,7 @@ const Friends = () => {
               onClick={toggleAudio}
               className="hover:bg-discord-iconHover cursor-pointer hover:text-discord-mainTextHover p-2 rounded-md"
             >
-              {isLocalAudioEnabled ? (
+              {!isLocalAudioEnabled ? (
                 <svg
                   aria-hidden="true"
                   role="img"
@@ -359,7 +370,10 @@ const Friends = () => {
                 ></path>
               </svg>
             </div>
-            <div className="hover:bg-discord-iconHover cursor-pointer hover:text-discord-mainTextHover p-2 rounded-md">
+            <div
+              onClick={settingNavigateHandler}
+              className="hover:bg-discord-iconHover cursor-pointer hover:text-discord-mainTextHover p-2 rounded-md"
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 20 20"

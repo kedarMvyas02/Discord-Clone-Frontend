@@ -15,7 +15,6 @@ const DmHeader = ({ data }) => {
   const user = GetUser();
   const { dmId } = useParams();
   const allFriends = useSelector((state) => state?.dmFriends?.allFriends);
-  // console.log(allFriends);
   const dispatch = useDispatch();
 
   const friendToFind = allFriends?.find((friend) => friend?._id === data?._id);
@@ -63,7 +62,7 @@ const DmHeader = ({ data }) => {
     });
 
     try {
-      await hmsActions.join({ userName: data?.name, authToken });
+      await hmsActions.join({ userName: user?.name, authToken });
       console.log("call started successfully");
     } catch (e) {
       console.error(e);
