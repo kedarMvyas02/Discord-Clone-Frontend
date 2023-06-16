@@ -69,15 +69,17 @@ const Channels = ({ newId }) => {
       return;
     }
 
-    if (channelModal.channel === "Voice Channel") {
-      await client.post(`/server/createVoiceChannel/${data._id}`, {
-        name: values.channelName,
-      });
-    } else if (channelModal.channel === "Text Channel") {
-      await client.post(`/server/createTextChannel/${data._id}`, {
-        name: values.channelName,
-      });
-    }
+    try {
+      if (channelModal.channel === "Voice Channel") {
+        await client.post(`/server/createVoiceChannel/${data._id}`, {
+          name: values.channelName,
+        });
+      } else if (channelModal.channel === "Text Channel") {
+        await client.post(`/server/createTextChannel/${data._id}`, {
+          name: values.channelName,
+        });
+      }
+    } catch (error) {}
 
     setChannelModal((prevState) => ({
       ...prevState,
@@ -101,9 +103,7 @@ const Channels = ({ newId }) => {
   const addToServerHandler = async () => {
     try {
       if (data?.owner === user?._id) {
-        await client.post(`/server/addToDm/${data?._id}`);
-      } else {
-        // show errro modal
+        // await client.post(`/server/joinServer/${data?._id}`);
       }
     } catch (error) {
       // const heading = `${error?.response?.data?.status}`;

@@ -1,6 +1,16 @@
-import React from "react";
+import React, { useState } from "react";
+import PinnedMsgsModal from "../Modal/PinnedMsgsModal";
 
 const Header = ({ channelName }) => {
+  const [modal, setModal] = useState(false);
+
+  const openPinnnedMsgs = () => {
+    setModal(true);
+  };
+  const closePinnedMsgs = () => {
+    setModal(false);
+  };
+
   return (
     <div className="flex-1 flex items-center justify-between bg-discord-600 border-b  px-4 py-3 border-b border-discord-900">
       <div className="flex items-center">
@@ -34,7 +44,7 @@ const Header = ({ channelName }) => {
             ></path>
           </svg>
         </a>
-        <a href="#" className="ml-3">
+        <div onClick={openPinnnedMsgs} className="ml-3">
           <svg
             className="w-6 h-6 text-discord-topIcons hover:text-gray-200"
             aria-hidden="false"
@@ -47,7 +57,7 @@ const Header = ({ channelName }) => {
               d="M22 12L12.101 2.10101L10.686 3.51401L12.101 4.92901L7.15096 9.87801V9.88001L5.73596 8.46501L4.32196 9.88001L8.56496 14.122L2.90796 19.778L4.32196 21.192L9.97896 15.536L14.222 19.778L15.636 18.364L14.222 16.95L19.171 12H19.172L20.586 13.414L22 12Z"
             ></path>
           </svg>
-        </a>
+        </div>
         <a href="#" className="ml-3">
           <svg
             className="w-6 h-6 text-discord-topIcons hover:text-gray-200"
@@ -130,6 +140,7 @@ const Header = ({ channelName }) => {
           </svg>
         </a>
       </div>
+      <PinnedMsgsModal visible={modal} onClose={closePinnedMsgs} />
     </div>
   );
 };

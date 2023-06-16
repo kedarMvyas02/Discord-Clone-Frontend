@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import client from "../../api/client";
 import { GetUser } from "../../hooks/redux";
 import { useHMSActions } from "@100mslive/react-sdk";
 
@@ -7,6 +6,8 @@ const VoiceChannel = ({ channelName, channelId, roomCode }) => {
   const [current, setCurrent] = useState([]);
   const user = GetUser();
   const hmsActions = useHMSActions();
+
+  useEffect(() => {}, [current]);
 
   // useEffect(() => {
   //   const joinedMembers = async () => {
@@ -34,17 +35,21 @@ const VoiceChannel = ({ channelName, channelId, roomCode }) => {
   // };
 
   const joinVoiceChannel = async (roomCode) => {
-    console.log(roomCode);
-    // const authToken = await hmsActions.getAuthTokenByRoomCode({
-    //   roomCode: roomCode,
-    // });
+    try {
+      const authToken = await hmsActions.getAuthTokenByRoomCode({
+        roomCode: roomCode,
+      });
+      await hmsActions.join({ userName: user?.name, authToken });
+      console.log("call started successfully");
 
-    // try {
-    //   await hmsActions.join({ userName: user?.name, authToken });
-    //   console.log("call started successfully");
-    // } catch (e) {
-    //   console.error(e);
-    // }
+      
+
+      setCurrent((prevState) => {
+        return [...prevState, user];
+      });
+    } catch (e) {
+      console.error(e);
+    }
   };
 
   return (
