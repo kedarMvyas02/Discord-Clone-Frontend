@@ -11,6 +11,7 @@ const AddDmModal = ({ visible, onClose, submitHandler }) => {
   useEffect(() => {
     dispatch(getAllFriends());
   }, []);
+
   useEffect(() => {
     setData(allFriends);
     // const fetchServer = async () => {

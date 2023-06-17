@@ -4,7 +4,7 @@ import ServerModal from "../Modal/ServerModal";
 import upload from "../../utils/upload";
 import client from "../../api/client";
 
-const SideBar = ({ onIdChange }) => {
+const SideBar = () => {
   const navigate = useNavigate();
   const [data, setData] = useState([]);
   const [serverModal, setServerModal] = useState({
@@ -14,13 +14,9 @@ const SideBar = ({ onIdChange }) => {
 
   useEffect(() => {
     const fetchServer = async () => {
-      try {
-        const res = await client.get(`/server/joinedServers/`);
-        if (res?.data?.responseWithChannels?.allServers) {
-          setData(res?.data?.responseWithChannels?.allServers);
-        }
-      } catch (error) {
-        console.log(error);
+      const res = await client.get(`/server/joinedServers/`);
+      if (res?.data?.responseWithChannels?.allServers) {
+        setData(res?.data?.responseWithChannels?.allServers);
       }
     };
     fetchServer();
@@ -28,7 +24,7 @@ const SideBar = ({ onIdChange }) => {
 
   const serverClickHandler = (e, id) => {
     e.preventDefault();
-    onIdChange(id);
+    navigate(`/channels/${id}`);
   };
 
   const addServerHandler = () => {
@@ -36,11 +32,6 @@ const SideBar = ({ onIdChange }) => {
       ...prevState,
       showModal: true,
     }));
-  };
-
-  const dmHandler = () => {
-    // TODO emit join operation here
-    navigate(`/channels/@me`);
   };
 
   const handleOnClose = () => {
@@ -52,20 +43,20 @@ const SideBar = ({ onIdChange }) => {
 
   const handleServerSubmit = async (values) => {
     const avatar = await upload(values?.avatarFile);
-    try {
-      await client.post("server/createServer", {
-        name: values.serverName,
-        avatar,
-      });
-    } catch (error) {
-      console.log(error);
-    }
+    await client.post("server/createServer", {
+      name: values.serverName,
+      avatar,
+    });
 
     setServerModal((prevState) => ({
       ...prevState,
       showModal: false,
       render: !serverModal.render,
     }));
+  };
+
+  const navigateToDm = () => {
+    navigate("/channels/@me");
   };
 
   const navigateToDiscover = () => {
@@ -78,9 +69,12 @@ const SideBar = ({ onIdChange }) => {
         className="flex flex-col space-y-3 bg-discord-900 p-3"
         style={{ width: "70px" }}
       >
+        {/* TODO discord icon hover:rounded-2xl (last option: hover:rounded-xlg)*/}
+        {/* TODO sidebar shouldn't collapse when mobile comes */}
         <div
-          onClick={dmHandler}
-          className="h-12  bg-discord-600 hover:rounded-2xlg rounded-full flex justify-center items-center cursor-pointer transition-none duration-100 ease-out hover:bg-discord-indigo "
+          onClick={navigateToDm}
+          tabIndex="0"
+          className="h-12  bg-discord-600 rounded-full flex justify-center items-center cursor-pointer transition-none duration-100 ease-out hover:bg-discord-indigo focus:bg-discord-indigo focus:rounded-2xlg focus:text-white hover:rounded-2xlg"
         >
           <img src="https://rb.gy/kuaslg" alt="" className="h-5 " />
         </div>
@@ -98,8 +92,9 @@ const SideBar = ({ onIdChange }) => {
         ))}
         {/* TODO discord plus icon hover:rounded-2xl */}
         <div
+          tabIndex="0"
           onClick={addServerHandler}
-          className="h-12 bg-discord-600 rounded-full hover:rounded-2xlg flex justify-center items-center cursor-pointer transition-none duration-100 ease-out hover:bg-discord-green group"
+          className="h-12 bg-discord-600 rounded-full hover:rounded-2xlg flex justify-center items-center cursor-pointer transition-none duration-100 ease-out hover:bg-discord-green focus:rounded-2xlg group"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -116,12 +111,13 @@ const SideBar = ({ onIdChange }) => {
         </div>
         <div
           onClick={navigateToDiscover}
-          className="h-12 bg-discord-600 rounded-full hover:rounded-2xlg flex justify-center items-center cursor-pointer transition-none duration-100 ease-out hover:bg-discord-green group"
+          tabIndex="0"
+          className="h-12 bg-discord-600 rounded-full hover:rounded-2xlg focus:bg-discord-green focus:text-white focus:rounded-2xlg flex justify-center items-center cursor-pointer transition-none duration-100 ease-out hover:bg-discord-green group"
         >
           <svg
             aria-hidden="true"
             role="img"
-            className="text-discord-green h-6 group-hover:text-white"
+            className="text-discord-green h-6 group-hover:text-white group-focus:text-white"
             width="24"
             height="24"
             viewBox="0 0 24 24"

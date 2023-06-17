@@ -13,7 +13,9 @@ import { useSocket } from "./socket";
 import Home from "./pages/Discover/Home";
 import { useHMSActions } from "@100mslive/react-sdk";
 import { GetUser } from "./hooks/redux/index";
-import Setting from "./pages/Setting";
+import Setting from "./pages/User Settings";
+import ServerSetting from "./pages/Server Settings";
+import ChannelSetting from "./pages/Channel Settings";
 
 const App = () => {
   const user = GetUser();
@@ -46,6 +48,8 @@ const App = () => {
         <Route path="/channels/@me/:dmId" element={<IndexDM />} />
         <Route path="/discover" element={<Home />} />
         <Route path="/userSettings" element={<Setting />} />
+        <Route path="/serverSettings/:id" element={<ServerSetting />} />
+        <Route path="/channelSettings/:id" element={<ChannelSetting />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>
@@ -53,5 +57,3 @@ const App = () => {
 };
 
 export default App;
-
-// {/* <Route path="/channels" element={<OnlineUsers />} /> */}

@@ -1,10 +1,22 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Sidebar from "./Sidebar";
-import { useNavigate } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import Account from "./Account";
+import client from "../../api/client";
 
-export default function Setting() {
+const ServerSetting = () => {
   const navigate = useNavigate();
+  const { id } = useParams();
+  const [data, setData] = useState("");
+
+  useEffect(() => {
+    const fetchServerDetails = async () => {
+      const res = await client.get(`server/getServer/${id}`);
+      console.log(res?.data);
+      setData(res?.data);
+    };
+    fetchServerDetails();
+  }, [id]);
 
   return (
     <div className="bg-discord-notQuiteDark flex w-full">
@@ -12,7 +24,7 @@ export default function Setting() {
         <Sidebar className="w-64" />
         <div className="flex-1 px-4">
           <div className="flex justify-between mt-16">
-            <h3 className="text-white text-xl font-bold">My Account</h3>
+            <h3 className="text-white text-xl font-bold">Server Overview</h3>
             <div
               className="flex flex-col"
               onClick={() => navigate("/channels/@me")}
@@ -36,4 +48,6 @@ export default function Setting() {
       </div>
     </div>
   );
-}
+};
+
+export default ServerSetting;

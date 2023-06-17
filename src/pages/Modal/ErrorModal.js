@@ -22,7 +22,7 @@ const ErrorModal = ({ visible, onClose, heading, subHeading }) => {
           <h4 className="text-xl text-white font-semibold text-center">
             {heading}
           </h4>
-          <h6 className="text-s text-white font-light text-center">
+          <h6 className="text-s text-white font-light text-center mt-3">
             {subHeading}
           </h6>
 

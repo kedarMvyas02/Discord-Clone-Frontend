@@ -1,6 +1,6 @@
 import React from "react";
 import TextField from "../../components";
-import { ErrorMessage, Form, Formik } from "formik";
+import { Form, Formik } from "formik";
 import * as Yup from "yup";
 
 const FriendReqModal = ({ visible, onClose, submitHandler }) => {

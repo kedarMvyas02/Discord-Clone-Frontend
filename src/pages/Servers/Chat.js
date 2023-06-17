@@ -290,7 +290,7 @@ const Chat = () => {
             placeholder={
               channelId ? `Message #${channelName}` : "Select a channel"
             }
-            className="bg-transparent focus:outline-none text-discord-mainTextHover w-full placeholder-discord-popOutHeader text-sm"
+            className="bg-transparent disabled:cursor-not-allowed focus:outline-none text-discord-mainTextHover w-full placeholder-discord-popOutHeader text-sm"
             value={msg}
             onChange={(e) => setMsg(e.target.value)}
           />

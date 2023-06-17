@@ -14,6 +14,7 @@ export default function Sidebar() {
       try {
         await logout(user?.user?.tokens?.refresh?.token);
 
+        // TODO LOGOUT
         dispatch(logoutSuccess());
         navigate("/login");
 
