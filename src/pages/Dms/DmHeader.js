@@ -8,7 +8,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { getAllFriends } from "../../store/dmFriends";
 
 const DmHeader = ({ data }) => {
-  const [showModal, setShowModal] = useState(false);
+  const [showModal, setShowModal] = useState({
+    toggle: false,
+    data: "",
+  });
   const hmsActions = useHMSActions();
   const { getSocket } = useSocket();
   const socket = getSocket();
@@ -24,12 +27,23 @@ const DmHeader = ({ data }) => {
   }, []);
 
   const handleCloseModal = () => {
-    setShowModal(false);
+    setShowModal((prevState) => {
+      return {
+        ...prevState,
+        toggle: false,
+      };
+    });
   };
 
-  const handleIncomingCall = () => {
-    console.log("an incoming call");
-    setShowModal(true);
+  const handleIncomingCall = (data) => {
+    console.log(data);
+    setShowModal((prevState) => {
+      return {
+        ...prevState,
+        data,
+        toggle: true,
+      };
+    });
   };
 
   const acceptCall = async () => {
@@ -39,7 +53,11 @@ const DmHeader = ({ data }) => {
 
     handleCloseModal();
     try {
-      await hmsActions.join({ userName: data?.name, authToken });
+      await hmsActions.join({
+        userName: user?.name,
+        authToken,
+        userIcon: user?.userImage,
+      });
       console.log("call started successfully");
     } catch (e) {
       console.error(e);
@@ -182,10 +200,10 @@ const DmHeader = ({ data }) => {
         </a>
       </div>
       <IncomingCall
-        visible={showModal}
+        visible={showModal.toggle}
         onClose={handleCloseModal}
-        callerName={user?.name}
-        callerImage={user?.userImage}
+        callerName={showModal?.data?.from_user?.name}
+        callerImage={showModal?.data?.from_user?.userImage}
         onAcceptCall={acceptCall}
         onRejectCall={handleCloseModal}
       />

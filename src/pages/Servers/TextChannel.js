@@ -27,7 +27,7 @@ const TextChannel = ({ dmId, channelName, serverId }) => {
 
   return (
     <div
-      className="select-none font-medium flex items-center cursor-pointer hover:bg-gray-600 p-1 rounded-md hover:text-white"
+      className="select-none font-medium flex items-center cursor-pointer hover:bg-gray-600 p-1 rounded-md hover:text-white focus:text-white focus:bg-gray-600"
       onClick={setTextChannel}
     >
       <div className="h-4 mr-1">

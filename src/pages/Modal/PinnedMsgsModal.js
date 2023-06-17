@@ -17,7 +17,7 @@ const PinnedMsgsModal = ({ visible, onClose }) => {
     >
       <div className="z-10 bg-discord-semi600 w-full sm:w-4/6 md:w-4/6 lg:w-2/6 rounded-md p-5 m-12 flex flex-row mx-auto mt-16">
         <div className="flex flex-col w-full bg-black bg-opacity-25">
-          <h4 className="text-xl flex justify-center items-center text-white font-semibold text-center pt-6 bg-black bg-opacity-50">
+          <h4 className="text-xl flex  p-4 text-white font-semibold text-center pt-6 bg-black bg-opacity-50">
             Pinned Messages
           </h4>
           {/* {!msgs ? (

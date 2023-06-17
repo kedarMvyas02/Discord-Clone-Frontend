@@ -1,13 +1,28 @@
 import React, { useEffect, useState } from "react";
 import { GetUser } from "../../hooks/redux";
 import { useHMSActions } from "@100mslive/react-sdk";
+import { useSocket } from "../../socket";
 
-const VoiceChannel = ({ channelName, channelId, roomCode }) => {
+const VoiceChannel = ({ channelName, channelId, roomCode, serverId }) => {
   const [current, setCurrent] = useState([]);
   const user = GetUser();
   const hmsActions = useHMSActions();
+  const { getSocket } = useSocket();
+  const socket = getSocket();
 
-  useEffect(() => {}, [current]);
+  const handleVcUpdate = (data) => {
+    setCurrent((prevState) => {
+      return [...prevState, data.user];
+    });
+  };
+
+  useEffect(() => {
+    socket?.on("joining-vc-update", handleVcUpdate);
+
+    return () => {
+      socket?.off("joining-vc-update", handleVcUpdate);
+    };
+  }, [current, socket]);
 
   // useEffect(() => {
   //   const joinedMembers = async () => {
@@ -42,10 +57,10 @@ const VoiceChannel = ({ channelName, channelId, roomCode }) => {
       await hmsActions.join({ userName: user?.name, authToken });
       console.log("call started successfully");
 
-      
-
-      setCurrent((prevState) => {
-        return [...prevState, user];
+      socket.emit("user-joined-vc", {
+        user,
+        server: serverId,
+        channel: channelId,
       });
     } catch (e) {
       console.error(e);

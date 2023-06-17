@@ -6,19 +6,29 @@ import { useParams } from "react-router";
 import client from "../../api/client";
 import Message from "./Message";
 import { useSocket } from "../../socket";
-import Emoji from "./Emoji";
-// import "./styles.css";
-
 import { getDmFriends } from "../../store/dmFriends";
 import { GetUser } from "../../hooks/redux";
 import {
   selectIsConnectedToRoom,
+  selectIsSomeoneScreenSharing,
+  selectPeerScreenSharing,
+  selectScreenShareByPeerID,
   useAVToggle,
   useHMSActions,
   useHMSStore,
   useScreenShare,
 } from "@100mslive/react-sdk";
 import Conference from "./Conference";
+import EmojiPicker, {
+  EmojiStyle,
+  SkinTones,
+  Theme,
+  Categories,
+  EmojiClickData,
+  Emoji,
+  SuggestionMode,
+  SkinTonePickerLocation,
+} from "emoji-picker-react";
 import ScreenShareComponent from "./ScreenShare";
 
 const DmChat = () => {
@@ -26,12 +36,27 @@ const DmChat = () => {
   const [data, setData] = useState(null);
   const [messages, setMessages] = useState(null);
   const [msg, setMsg] = useState("");
+  const [emoji, setEmoji] = useState(false);
   const chatRef = useRef();
   const user = GetUser();
   const dispatch = useDispatch();
   const { getSocket } = useSocket();
   const socket = getSocket();
   const isConnected = useHMSStore(selectIsConnectedToRoom);
+  const { isLocalAudioEnabled, isLocalVideoEnabled, toggleAudio, toggleVideo } =
+    useAVToggle();
+  const hmsActions = useHMSActions();
+  const screenshareOn = useHMSStore(selectIsSomeoneScreenSharing);
+
+  const { toggleScreenShare, amIScreenSharing } = useScreenShare();
+
+  // const hmsStore = useHMSStore();
+
+  // const presenter = hmsStore.getState(selectPeerScreenSharing);
+  // const screenshareVideoTrack = hmsStore.getState(
+  //   selectScreenShareByPeerID(presenter.id)
+  // );
+  // const startScreenShare = async () => {};
 
   useEffect(() => {
     const fetchDmUserData = async () => {
@@ -41,7 +66,7 @@ const DmChat = () => {
       setMessages(temp?.data?.messages);
     };
     fetchDmUserData();
-  }, [chatRef, dmId]);
+  }, [chatRef, dmId,amIScreenSharing]);
 
   const scrollToBottom = () => {
     chatRef.current.scrollIntoView({
@@ -92,13 +117,6 @@ const DmChat = () => {
     scrollToBottom();
   };
 
-  const { isLocalAudioEnabled, isLocalVideoEnabled, toggleAudio, toggleVideo } =
-    useAVToggle();
-
-  const hmsActions = useHMSActions();
-
-  const { toggleScreenShare } = useScreenShare();
-
   return (
     <div className="flex flex-col h-screen">
       <div className="flex flex-col flex-grow">
@@ -111,7 +129,7 @@ const DmChat = () => {
         {isConnected ? (
           <div className="bg-black">
             <Conference data={data} />
-            {/* <ScreenShareComponent /> */}
+            { screenshareOn && <ScreenShareComponent />}
             {/* <div className="flex">
               <div className="z-10 flex m-auto mt-12">
                 <div>
@@ -281,9 +299,6 @@ const DmChat = () => {
         )}
         <div ref={chatRef} className="pb-16" /> {/* className="pb-16" */}
       </main>
-      {/* <div className="h-16 w-16" style={{ zIndex: 10 }}>
-         <Emoji /> 
-      </div> */}
 
       <div className="flex items-center bg-discord-chatInputBg mx-4 mb-5 rounded-lg justify-end mt-auto">
         <svg
@@ -310,7 +325,11 @@ const DmChat = () => {
             value={msg}
             onChange={(e) => setMsg(e.target.value)}
           />
-
+          {/* <div className="h-16 w-16 z-50" style={{ zIndex: 10 }}>
+            {emoji ? (
+              <Emoji unified={emoji} emojiStyle={EmojiStyle.GOOGLE} size={22} />
+            ) : null}
+          </div> */}
           <button hidden type="submit" onClick={sendMessage}>
             Send
           </button>
@@ -321,6 +340,7 @@ const DmChat = () => {
           viewBox="0 0 24 24"
           strokeWidth={1.5}
           stroke="currentColor"
+          onClick={() => setEmoji(!emoji)}
           className="hover:bg-discord-iconHover cursor-pointer text-discord-mainTextHover opacity-75 hover:opacity-100 py-2 rounded-md w-10 h-10"
         >
           <path
@@ -347,6 +367,52 @@ const DmChat = () => {
           <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
         </svg>
       </div>
+      {/* <EmojiPicker
+        onEmojiClick={(emojiData) =>
+          setMsg((prevState) => {
+            const data = emojiData.unified;
+            return {
+              ...prevState,
+              data,
+            };
+          })
+        }
+        autoFocusSearch={false}
+        theme={Theme.DARK}
+        // searchDisabled
+        // skinTonePickerLocation={SkinTonePickerLocation.PREVIEW}
+        // height={350}
+        // width="50%"
+        // emojiVersion="0.6"
+        // lazyLoadEmojis={true}
+        // previewConfig={{
+        //   defaultCaption: "Pick one!",
+        //   defaultEmoji: "1f92a" // 🤪
+        // }}
+        // suggestedEmojisMode={SuggestionMode.RECENT}
+        // skinTonesDisabled
+        // searchPlaceHolder="Filter"
+        // defaultSkinTone={SkinTones.MEDIUM}
+        emojiStyle={EmojiStyle.TWITTER}
+        // categories={[
+        //   {
+        //     name: "Fun and Games",
+        //     category: Categories.ACTIVITIES
+        //   },
+        //   {
+        //     name: "Smiles & Emotions",
+        //     category: Categories.SMILEYS_PEOPLE
+        //   },
+        //   {
+        //     name: "Flags",
+        //     category: Categories.FLAGS
+        //   },
+        //   {
+        //     name: "Yum Yum",
+        //     category: Categories.FOOD_DRINK
+        //   }
+        // ]}
+      /> */}
     </div>
   );
 };

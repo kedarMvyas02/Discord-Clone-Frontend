@@ -1,6 +1,6 @@
 import React from "react";
 import MainComponent from "./MainComponent";
-import SideBar from "../Dms/SideBar";
+import SideBar from "./SidebarDiscover";
 import Discover from "./Discover";
 import { Navigate } from "react-router";
 import { GetMe } from "../../hooks/redux";

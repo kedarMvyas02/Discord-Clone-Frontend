@@ -343,7 +343,6 @@ const Channels = ({ newId }) => {
                   <VoiceChannel
                     roomCode={item?.roomCode}
                     serverId={data?._id}
-                    key={item._id}
                     channelId={item._id}
                     channelName={item.name}
                     className="pl-4 list-outside list-none"
