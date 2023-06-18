@@ -26,31 +26,6 @@ const VoiceChannel = ({ channelName, channelId, roomCode, serverId }) => {
     };
   }, [current, socket]);
 
-  // useEffect(() => {
-  //   const joinedMembers = async () => {
-  //     try {
-  //       const res = await client.get(`/server/getJoinedInVoiceChannel/${channelId}`);
-  //       console.log("joined already", res?.data?.joinedMembers);
-  //       setCurrent((prevState) => {
-  //         return [...prevState, res?.data?.joinedMembers[0]];
-  //       });
-  //     } catch (error) {}
-  //   };
-  //   joinedMembers();
-  // }, [channelId]);
-
-  // const setVoiceChannel = async () => {
-  //   try {
-  //     const res = await client.post(`/server/joinVoiceChannel/${channelId}`);
-  //     console.log("currently joined", res?.data?.updated?.current);
-  //     setCurrent((prevState) => {
-  //       return [...prevState, res?.data?.updated?.current[0]];
-  //     });
-  //   } catch (error) {
-  //     // console.log(error);
-  //   }
-  // };
-
   const joinVoiceChannel = async (roomCode) => {
     try {
       const authToken = await hmsActions.getAuthTokenByRoomCode({

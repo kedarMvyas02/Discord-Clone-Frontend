@@ -1,37 +1,17 @@
 import {
   selectIsSomeoneScreenSharing,
-  selectPeerScreenSharing,
-  selectScreenShareByPeerID,
   useHMSStore,
   useScreenShare,
   useVideo,
 } from "@100mslive/react-sdk";
 
 function ScreenShare() {
-  const {
-    amIScreenSharing,
-    screenSharingPeerName,
-    screenShareAudioTrackId,
-    screenShareVideoTrackId,
-    screenSharingPeerId,
-    toggleScreenShare,
-  } = useScreenShare();
+  const { screenShareVideoTrackId } = useScreenShare();
   const screenshareOn = useHMSStore(selectIsSomeoneScreenSharing);
-
-  console.log(screenShareVideoTrackId, "jhgxsjjgjgsjfasjfasjcf");
-  console.log("amIScreenSharing_asdjflak", amIScreenSharing);
-  const screenSharingPeer = useHMSStore(selectPeerScreenSharing);
-  console.log("screenSharingPeer_lkkajdsfkla", screenSharingPeer?.id);
-  const screenSharingVideoTrack = useHMSStore(
-    selectScreenShareByPeerID(screenSharingPeer?.id)
-  );
-  console.log("screenSharingVideoTrack_aldfjlka", screenSharingVideoTrack);
 
   const { videoRef } = useVideo({
     trackId: screenShareVideoTrackId,
   });
-
-  console.log(videoRef);
 
   return (
     <div className="w-[100%] h-80 p-5 m-auto">

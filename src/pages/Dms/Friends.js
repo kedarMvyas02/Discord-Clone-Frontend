@@ -60,9 +60,9 @@ const Friends = () => {
 
   const removeFromDm = async (id) => {
     try {
-      navigate("/channels/@me");
       await client.post(`/server/removeFromDm/${id}`);
       dispatch(getDmFriends());
+      friendsNavigateHandler();
     } catch (error) {
       const heading = `${error?.response?.data?.status}`;
       const subHeading = `${error?.response?.data?.message}`;

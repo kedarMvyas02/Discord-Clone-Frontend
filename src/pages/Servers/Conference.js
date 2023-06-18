@@ -1,8 +1,4 @@
-import {
-  selectPeers,
-  selectPeersScreenSharing,
-  useHMSStore,
-} from "@100mslive/react-sdk";
+import { selectPeers, useHMSStore } from "@100mslive/react-sdk";
 import React from "react";
 import Peer from "./Peer";
 

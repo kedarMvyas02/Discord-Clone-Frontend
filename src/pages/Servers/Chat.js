@@ -10,11 +10,14 @@ import { useParams } from "react-router";
 import { GetUser } from "../../hooks/redux";
 import {
   selectIsConnectedToRoom,
+  selectIsSomeoneScreenSharing,
   useAVToggle,
   useHMSActions,
   useHMSStore,
+  useScreenShare,
 } from "@100mslive/react-sdk";
 import Conference from "./Conference";
+import ScreenShareComponent from "../Dms/ScreenShare";
 
 const Chat = () => {
   const { serverId } = useParams();
@@ -26,6 +29,9 @@ const Chat = () => {
   const { getSocket } = useSocket();
   const socket = getSocket();
   const [messages, setMessages] = useState([]);
+
+  const { toggleScreenShare } = useScreenShare();
+  const screenshareOn = useHMSStore(selectIsSomeoneScreenSharing);
 
   useEffect(() => {
     const handleNavoMessage = (data) => {
@@ -112,6 +118,8 @@ const Chat = () => {
         {isConnected ? (
           <div className="bg-black">
             <Conference />
+            {screenshareOn && <ScreenShareComponent />}
+
             <div className="flex justify-center items-center">
               <div className="z-10  flex my-5">
                 {/* VIDEO  */}
@@ -136,7 +144,7 @@ const Chat = () => {
                 </div>
                 {/* SCREEN SHARING */}
                 <div
-                  // onClick={toggleScreenShare}
+                  onClick={toggleScreenShare}
                   className="bg-discord-800 mx-4 p-3 rounded-full cursor-pointer text-white hover:text-opacity-100 hover:bg-discord-900"
                 >
                   <svg

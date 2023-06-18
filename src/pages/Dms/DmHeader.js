@@ -6,6 +6,7 @@ import { useParams } from "react-router";
 import IncomingCall from "../Modal/IncomingCallModal";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllFriends } from "../../store/dmFriends";
+import client from "../../api/client";
 
 const DmHeader = ({ data }) => {
   const [showModal, setShowModal] = useState({
@@ -36,7 +37,6 @@ const DmHeader = ({ data }) => {
   };
 
   const handleIncomingCall = (data) => {
-    console.log(data);
     setShowModal((prevState) => {
       return {
         ...prevState,
@@ -71,6 +71,15 @@ const DmHeader = ({ data }) => {
       socket?.off("incoming-call", handleIncomingCall);
     };
   }, []);
+
+  const inputSearchHandler = async (e) => {
+    const res = await client.get(`/server/messageFinder/${e.target.value}`, {
+      sender: user?._id,
+      reciever: dmId,
+    });
+
+    console.log(res);
+  };
 
   const startCallHandler = async () => {
     socket.emit("private-call", { from: user?._id, to: dmId });
@@ -144,6 +153,7 @@ const DmHeader = ({ data }) => {
             <input
               type="text"
               placeholder="Search"
+              onChange={(e) => inputSearchHandler(e)}
               className="w-40 rounded-default bg-gray-900 placeholder-discord-200 placeholder:text-sm p-1 font-normal text-discord-500 focus:outline-none leading-normal text-xs"
               // className="w-40 rounded bg-gray-900 placeholder-discord-200 p-1 focus:outline-none leading-normal text-xs"
             />

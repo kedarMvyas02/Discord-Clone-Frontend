@@ -10,10 +10,25 @@ function Peer({ peer, data }) {
 
   const { isLocalVideoEnabled } = useAVToggle();
 
+  const showUserImage = !isLocalVideoEnabled && peer.isLocal;
+  const otherUserImage = !peer.videoTrack && !peer.isLocal;
+
   return (
     <div className="w-[38%] h-auto p-5 m-auto">
       <div className="flex justify-end w-full">
-        {isLocalVideoEnabled ? (
+        {showUserImage ? (
+          <img
+            src={user?.userImage}
+            alt=""
+            className="rounded-full mr-4  w-16 h-16"
+          />
+        ) : otherUserImage ? (
+          <img
+            src={data?.userImage}
+            alt=""
+            className="rounded-full mr-4  w-16 h-16"
+          />
+        ) : (
           <video
             className="w-[400px]"
             ref={videoRef}
@@ -21,22 +36,10 @@ function Peer({ peer, data }) {
             muted
             playsInline
           />
-        ) : peer.isLocal ? (
-          <img
-            src={user?.userImage}
-            alt=""
-            className="rounded-full mr-4  w-16 h-16 "
-          />
-        ) : (
-          <img
-            src={data?.userImage}
-            alt=""
-            className="rounded-full mr-4  w-16 h-16 "
-          />
         )}
       </div>
       <div className="text-sm py-4 text-center text-white">
-        {peer.name} {!peer.isLocal ? "(You)" : ""}
+        {peer.name} {peer.isLocal ? "(You)" : ""}
       </div>
     </div>
   );

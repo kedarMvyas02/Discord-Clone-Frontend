@@ -11,24 +11,12 @@ import { GetUser } from "../../hooks/redux";
 import {
   selectIsConnectedToRoom,
   selectIsSomeoneScreenSharing,
-  selectPeerScreenSharing,
-  selectScreenShareByPeerID,
   useAVToggle,
   useHMSActions,
   useHMSStore,
   useScreenShare,
 } from "@100mslive/react-sdk";
 import Conference from "./Conference";
-import EmojiPicker, {
-  EmojiStyle,
-  SkinTones,
-  Theme,
-  Categories,
-  EmojiClickData,
-  Emoji,
-  SuggestionMode,
-  SkinTonePickerLocation,
-} from "emoji-picker-react";
 import ScreenShareComponent from "./ScreenShare";
 
 const DmChat = () => {
@@ -43,20 +31,11 @@ const DmChat = () => {
   const { getSocket } = useSocket();
   const socket = getSocket();
   const isConnected = useHMSStore(selectIsConnectedToRoom);
-  const { isLocalAudioEnabled, isLocalVideoEnabled, toggleAudio, toggleVideo } =
-    useAVToggle();
+  const { isLocalAudioEnabled, toggleAudio, toggleVideo } = useAVToggle();
   const hmsActions = useHMSActions();
   const screenshareOn = useHMSStore(selectIsSomeoneScreenSharing);
 
   const { toggleScreenShare, amIScreenSharing } = useScreenShare();
-
-  // const hmsStore = useHMSStore();
-
-  // const presenter = hmsStore.getState(selectPeerScreenSharing);
-  // const screenshareVideoTrack = hmsStore.getState(
-  //   selectScreenShareByPeerID(presenter.id)
-  // );
-  // const startScreenShare = async () => {};
 
   useEffect(() => {
     const fetchDmUserData = async () => {
@@ -66,7 +45,7 @@ const DmChat = () => {
       setMessages(temp?.data?.messages);
     };
     fetchDmUserData();
-  }, [chatRef, dmId,amIScreenSharing]);
+  }, [chatRef, dmId, amIScreenSharing]);
 
   const scrollToBottom = () => {
     chatRef.current.scrollIntoView({
@@ -129,27 +108,8 @@ const DmChat = () => {
         {isConnected ? (
           <div className="bg-black">
             <Conference data={data} />
-            { screenshareOn && <ScreenShareComponent />}
-            {/* <div className="flex">
-              <div className="z-10 flex m-auto mt-12">
-                <div>
-                  <img
-                    src={user?.userImage}
-                    alt=""
-                    className="rounded-full mr-4  w-16 h-16 "
-                  />
-                  <span className="text-white mr-4">{user?.name}</span>
-                </div>
-                <div>
-                  <img
-                    src={data?.userImage}
-                    alt=""
-                    className="rounded-full ml-4  w-16 h-16 "
-                  />
-                  <span className="text-white">{data?.name}</span>
-                </div>
-              </div>
-            </div> */}
+            {screenshareOn && <ScreenShareComponent />}
+
             <div className="flex justify-center items-center">
               <div className="z-10  flex my-5">
                 {/* VIDEO  */}
