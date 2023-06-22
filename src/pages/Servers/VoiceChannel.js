@@ -12,17 +12,32 @@ const VoiceChannel = ({ channelName, channelId, roomCode, serverId }) => {
   const socket = getSocket();
   const navigate = useNavigate();
 
-  const handleVcUpdate = (data) => {
+  const handleJoiningVcUpdate = (data) => {
     setCurrent((prevState) => {
       return [...prevState, data.user];
     });
   };
 
+  const handleLeavingVcUpdate = (data) => {
+    setCurrent((prevState) => {
+      const temp = prevState.filter((user) => user?._id !== data?._id);
+      return temp;
+    });
+  };
+
   useEffect(() => {
-    socket?.on("joining-vc-update", handleVcUpdate);
+    socket?.on("joining-vc-update", handleJoiningVcUpdate);
 
     return () => {
-      socket?.off("joining-vc-update", handleVcUpdate);
+      socket?.off("joining-vc-update", handleJoiningVcUpdate);
+    };
+  }, [current, socket]);
+
+  useEffect(() => {
+    socket?.on("leaving-vc-update", handleLeavingVcUpdate);
+
+    return () => {
+      socket?.off("leaving-vc-update", handleLeavingVcUpdate);
     };
   }, [current, socket]);
 

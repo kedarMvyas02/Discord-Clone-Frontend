@@ -6,7 +6,7 @@ const client = axios.create({
   baseURL: process.env.API_URL || "http://127.0.0.1:8000",
   withCredentials: true,
 });
-
+  
 client.interceptors.request.use(function (config) {
   if (localStorage.user) {
     const userStorage = JSON.parse(localStorage.getItem("user"));

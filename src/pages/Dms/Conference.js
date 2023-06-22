@@ -6,7 +6,7 @@ function Conference({ data }) {
   const peers = useHMSStore(selectPeers);
 
   return (
-    <div class="flex justify-between items-center">
+    <div className="flex justify-between items-center">
       {peers?.map((peer) => (
         <Peer data={data} key={peer.id} peer={peer} />
       ))}

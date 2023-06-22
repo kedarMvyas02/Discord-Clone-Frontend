@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { selectChannelId, selectChannelName } from "../../store/channel";
 import { useSelector } from "react-redux";
 import Header from "./Header";
-import Message from "../Dms/Message";
+import Message from "./Message";
 import { useSocket } from "../../socket";
 import wumpus from "../../assets/wumpus.svg";
 import client from "../../api/client";
@@ -80,17 +80,6 @@ const Chat = () => {
         server: serverId,
         message: msg,
       });
-      // setMessages((prevState) => {
-      //   return [
-      //     ...prevState,
-      //     {
-      //       sender: user,
-      //       createdAt: Date.now(),
-      //       content: msg,
-      //       _id: Date.now(),
-      //     },
-      //   ];
-      // });
     }
     setMsg("");
   };
@@ -103,14 +92,20 @@ const Chat = () => {
   };
 
   const isConnected = useHMSStore(selectIsConnectedToRoom);
-  const { isLocalAudioEnabled, toggleAudio, toggleVideo } = useAVToggle();
+  const { isLocalAudioEnabled, isLocalVideoEnabled, toggleAudio, toggleVideo } =
+    useAVToggle();
   const hmsActions = useHMSActions();
+
+  const leaveCallHandler = () => {
+    socket.emit("leaving-vc", user);
+    hmsActions.leave();
+  };
 
   return (
     <div className="flex flex-col h-screen">
       <div className="flex flex-col flex-grow">
         <header>
-          <Header channelName={channelName} />
+          <Header channelName={channelName} channelId={channelId} />
         </header>
         <hr className=" border-y-discord-transparentBlack1 border w-full mx-auto" />
       </div>
@@ -125,7 +120,11 @@ const Chat = () => {
                 {/* VIDEO  */}
                 <div
                   onClick={toggleVideo}
-                  className="bg-discord-800 mx-4 p-3 rounded-full cursor-pointer text-white hover:text-opacity-100 hover:bg-discord-900"
+                  className={`${isLocalVideoEnabled
+                    ? "bg-white mx-4 p-3 rounded-full cursor-pointer text-black hover:bg-opacity-75"
+                    : "bg-discord-800 mx-4 p-3 rounded-full cursor-pointer text-white hover:text-opacity-100 hover:bg-discord-900"
+                    }`}
+                // className="bg-discord-800 mx-4 p-3 rounded-full cursor-pointer text-white hover:text-opacity-100 hover:bg-discord-900"
                 >
                   <svg
                     x="0"
@@ -145,7 +144,11 @@ const Chat = () => {
                 {/* SCREEN SHARING */}
                 <div
                   onClick={toggleScreenShare}
-                  className="bg-discord-800 mx-4 p-3 rounded-full cursor-pointer text-white hover:text-opacity-100 hover:bg-discord-900"
+                  className={`${screenshareOn
+                    ? "bg-white mx-4 p-3 rounded-full cursor-pointer text-black hover:bg-opacity-75"
+                    : "bg-discord-800 mx-4 p-3 rounded-full cursor-pointer text-white hover:text-opacity-100 hover:bg-discord-900"
+                    }`}
+                // className="bg-discord-800 mx-4 p-3 rounded-full cursor-pointer text-white hover:text-opacity-100 hover:bg-discord-900"
                 >
                   <svg
                     width="24"
@@ -156,7 +159,7 @@ const Chat = () => {
                   >
                     <path
                       fill="currentColor"
-                      fill-rule="evenodd"
+                      fillRule="evenodd"
                       clip-rule="evenodd"
                       d="M2 4.5C2 3.397 2.897 2.5 4 2.5H20C21.103 2.5 22 3.397 22 4.5V15.5C22 16.604 21.103 17.5 20 17.5H13V19.5H17V21.5H7V19.5H11V17.5H4C2.897 17.5 2 16.604 2 15.5V4.5ZM13.2 14.3375V11.6C9.864 11.6 7.668 12.6625 6 15C6.672 11.6625 8.532 8.3375 13.2 7.6625V5L18 9.6625L13.2 14.3375Z"
                     ></path>
@@ -202,13 +205,13 @@ const Chat = () => {
                       viewBox="0 0 24 24"
                     >
                       <path
-                        fill-rule="evenodd"
+                        fillRule="evenodd"
                         clip-rule="evenodd"
                         d="M14.99 11C14.99 12.66 13.66 14 12 14C10.34 14 9 12.66 9 11V5C9 3.34 10.34 2 12 2C13.66 2 15 3.34 15 5L14.99 11ZM12 16.1C14.76 16.1 17.3 14 17.3 11H19C19 14.42 16.28 17.24 13 17.72V21H11V17.72C7.72 17.23 5 14.41 5 11H6.7C6.7 14 9.24 16.1 12 16.1ZM12 4C11.2 4 11 4.66667 11 5V11C11 11.3333 11.2 12 12 12C12.8 12 13 11.3333 13 11V5C13 4.66667 12.8 4 12 4Z"
                         fill="currentColor"
                       ></path>
                       <path
-                        fill-rule="evenodd"
+                        fillRule="evenodd"
                         clip-rule="evenodd"
                         d="M14.99 11C14.99 12.66 13.66 14 12 14C10.34 14 9 12.66 9 11V5C9 3.34 10.34 2 12 2C13.66 2 15 3.34 15 5L14.99 11ZM12 16.1C14.76 16.1 17.3 14 17.3 11H19C19 14.42 16.28 17.24 13 17.72V22H11V17.72C7.72 17.23 5 14.41 5 11H6.7C6.7 14 9.24 16.1 12 16.1Z"
                         fill="currentColor"
@@ -218,11 +221,11 @@ const Chat = () => {
                 </div>
                 {/* CUT CALL */}
                 <div
-                  onClick={() => hmsActions.leave()}
+                  onClick={leaveCallHandler}
                   className="bg-red-600 mx-4 p-3 rounded-full cursor-pointer text-white"
                 >
                   <svg
-                    class="controlIcon-10O-4h centerIcon-JYpTUi"
+                    className="controlIcon-10O-4h centerIcon-JYpTUi"
                     aria-hidden="true"
                     role="img"
                     width="24"
@@ -231,7 +234,7 @@ const Chat = () => {
                   >
                     <path
                       fill="currentColor"
-                      fill-rule="evenodd"
+                      fillRule="evenodd"
                       clip-rule="evenodd"
                       d="M21.1169 1.11603L22.8839 2.88403L19.7679 6.00003L22.8839 9.11603L21.1169 10.884L17.9999 7.76803L14.8839 10.884L13.1169 9.11603L16.2329 6.00003L13.1169 2.88403L14.8839 1.11603L17.9999 4.23203L21.1169 1.11603ZM18 22H13C6.925 22 2 17.075 2 11V6C2 5.447 2.448 5 3 5H7C7.553 5 8 5.447 8 6V10C8 10.553 7.553 11 7 11H6C6.063 14.938 9 18 13 18V17C13 16.447 13.447 16 14 16H18C18.553 16 19 16.447 19 17V21C19 21.553 18.553 22 18 22Z"
                     ></path>
@@ -331,7 +334,7 @@ const Chat = () => {
           strokeWidth="2"
           strokeLinecap="round"
           strokeLinejoin="round"
-          // class=""
+          // className=""
           onClick={sendMessage}
           className="feather feather-send hover:bg-discord-iconHover cursor-pointer text-discord-mainTextHover opacity-75 hover:opacity-100 py-2 rounded-md w-10 h-10"
         >
@@ -445,7 +448,7 @@ export default Chat;
           strokeWidth="2"
           strokeLinecap="round"
           strokeLinejoin="round"
-          // class=""
+          // className=""
           onClick={sendMessage}
           className="feather feather-send hover:bg-discord-iconHover cursor-pointer text-discord-mainTextHover opacity-75 hover:opacity-100 py-2 rounded-md w-10 h-10"
         >

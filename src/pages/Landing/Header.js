@@ -6,7 +6,7 @@ import RightHeaderImage from "../../assets/right_bg_landing_header.svg";
 import CenterHeaderImage from "../../assets/center_bg_landing_header.svg";
 import { GetMe } from "../../hooks/redux";
 
-export default function Header() {
+const Header = () => {
   const [open, setOpen] = useState(false);
   const me = GetMe();
   const navClass = classNames(
@@ -259,7 +259,7 @@ export default function Header() {
               </a>
             </a>
             <Link
-              to="/login"
+              to={me ? `/channels/@me` : `/login`}
               className=" w-36 sm:w-6/12 md:w-5/12 lg:w-4/12 lx:w-2/12 2xl:w-72  bg-discord-notQuiteDark text-white py-3 px-6 rounded-full text-base mt-4 md:mt-0 text-center"
             >
               Open Discord in your browser
@@ -269,4 +269,6 @@ export default function Header() {
       </section>
     </div>
   );
-}
+};
+
+export default Header;

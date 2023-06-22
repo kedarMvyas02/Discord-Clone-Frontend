@@ -5,7 +5,7 @@ import FandomLandingImage from "../../assets/fandom_landing.svg";
 import JustChilingLandingImage from "../../assets/just_chiling_landing.svg";
 import TinyStarsLandingImage from "../../assets/tiny_stars_landing.svg";
 
-export default function Footer() {
+const Body = () => {
   return (
     <div className="flex flex-col">
       <div className="flex md:flex-row justify-center items-center sm:my-28 my-18 px-4">
@@ -108,4 +108,6 @@ export default function Footer() {
       </div>
     </div>
   );
-}
+};
+
+export default Body;

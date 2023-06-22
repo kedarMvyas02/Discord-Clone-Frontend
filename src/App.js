@@ -20,19 +20,19 @@ import ChannelSetting from "./pages/Channel Settings";
 const App = () => {
   const user = GetUser();
   const { getSocket } = useSocket();
-
-  useEffect(() => {
-    const socket = getSocket();
-    socket.emit("add-user", { user_id: user?._id });
-  }, [user, getSocket]);
-
+  const socket = getSocket();
   const hmsActions = useHMSActions();
 
   useEffect(() => {
+    socket.emit("add-user", { user_id: user?._id });
+  }, [user, socket]);
+
+  useEffect(() => {
+    socket.emit("leaving-vc", user);
     window.onunload = () => {
       hmsActions.leave();
     };
-  }, [hmsActions]);
+  }, [hmsActions, user, socket]);
 
   return (
     <BrowserRouter>
@@ -57,3 +57,17 @@ const App = () => {
 };
 
 export default App;
+
+/*
+import { useNavigate, createSearchParams } from 'react-router-dom';
+
+const navigate = useNavigate();
+const params = {
+  color: 'blue',
+};
+const options = {
+  pathname: '/shop/Clothes/dresses',
+  search: `?${createSearchParams(params)}`,
+};
+navigate(options, { replace: true });
+*/

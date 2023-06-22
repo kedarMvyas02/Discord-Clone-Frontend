@@ -11,6 +11,7 @@ const ServerModal = ({ visible, onClose, submitHandler }) => {
   };
 
   const forSubmit = (values) => {
+    console.log(values);
     submitHandler(values);
     setTimeout(onClose, 2000);
   };
@@ -105,7 +106,12 @@ const ServerModal = ({ visible, onClose, submitHandler }) => {
 
           <Formik
             validationSchema={validationSchema}
-            initialValues={{ serverName: "", avatarFile: null }}
+            initialValues={{
+              serverName: "",
+              avatarFile: null,
+              privacy: "private",
+              description: "",
+            }}
             onSubmit={forSubmit}
           >
             {({ isSubmitting }) => (
@@ -126,6 +132,40 @@ const ServerModal = ({ visible, onClose, submitHandler }) => {
                   name="serverName"
                   type="text"
                 />
+                <TextField
+                  fieldClass="mb-4 mt-4"
+                  labelClass="block text-discord-sideBarChannels font-semibold text-xs mb-2"
+                  inputClass="focus:outline-none border-discord-transparentBlack1 border-1 focus:ring-2 focus:ring-blue-400 bg-discord-transparentBlack2 text-white w-full rounded py-1 px-2"
+                  label="DESCRIPTION"
+                  name="description"
+                  type="text"
+                />
+                <label
+                  htmlFor="privacy"
+                  className="block text-discord-sideBarChannels font-semibold text-xs mb-2"
+                >
+                  PRIVACY
+                </label>
+                <Field
+                  as="select"
+                  id="dropdown"
+                  name="dropdown"
+                  className="focus:outline-none border-discord-transparentBlack1 mb-4 border-1 focus:ring-2 focus:ring-blue-400 bg-discord-transparentBlack2 text-white w-full rounded py-1 px-2"
+                >
+                  <option
+                    value="private"
+                    className="border-discord-transparentBlack1 focus:ring-2 bg-discord-transparentBlack2 text-black font-bold"
+                  >
+                    Private
+                  </option>
+                  <option
+                    value="public"
+                    className="border-discord-transparentBlack1 focus:ring-2 bg-discord-transparentBlack2 text-black font-bold"
+                  >
+                    Public
+                  </option>
+                </Field>
+
                 <h6 className="text-xs text-white font-light text-left pt-0">
                   By creating a server, you agree to Discord's{" "}
                   <a

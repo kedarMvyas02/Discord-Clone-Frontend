@@ -8,13 +8,10 @@ import { GetMe } from "../../hooks/redux";
 import {
   selectIsSomeoneScreenSharing,
   useHMSStore,
-  useScreenShare,
 } from "@100mslive/react-sdk";
 
 const IndexDM = () => {
   const screenshareOn = useHMSStore(selectIsSomeoneScreenSharing);
-  console.log(screenshareOn);
-
   useEffect(() => {}, [screenshareOn]);
 
   const { dmId } = useParams();

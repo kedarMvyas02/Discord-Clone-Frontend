@@ -6,7 +6,7 @@ import FacebookIcon from "../../assets/facebook_icon.svg";
 import YoutubeIcon from "../../assets/youtube_icon.svg";
 import { Link } from "react-router-dom";
 
-export default function Footer() {
+const Footer = () => {
   return (
     <div
       className="bg-discord-notQuiteDark flex flex-col py-16 pb-4 sm:px-20 px-6"
@@ -318,8 +318,11 @@ export default function Footer() {
         </Link>
       </div>
       <div className="text-white flex items-center justify-center pt-12">
-        Made with God's Grace 🙏🏻 by Kedar Vyas
+        Made with God's Grace 🙏🏻 by &nbsp;
+        <span className="underline text-orange-500">Kedar Vyas</span>
       </div>
     </div>
   );
-}
+};
+
+export default Footer;

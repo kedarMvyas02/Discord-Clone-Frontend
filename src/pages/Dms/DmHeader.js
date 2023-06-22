@@ -7,12 +7,15 @@ import IncomingCall from "../Modal/IncomingCallModal";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllFriends } from "../../store/dmFriends";
 import client from "../../api/client";
+import PinnedMsgsModal from "../Modal/PinnedMsgsModal";
 
 const DmHeader = ({ data }) => {
   const [showModal, setShowModal] = useState({
     toggle: false,
     data: "",
   });
+  const [pinnedModal, setPinnedModal] = useState(false);
+
   const hmsActions = useHMSActions();
   const { getSocket } = useSocket();
   const socket = getSocket();
@@ -95,6 +98,14 @@ const DmHeader = ({ data }) => {
       console.error(e);
     }
   };
+
+  const openPinnnedMsgs = () => {
+    setPinnedModal(true);
+  };
+  const closePinnedMsgs = () => {
+    setPinnedModal(false);
+  };
+
   return (
     <div className="flex-1 flex items-center justify-between bg-discord-600 border-b  px-4 py-3 border-b border-discord-900">
       <div className="flex items-center">
@@ -148,6 +159,21 @@ const DmHeader = ({ data }) => {
             ></path>
           </svg>
         </div>
+        {/* TODO */}
+        <div onClick={openPinnnedMsgs} className="cursor-pointer">
+          <svg
+            className="w-6 h-6 text-discord-topIcons hover:text-gray-200 ml-3"
+            aria-hidden="false"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+          >
+            <path
+              fill="currentColor"
+              d="M22 12L12.101 2.10101L10.686 3.51401L12.101 4.92901L7.15096 9.87801V9.88001L5.73596 8.46501L4.32196 9.88001L8.56496 14.122L2.90796 19.778L4.32196 21.192L9.97896 15.536L14.222 19.778L15.636 18.364L14.222 16.95L19.171 12H19.172L20.586 13.414L22 12Z"
+            ></path>
+          </svg>
+        </div>
         <div className="ml-3">
           <form className="relative">
             <input
@@ -174,7 +200,7 @@ const DmHeader = ({ data }) => {
             </span>
           </form>
         </div>
-        <a href="#" className="ml-3">
+        {/* <a href="#" className="ml-3">
           <svg
             className="w-6 h-6 text-discord-topIcons hover:text-gray-200"
             aria-hidden="false"
@@ -188,7 +214,7 @@ const DmHeader = ({ data }) => {
               fill="currentColor"
             ></path>
           </svg>
-        </a>
+        </a> */}
         <a
           target="_blank"
           rel="noopener noreferrer"
@@ -217,6 +243,14 @@ const DmHeader = ({ data }) => {
         onAcceptCall={acceptCall}
         onRejectCall={handleCloseModal}
       />
+      {pinnedModal && (
+        <PinnedMsgsModal
+          where="DM"
+          visible={pinnedModal}
+          onClose={closePinnedMsgs}
+          id={dmId}
+        />
+      )}
     </div>
   );
 };

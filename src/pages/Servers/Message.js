@@ -7,7 +7,7 @@ const Message = ({ name, uniqueCode, content, createdAt, userImage, _id }) => {
 
   const deleteMessageHandler = async () => {
     try {
-      await client.post(`/server/deleteDmMessage/${_id}`);
+      await client.post(`/server/deleteMessage/${_id}`);
     } catch (error) {
       console.log(error);
     }
@@ -15,7 +15,7 @@ const Message = ({ name, uniqueCode, content, createdAt, userImage, _id }) => {
 
   const pinMessageHandler = async () => {
     try {
-      await client.post(`/server/pinDmMessage/${_id}`);
+      await client.post(`/server/pinMessage/${_id}`);
     } catch (error) {
       console.log(error);
     }

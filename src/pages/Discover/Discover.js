@@ -19,6 +19,7 @@ import {
   useHMSActions,
   useHMSStore,
 } from "@100mslive/react-sdk";
+import { useSocket } from "../../socket";
 
 const Discover = () => {
   const user = GetUser();
@@ -26,6 +27,8 @@ const Discover = () => {
   const { isLocalAudioEnabled, toggleAudio, toggleVideo } = useAVToggle();
   const isConnectedToRoom = useHMSStore(selectIsConnectedToRoom);
   const hmsActions = useHMSActions();
+  const { getSocket } = useSocket();
+  const socket = getSocket();
 
   const settingNavigateHandler = () => {
     navigate("/userSettings");
@@ -41,6 +44,11 @@ const Discover = () => {
     { title: "Anime & Manga", icon: <BsFillEmojiSmileFill /> },
     { title: "Movies & TV", icon: <FiMonitor /> },
   ];
+
+  const handleLeaveVc = () => {
+    hmsActions.leave();
+    socket.emit("leaving-vc", user);
+  };
 
   return (
     <div
@@ -91,7 +99,7 @@ const Discover = () => {
               Voice Connected
             </span>
             <div
-              onClick={() => hmsActions.leave()}
+              onClick={() => handleLeaveVc}
               className="contents-3NembX hover:bg-discord-iconHover text-gray-400 opacity-50 flex-grow-default rounded-md flex justify-center items-center cursor-pointer"
             >
               <svg
@@ -153,7 +161,7 @@ const Discover = () => {
       {/* USER SECTION */}
       <div
         className=" bg-discord-secondPrimary mt-auto p-2 flex justify-between items-center space-x-8 ml-auto"
-        style={{ marginTop: `${isLocalAudioEnabled ? 0 : "auto"}` }}
+        style={{ marginTop: `${isConnectedToRoom ? 0 : "auto"}` }}
       >
         <div className="flex items-center space-x-1">
           <img
@@ -197,7 +205,7 @@ const Discover = () => {
                 <path
                   className="text-red-600"
                   d="M21 4.27L19.73 3L3 19.73L4.27 21L8.46 16.82L9.69 15.58L11.35 13.92L14.99 10.28L21 4.27Z"
-                  class="strikethrough-2Kl6HF"
+                  className="strikethrough-2Kl6HF"
                   fill="currentColor"
                 ></path>
               </svg>
@@ -211,13 +219,13 @@ const Discover = () => {
                 className="opacity-50 h-5 mr-1"
               >
                 <path
-                  fill-rule="evenodd"
+                  fillRule="evenodd"
                   clip-rule="evenodd"
                   d="M14.99 11C14.99 12.66 13.66 14 12 14C10.34 14 9 12.66 9 11V5C9 3.34 10.34 2 12 2C13.66 2 15 3.34 15 5L14.99 11ZM12 16.1C14.76 16.1 17.3 14 17.3 11H19C19 14.42 16.28 17.24 13 17.72V21H11V17.72C7.72 17.23 5 14.41 5 11H6.7C6.7 14 9.24 16.1 12 16.1ZM12 4C11.2 4 11 4.66667 11 5V11C11 11.3333 11.2 12 12 12C12.8 12 13 11.3333 13 11V5C13 4.66667 12.8 4 12 4Z"
                   fill="currentColor"
                 ></path>
                 <path
-                  fill-rule="evenodd"
+                  fillRule="evenodd"
                   clip-rule="evenodd"
                   d="M14.99 11C14.99 12.66 13.66 14 12 14C10.34 14 9 12.66 9 11V5C9 3.34 10.34 2 12 2C13.66 2 15 3.34 15 5L14.99 11ZM12 16.1C14.76 16.1 17.3 14 17.3 11H19C19 14.42 16.28 17.24 13 17.72V22H11V17.72C7.72 17.23 5 14.41 5 11H6.7C6.7 14 9.24 16.1 12 16.1Z"
                   fill="currentColor"

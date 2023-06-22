@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { GetUser } from "../../hooks/redux";
 import { useNavigate } from "react-router";
 import ErrorModal from "../Modal/ErrorModal";
@@ -73,84 +73,58 @@ const Account = () => {
     // TODO
   };
 
+  const CustomFileInput = ({ field }) => {
+    const [selectedFile, setSelectedFile] = useState(null);
+    const fileInputRef = useRef(null);
+
+    const handleFileChange = (event) => {
+      const file = event.currentTarget.files[0];
+      setSelectedFile(file);
+    };
+
+    const handleClick = () => {
+      fileInputRef.current.click();
+    };
+
+    return (
+      <div className="relative m-auto mt-6">
+        <input
+          type="file"
+          id={field.name}
+          name={field.name}
+          className="hidden"
+          accept="image/*"
+          onChange={handleFileChange}
+          ref={fileInputRef}
+        />
+        <div className="relative">
+          <label
+            htmlFor={field.name}
+            className="w-24 h-24 rounded-full overflow-hidden border-2 border-dashed border-blue-400 cursor-pointer flex justify-center items-center"
+            onClick={handleClick}
+          >
+            {selectedFile ? (
+              <img
+                src={URL.createObjectURL(selectedFile)}
+                alt="Avatar Preview"
+                className="w-full h-full object-cover"
+              />
+            ) : (
+              <>
+                <div className="ml-12 mb-16 w-6 absolute"></div>
+              </>
+            )}
+          </label>
+        </div>
+      </div>
+    );
+  };
+
   return (
-    <div className="flex flex-col mt-2">
-      <div className="w-full flex flex-col mx-4 mx-auto">
-        <div className={`w-full bg-discord-indigo h-20 relative rounded-t-lg`}>
-          <div className="flex items-center absolute bottom-0 left-0 -mb-16 ml-4">
-            <div className="relative flex justify-center">
-              <div
-                className={`relative flex items-center mx-auto w-20 h-20 bg-discord-indigo text-white rounded-full inline-block p-2 border-6 border-discord-900`}
-              >
-                <img src={user?.userImage} alt="" className="rounded-full" />
-              </div>
-              <span className="bg-discord-green w-6 h-6 rounded-full absolute right-0 bottom-0 border-6 border-discord-900 -mr-1 mb-2"></span>
-            </div>
-            <div className="flex items-center ml-4">
-              <p className="text-white text-medium font-bold text-xl">
-                {user?.name}{" "}
-              </p>
-              <p className="text-discord-mainText text-medium text-xm ml-1 mt-1">
-                #{user?.uniqueCode}
-              </p>
-            </div>
-          </div>
-        </div>
-        <div className="w-full flex flex-col bg-discord-900 p-4">
-          {/* <button className="self-end w-24 bg-discord-experiment500 text-white p-1 rounded-md text-xs text-center hover:bg-discord-experiment500Disabled">
-          Edit Profile
-        </button> */}
-          <div className="p-4 flex flex-col mt-8  bg-gray-700 rounded-lg">
-            <div className="flex justify-between mt-2">
-              <div className="flex flex-col">
-                <span className="text-xxs text-discord-mainText font-semibold">
-                  USERNAME
-                </span>
-                <h6 className="text-white text-xm">
-                  {user?.name}{" "}
-                  <span className="text-discord-mainText text-xs">
-                    #{user?.uniqueCode}
-                  </span>
-                </h6>
-              </div>
-              <button
-                onClick={() => showUpdateModal({ name: user?.name })}
-                className="bg-discord-grayDeep text-white p-1 px-4 rounded text-sm text-center"
-              >
-                Edit
-              </button>
-            </div>
-
-            <div className="flex justify-between mt-6">
-              <div className="flex flex-col">
-                <span className="text-xxs text-discord-mainText font-semibold">
-                  EMAIL
-                </span>
-                <h6 className="text-white text-xm">{user?.email}</h6>
-              </div>
-              <button
-                onClick={() => showUpdateModal({ email: user?.email })}
-                className="bg-discord-grayDeep text-white p-1 px-4 rounded text-sm text-center"
-              >
-                Edit
-              </button>
-            </div>
-
-            <div className="flex justify-between mt-6">
-              <div className="flex flex-col">
-                <span className="text-xxs text-discord-mainText font-semibold">
-                  PHONE NUMBER
-                </span>
-                <h6 className="text-white text-xm">
-                  You haven't added a phone number yet.
-                </h6>
-              </div>
-              <button className="bg-discord-grayDeep text-white p-1 px-4 rounded text-sm text-center">
-                Add
-              </button>
-            </div>
-          </div>
-        </div>
+    <div className="flex flex-col mt-0">
+      <div className="mt-0 flex">
+        <CustomFileInput field="serverImage" />
+        <h1>Remove</h1>
       </div>
       <hr className=" border-y-discord-600 border w-full mx-auto mt-12" />
       <div>

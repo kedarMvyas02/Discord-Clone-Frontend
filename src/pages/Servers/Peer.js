@@ -15,18 +15,18 @@ function Peer({ peer, data }) {
 
   return (
     <div className="w-[38%] h-auto p-5 m-auto">
-      <div className="flex justify-end w-full">
+      <div className="flex justify-center w-full">
         {showUserImage ? (
           <img
             src={user?.userImage}
             alt=""
-            className="rounded-full mr-4  w-16 h-16"
+            className="rounded-full w-16 h-16"
           />
         ) : otherUserImage ? (
           <img
             src={data?.userImage}
             alt=""
-            className="rounded-full mr-4  w-16 h-16"
+            className="rounded-full w-16 h-16"
           />
         ) : (
           <video

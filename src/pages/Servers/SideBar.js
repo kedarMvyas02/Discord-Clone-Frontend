@@ -24,9 +24,9 @@ const SideBar = ({ onIdChange }) => {
       }
     };
     fetchServer();
-  }, [serverModal.render]);
+  }, [serverModal.render, onIdChange]);
 
-  const serverClickHandler = (e, id) => {
+  const serverClickHandler = async (e, id) => {
     e.preventDefault();
     onIdChange(id);
   };
@@ -56,6 +56,8 @@ const SideBar = ({ onIdChange }) => {
       await client.post("server/createServer", {
         name: values.serverName,
         avatar,
+        privacy: values.privacy,
+        description: values.description,
       });
     } catch (error) {
       console.log(error);

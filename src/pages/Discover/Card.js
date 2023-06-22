@@ -1,8 +1,27 @@
 import React from "react";
+import client from "../../api/client";
+import { GetUser } from "../../hooks/redux";
+import { useDispatch } from "react-redux";
+import { showErrorModal } from "../../store/error";
 
-const Card = ({ size, description, title, profile, bg }) => {
+const Card = ({ size, description, title, profile, bg, _id }) => {
+  const user = GetUser();
+  const dispatch = useDispatch();
+
+  const joinServer = async () => {
+    try {
+      await client.post(`/server/join/${_id}`, {
+        uniqueCode: user?.uniqueCode,
+      });
+    } catch (error) {
+      const heading = `${error?.response?.data?.status}`;
+      const subHeading = `${error?.response?.data?.message}`;
+      dispatch(showErrorModal({ heading, subHeading }));
+    }
+  };
+
   return (
-    <div className="w-full  ">
+    <div onClick={joinServer} className="w-full cursor-pointer">
       {/* Banner  */}
       <div className="  h-40 flex  w-full">
         <img
@@ -18,18 +37,17 @@ const Card = ({ size, description, title, profile, bg }) => {
         </div>
 
         {/* Title  */}
-
-        <p className="text-white font-bold text-[17px] pt-9 ml-8 pt-2">
+        <p className="text-white font-bold text-[17px] pt-9 ml-18 pt-2">
           {title}
         </p>
 
         {/* Description  */}
-        <p className=" text-gray-400 font-medium text-[15px] pt-1">
+        <p className=" text-gray-400 font-medium text-[15px] pt-1 ml-18">
           {description}
         </p>
         {/* Size  */}
-        <p className=" text-gray-400 font-medium text-[13.5px] pt-3 pb-4 ">
-          {size}
+        <p className=" text-gray-400 font-medium text-[13.5px] pt-6 pb-4 ">
+          Total Members :- {size}
         </p>
       </div>
     </div>
