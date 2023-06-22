@@ -10,11 +10,14 @@ import { getDmFriends } from "../../store/dmFriends";
 import { GetUser } from "../../hooks/redux";
 import {
   selectIsConnectedToRoom,
+  selectIsSomeoneScreenSharing,
   useAVToggle,
   useHMSActions,
   useHMSStore,
+  useScreenShare,
 } from "@100mslive/react-sdk";
 import { useSocket } from "../../socket";
+import SearchBarFriendsModal from "../Modal/SearchBarFriendsModal";
 
 const Friends = () => {
   const dispatch = useDispatch();
@@ -27,7 +30,10 @@ const Friends = () => {
   );
   const { dmFriends: dmFriend1 } = useSelector((state) => state.dmFriends);
   const user = GetUser();
+  const [searchModal, setSearchModal] = useState(false);
   const hmsActions = useHMSActions();
+  const screenshareOn = useHMSStore(selectIsSomeoneScreenSharing);
+  const { toggleScreenShare } = useScreenShare();
   const { getSocket } = useSocket();
   const socket = getSocket();
 
@@ -46,6 +52,14 @@ const Friends = () => {
 
   const addToDmClickHandler = () => {
     setModal(true);
+  };
+
+  const navigateToDmHandler = async (values) => {
+    navigate(`/channels/@me/${values?._id}`);
+    try {
+      await client.post(`/server/addToDm/${values._id}`);
+      dispatch(getDmFriends());
+    } catch (error) {}
   };
 
   const addToDmHandler = async (values) => {
@@ -80,6 +94,7 @@ const Friends = () => {
 
   const handleOnClose = () => {
     setModal(false);
+    setSearchModal(!searchModal);
   };
 
   const settingNavigateHandler = () => {
@@ -88,6 +103,10 @@ const Friends = () => {
 
   const handleCloseErrorModal = () => {
     dispatch(hideErrorModal());
+  };
+
+  const openSearchBarModal = () => {
+    setSearchModal(!searchModal);
   };
 
   const handleLeaveVc = () => {
@@ -105,6 +124,7 @@ const Friends = () => {
       <div className="bg-discord-700 flex flex-col" style={{ width: "250px" }}>
         <form className="relative p-3">
           <input
+            onClick={openSearchBarModal}
             type="text"
             placeholder="Find or start a conversation"
             className="w-56 h-7 rounded-default bg-gray-900 placeholder-discord-200 placeholder:text-smx p-1 font-normal text-discord-500 focus:outline-none leading-normal text-xs"
@@ -229,7 +249,7 @@ const Friends = () => {
                 Voice Connected
               </span>
               <div
-                onClick={() => handleLeaveVc}
+                onClick={handleLeaveVc}
                 className="contents-3NembX hover:bg-discord-iconHover text-gray-400 opacity-50 flex-grow-default rounded-md flex justify-center items-center cursor-pointer"
               >
                 <svg
@@ -251,10 +271,13 @@ const Friends = () => {
             <div className="border-b-1 border-b-discord-600 bg-discord-secondPrimary flex mt-0">
               <div
                 onClick={toggleVideo}
-                className="bg-discord-iconHover cursor-pointer hover:text-discord-mainTextHover hover:bg-discord-600 p-1 m-1 rounded-md flex-grow-default flex justify-center items-center"
+                className={
+                  isLocalVideoEnabled
+                    ? "bg-discord-100  cursor-pointer p-1 m-1 rounded-md flex-grow-default flex justify-center items-center"
+                    : "bg-discord-iconHover cursor-pointer hover:text-discord-mainTextHover text-gray-400 hover:text-opacity-50 text-opacity-50 hover:bg-discord-600 p-1 m-1 rounded-md flex-grow-default flex justify-center items-center"
+                }
               >
                 <svg
-                  className="buttonIcon-2Zsrs2 text-gray-400 opacity-50"
                   aria-hidden="true"
                   role="img"
                   width="24"
@@ -267,9 +290,18 @@ const Friends = () => {
                   ></path>
                 </svg>
               </div>
-              <div className="bg-discord-iconHover cursor-pointer hover:text-discord-mainTextHover hover:bg-discord-600 p-1 m-1 rounded-md flex-grow-default flex justify-center items-center">
+              {/* SCREEN SHARING */}
+
+              <div
+                onClick={toggleScreenShare}
+                className={
+                  screenshareOn
+                    ? "bg-discord-100  cursor-pointer p-1 m-1 rounded-md flex-grow-default flex justify-center items-center"
+                    : "bg-discord-iconHover cursor-pointer hover:text-discord-mainTextHover text-gray-400 hover:text-opacity-50 text-opacity-50 hover:bg-discord-600 p-1 m-1 rounded-md flex-grow-default flex justify-center items-center"
+                }
+                // className="bg-discord-iconHover cursor-pointer hover:text-discord-mainTextHover hover:bg-discord-600 p-1 m-1 rounded-md flex-grow-default flex justify-center items-center"
+              >
                 <svg
-                  className="buttonIcon-2Zsrs2 text-gray-400 opacity-50"
                   width="24"
                   height="24"
                   viewBox="0 0 24 24"
@@ -337,7 +369,6 @@ const Friends = () => {
                   <path
                     className="text-red-600"
                     d="M21 4.27L19.73 3L3 19.73L4.27 21L8.46 16.82L9.69 15.58L11.35 13.92L14.99 10.28L21 4.27Z"
-                    className="strikethrough-2Kl6HF"
                     fill="currentColor"
                   ></path>
                 </svg>
@@ -352,13 +383,13 @@ const Friends = () => {
                 >
                   <path
                     fillRule="evenodd"
-                    clip-rule="evenodd"
+                    clipRule="evenodd"
                     d="M14.99 11C14.99 12.66 13.66 14 12 14C10.34 14 9 12.66 9 11V5C9 3.34 10.34 2 12 2C13.66 2 15 3.34 15 5L14.99 11ZM12 16.1C14.76 16.1 17.3 14 17.3 11H19C19 14.42 16.28 17.24 13 17.72V21H11V17.72C7.72 17.23 5 14.41 5 11H6.7C6.7 14 9.24 16.1 12 16.1ZM12 4C11.2 4 11 4.66667 11 5V11C11 11.3333 11.2 12 12 12C12.8 12 13 11.3333 13 11V5C13 4.66667 12.8 4 12 4Z"
                     fill="currentColor"
                   ></path>
                   <path
                     fillRule="evenodd"
-                    clip-rule="evenodd"
+                    clipRule="evenodd"
                     d="M14.99 11C14.99 12.66 13.66 14 12 14C10.34 14 9 12.66 9 11V5C9 3.34 10.34 2 12 2C13.66 2 15 3.34 15 5L14.99 11ZM12 16.1C14.76 16.1 17.3 14 17.3 11H19C19 14.42 16.28 17.24 13 17.72V22H11V17.72C7.72 17.23 5 14.41 5 11H6.7C6.7 14 9.24 16.1 12 16.1Z"
                     fill="currentColor"
                   ></path>
@@ -409,6 +440,13 @@ const Friends = () => {
           onClose={handleOnClose}
           visible={modal}
           submitHandler={addToDmHandler}
+        />
+      )}
+      {searchModal && (
+        <SearchBarFriendsModal
+          onClose={handleOnClose}
+          visible={searchModal}
+          submitHandler={navigateToDmHandler}
         />
       )}
     </div>

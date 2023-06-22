@@ -6,10 +6,9 @@ import { useParams } from "react-router";
 import IncomingCall from "../Modal/IncomingCallModal";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllFriends } from "../../store/dmFriends";
-import client from "../../api/client";
 import PinnedMsgsModal from "../Modal/PinnedMsgsModal";
 
-const DmHeader = ({ data }) => {
+const DmHeader = ({ data, setContent }) => {
   const [showModal, setShowModal] = useState({
     toggle: false,
     data: "",
@@ -76,12 +75,8 @@ const DmHeader = ({ data }) => {
   }, []);
 
   const inputSearchHandler = async (e) => {
-    const res = await client.get(`/server/messageFinder/${e.target.value}`, {
-      sender: user?._id,
-      reciever: dmId,
-    });
-
-    console.log(res);
+    e.preventDefault();
+    setContent(e.target.value);
   };
 
   const startCallHandler = async () => {

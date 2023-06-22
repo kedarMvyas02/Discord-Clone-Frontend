@@ -2,26 +2,19 @@ import React, { useEffect, useState } from "react";
 import client from "../../api/client";
 
 const PinnedMsgsModal = ({ visible, where, onClose, id }) => {
-  const [msgs, setMsgs] = useState("");
-  console.log("where", where);
+  const [msgs, setMsgs] = useState([]);
 
   useEffect(() => {
     const fetchPinnedMsgs = async () => {
       try {
         if (where === "DM") {
-          console.log(where, "im here");
-          console.log(id);
           const res = await client.get(`server/getDmPinnedMessages/${id}`);
-          console.log(res?.data?.messages);
           setMsgs(res?.data?.messages);
         } else {
           const res = await client.get(`server/getPinnedMessages/${id}`);
-          console.log(res?.data?.messages);
           setMsgs(res?.data?.messages);
         }
-      } catch (error) {
-        console.log(error);
-      }
+      } catch (error) {}
     };
     fetchPinnedMsgs();
   }, [id, where, visible]);
@@ -32,8 +25,19 @@ const PinnedMsgsModal = ({ visible, where, onClose, id }) => {
     if (e.target.id === "container") onClose();
   };
 
-  // TODO
-  const removePinnedMessageHandler = () => {};
+  const removePinnedMessageHandler = async (data) => {
+    try {
+      if (where === "DM") {
+        await client.post(`server/deleteDmPinnedMessage/${data?._id}`);
+        const updatedMsgs = msgs?.filter((msg) => msg?._id !== data?._id);
+        setMsgs(updatedMsgs);
+      } else {
+        await client.post(`server/deletePinnedMessage/${data?._id}`);
+        const updatedMsgs = msgs?.filter((msg) => msg?._id !== data?._id);
+        setMsgs(updatedMsgs);
+      }
+    } catch (error) {}
+  };
 
   return (
     <div
@@ -120,7 +124,7 @@ const PinnedMsgsModal = ({ visible, where, onClose, id }) => {
                     <p className="text-sm text-discord-100">{data?.content}</p>
                   </div>
                   <div
-                    onClick={removePinnedMessageHandler}
+                    onClick={() => removePinnedMessageHandler(data)}
                     className="ml-auto mr-2 text-discord-100 text-opacity-75 hover:text-opacity-100 cursor-pointer"
                   >
                     <svg

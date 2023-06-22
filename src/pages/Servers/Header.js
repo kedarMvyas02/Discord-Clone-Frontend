@@ -3,7 +3,7 @@ import PinnedMsgsModal from "../Modal/PinnedMsgsModal";
 import { toggleMemberList } from "../../store/channel";
 import { useDispatch } from "react-redux";
 
-const Header = ({ channelName, channelId }) => {
+const Header = ({ channelName, channelId, setContent }) => {
   const [modal, setModal] = useState(false);
   const dispatch = useDispatch();
 
@@ -16,6 +16,11 @@ const Header = ({ channelName, channelId }) => {
 
   const toggleMemberListHandler = () => {
     dispatch(toggleMemberList());
+  };
+
+  const inputSearchHandler = async (e) => {
+    e.preventDefault();
+    setContent(e.target.value);
   };
 
   return (
@@ -95,28 +100,7 @@ const Header = ({ channelName, channelId }) => {
             ></path>
           </svg>
         </a> */}
-        {/* <form className="relative">
-          <input
-            type="text"
-            placeholder="Search"
-            className="w-40 rounded bg-gray-900 placeholder-discord-200 p-1 focus:outline-none leading-normal text-xs"
-          />
-          <span>
-            <svg
-              className="absolute right-0 top-0 w-4 h-4 text-discord-200 mr-2"
-              style={{ top: "6px" }}
-              aria-hidden="false"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-            >
-              <path
-                fill="currentColor"
-                d="M21.707 20.293L16.314 14.9C17.403 13.504 18 11.799 18 10C18 7.863 17.167 5.854 15.656 4.344C14.146 2.832 12.137 2 10 2C7.863 2 5.854 2.832 4.344 4.344C2.833 5.854 2 7.863 2 10C2 12.137 2.833 14.146 4.344 15.656C5.854 17.168 7.863 18 10 18C11.799 18 13.504 17.404 14.9 16.314L20.293 21.706L21.707 20.293ZM10 16C8.397 16 6.891 15.376 5.758 14.243C4.624 13.11 4 11.603 4 10C4 8.398 4.624 6.891 5.758 5.758C6.891 4.624 8.397 4 10 4C11.603 4 13.109 4.624 14.242 5.758C15.376 6.891 16 8.398 16 10C16 11.603 15.376 13.11 14.242 14.243C13.109 15.376 11.603 16 10 16Z"
-              ></path>
-            </svg>
-          </span>
-        </form> */}
+
         {/* <a href="#" className="ml-3">
           <svg
             className="w-6 h-6 text-discord-topIcons hover:text-gray-200"
@@ -146,13 +130,13 @@ const Header = ({ channelName, channelId }) => {
             <path
               fill="currentColor"
               fillRule="evenodd"
-              clip-rule="evenodd"
+              clipRule="evenodd"
               d="M14 8.00598C14 10.211 12.206 12.006 10 12.006C7.795 12.006 6 10.211 6 8.00598C6 5.80098 7.794 4.00598 10 4.00598C12.206 4.00598 14 5.80098 14 8.00598ZM2 19.006C2 15.473 5.29 13.006 10 13.006C14.711 13.006 18 15.473 18 19.006V20.006H2V19.006Z"
             ></path>
             <path
               fill="currentColor"
               fillRule="evenodd"
-              clip-rule="evenodd"
+              clipRule="evenodd"
               d="M14 8.00598C14 10.211 12.206 12.006 10 12.006C7.795 12.006 6 10.211 6 8.00598C6 5.80098 7.794 4.00598 10 4.00598C12.206 4.00598 14 5.80098 14 8.00598ZM2 19.006C2 15.473 5.29 13.006 10 13.006C14.711 13.006 18 15.473 18 19.006V20.006H2V19.006Z"
             ></path>
             <path
@@ -165,6 +149,30 @@ const Header = ({ channelName, channelId }) => {
             ></path>
           </svg>
         </div>
+        <form className="relative">
+          <input
+            type="text"
+            onChange={(e) => inputSearchHandler(e)}
+            placeholder="Search"
+            className="w-40 rounded-default bg-gray-900 placeholder-discord-200 placeholder:text-sm p-1 font-normal text-discord-500 focus:outline-none leading-normal text-xs ml-4"
+            // className="w-40 rounded bg-gray-900 placeholder-discord-200 p-1 focus:outline-none leading-normal text-xs"
+          />
+          <span>
+            <svg
+              className="absolute right-0 top-0 w-4 h-4 text-discord-200 mr-2"
+              style={{ top: "6px" }}
+              aria-hidden="false"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+            >
+              <path
+                fill="currentColor"
+                d="M21.707 20.293L16.314 14.9C17.403 13.504 18 11.799 18 10C18 7.863 17.167 5.854 15.656 4.344C14.146 2.832 12.137 2 10 2C7.863 2 5.854 2.832 4.344 4.344C2.833 5.854 2 7.863 2 10C2 12.137 2.833 14.146 4.344 15.656C5.854 17.168 7.863 18 10 18C11.799 18 13.504 17.404 14.9 16.314L20.293 21.706L21.707 20.293ZM10 16C8.397 16 6.891 15.376 5.758 14.243C4.624 13.11 4 11.603 4 10C4 8.398 4.624 6.891 5.758 5.758C6.891 4.624 8.397 4 10 4C11.603 4 13.109 4.624 14.242 5.758C15.376 6.891 16 8.398 16 10C16 11.603 15.376 13.11 14.242 14.243C13.109 15.376 11.603 16 10 16Z"
+              ></path>
+            </svg>
+          </span>
+        </form>
         <a
           href="https://support.discord.com/hc/en-us"
           target="_blank"

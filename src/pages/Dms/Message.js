@@ -45,7 +45,7 @@ const Message = ({ name, uniqueCode, content, createdAt, userImage, _id }) => {
         className="hover:bg-discord-indigo text-discord-indigo mr-2 hover:text-white cursor-pointer p-1 ml-auto rounded-2xlg"
       >
         <svg
-          className="w-7 h-7 hidden group-hover:inline"
+          className="w-6 h-6 hidden group-hover:inline"
           aria-hidden="true"
           role="img"
           viewBox="0 0 24 24"
