@@ -203,7 +203,7 @@ const Channels = ({ newId, setMembers }) => {
         deafen: !toggle.deafen,
       };
     });
-    hmsActions.setVolume(toggle.deafen ? 0 : 100);
+    hmsActions?.setVolume(toggle.deafen ? 0 : 100);
   };
 
   const handleLeaveVc = () => {

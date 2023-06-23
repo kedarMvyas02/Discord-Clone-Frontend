@@ -21,12 +21,11 @@ client.interceptors.response.use(
   async (err) => {
     const { status } = err.response;
     const originalReq = err.config;
-    const navigate = useNavigate();
 
     if (originalReq.url !== "/users/loginUser" && err.response) {
       if (err.response.status === 401) {
         localStorage.removeItem("user");
-        navigate("/login");
+        window.location.replace("/login");
         return Promise.reject();
       }
     }
@@ -34,7 +33,7 @@ client.interceptors.response.use(
     switch (status) {
       case 403:
         localStorage.removeItem("user");
-        navigate("/login");
+        window.location.replace("/login");
         break;
       default:
         break;

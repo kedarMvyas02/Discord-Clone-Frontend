@@ -21,7 +21,7 @@ import {
 } from "@100mslive/react-sdk";
 import { useSocket } from "../../socket";
 
-const Discover = () => {
+const Discover = ({ setTopic }) => {
   const user = GetUser();
   const navigate = useNavigate();
   const { isLocalAudioEnabled, toggleAudio, toggleVideo } = useAVToggle();
@@ -35,19 +35,36 @@ const Discover = () => {
   };
 
   const topics = [
-    { title: "Home", icon: <AiFillCompass /> },
-    { title: "Gaming", icon: <GiConsoleController /> },
-    { title: "Music", icon: <BsMusicNoteBeamed /> },
-    { title: "Education", icon: <FaGraduationCap /> },
-    { title: "Science & tech", icon: <TbAtom /> },
-    { title: "Content Creator", icon: <BsFillPlayCircleFill /> },
-    { title: "Anime & Manga", icon: <BsFillEmojiSmileFill /> },
-    { title: "Movies & TV", icon: <FiMonitor /> },
+    { title: "Home", backendName: "", icon: <AiFillCompass /> },
+    { title: "Gaming", backendName: "gaming", icon: <GiConsoleController /> },
+    { title: "Music", backendName: "music", icon: <BsMusicNoteBeamed /> },
+    { title: "Education", backendName: "education", icon: <FaGraduationCap /> },
+    {
+      title: "Science & tech",
+      backendName: "scienceAndTech",
+      icon: <TbAtom />,
+    },
+    {
+      title: "Content Creator",
+      backendName: "contentCreator",
+      icon: <BsFillPlayCircleFill />,
+    },
+    {
+      title: "Anime & Manga",
+      backendName: "animeAndManga",
+      icon: <BsFillEmojiSmileFill />,
+    },
+    { title: "Movies & TV", backendName: "moviesAndTV", icon: <FiMonitor /> },
   ];
 
   const handleLeaveVc = () => {
     hmsActions.leave();
     socket.emit("leaving-vc", user);
+  };
+
+  const topicClickHandler = (topic) => {
+    console.log(topic.backendName);
+    setTopic(topic.backendName);
   };
 
   return (
@@ -61,7 +78,9 @@ const Discover = () => {
         {/* Topics */}
         <div className="mt-4 space-y-2">
           {topics.map((topic) => (
-            <Topic title={topic.title} icon={topic.icon} />
+            <div onClick={() => topicClickHandler(topic)} key={topic.title}>
+              <Topic title={topic.title} icon={topic.icon} />
+            </div>
           ))}
         </div>
       </div>
@@ -205,7 +224,6 @@ const Discover = () => {
                 <path
                   className="text-red-600"
                   d="M21 4.27L19.73 3L3 19.73L4.27 21L8.46 16.82L9.69 15.58L11.35 13.92L14.99 10.28L21 4.27Z"
-                  className="strikethrough-2Kl6HF"
                   fill="currentColor"
                 ></path>
               </svg>

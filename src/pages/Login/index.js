@@ -30,8 +30,8 @@ export default function Index() {
         navigate("/channels/@me");
       }
     } catch (error) {
-      const heading = `${error.response.data.status}`;
-      const subHeading = `${error.response.data.message}`;
+      const heading = `${error?.response?.data?.status}`;
+      const subHeading = `${error?.response?.data?.message}`;
       dispatch(showErrorModal({ heading, subHeading }));
     }
   }

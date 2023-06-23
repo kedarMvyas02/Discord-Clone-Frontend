@@ -46,6 +46,9 @@ const SideBar = () => {
     await client.post("server/createServer", {
       name: values.serverName,
       avatar,
+      privacy: values.privacy,
+      description: values.description,
+      serverType: values.serverType,
     });
 
     setServerModal((prevState) => ({

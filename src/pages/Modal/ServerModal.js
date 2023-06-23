@@ -110,6 +110,7 @@ const ServerModal = ({ visible, onClose, submitHandler }) => {
               avatarFile: null,
               privacy: "private",
               description: "",
+              serverType: "other",
             }}
             onSubmit={forSubmit}
           >
@@ -139,31 +140,99 @@ const ServerModal = ({ visible, onClose, submitHandler }) => {
                   name="description"
                   type="text"
                 />
-                <label
-                  htmlFor="privacy"
-                  className="block text-discord-sideBarChannels font-semibold text-xs mb-2"
-                >
-                  PRIVACY
-                </label>
-                <Field
-                  as="select"
-                  id="dropdown"
-                  name="dropdown"
-                  className="focus:outline-none border-discord-transparentBlack1 mb-4 border-1 focus:ring-2 focus:ring-blue-400 bg-discord-transparentBlack2 text-white w-full rounded py-1 px-2"
-                >
-                  <option
-                    value="private"
-                    className="border-discord-transparentBlack1 focus:ring-2 bg-discord-transparentBlack2 text-black font-bold"
-                  >
-                    Private
-                  </option>
-                  <option
-                    value="public"
-                    className="border-discord-transparentBlack1 focus:ring-2 bg-discord-transparentBlack2 text-black font-bold"
-                  >
-                    Public
-                  </option>
-                </Field>
+                <div className="flex">
+                  <div className="flex-grow-default">
+                    <label
+                      htmlFor="privacy"
+                      className="block text-discord-sideBarChannels font-semibold text-xs mr-2"
+                    >
+                      PRIVACY
+                    </label>
+                    <Field
+                      as="select"
+                      id="dropdown"
+                      name="dropdown"
+                      className="focus:outline-none border-discord-transparentBlack1 mb-4 border-1 focus:ring-2 focus:ring-blue-400 bg-discord-transparentBlack2 text-white w-full rounded py-1 px-2"
+                    >
+                      <option
+                        value="private"
+                        className="border-discord-transparentBlack1 focus:ring-2 bg-discord-transparentBlack2 text-black font-bold"
+                      >
+                        Private
+                      </option>
+                      <option
+                        value="public"
+                        className="border-discord-transparentBlack1 focus:ring-2 bg-discord-transparentBlack2 text-black font-bold"
+                      >
+                        Public
+                      </option>
+                    </Field>
+                  </div>
+
+                  <div className="flex-grow-default">
+                    <label
+                      htmlFor="serverType"
+                      className="block text-discord-sideBarChannels font-semibold text-xs mx-2"
+                    >
+                      SERVER TYPE
+                    </label>
+                    <Field
+                      as="select"
+                      id="dropdown"
+                      name="dropdown"
+                      className="focus:outline-none ml-1 border-discord-transparentBlack1 mb-4 border-1 focus:ring-2 focus:ring-blue-400 bg-discord-transparentBlack2 text-white w-full rounded py-1 px-2"
+                    >
+                      <option
+                        value="gaming"
+                        className="border-discord-transparentBlack1 focus:ring-2 bg-discord-transparentBlack2 text-black font-bold"
+                      >
+                        Gaming
+                      </option>
+                      <option
+                        value="music"
+                        className="border-discord-transparentBlack1 focus:ring-2 bg-discord-transparentBlack2 text-black font-bold"
+                      >
+                        Music
+                      </option>
+                      <option
+                        value="education"
+                        className="border-discord-transparentBlack1 focus:ring-2 bg-discord-transparentBlack2 text-black font-bold"
+                      >
+                        Education
+                      </option>
+                      <option
+                        value="scienceAndTech"
+                        className="border-discord-transparentBlack1 focus:ring-2 bg-discord-transparentBlack2 text-black font-bold"
+                      >
+                        Science & Tech
+                      </option>
+                      <option
+                        value="contentCreator"
+                        className="border-discord-transparentBlack1 focus:ring-2 bg-discord-transparentBlack2 text-black font-bold"
+                      >
+                        Content Creator
+                      </option>
+                      <option
+                        value="animeAndManga"
+                        className="border-discord-transparentBlack1 focus:ring-2 bg-discord-transparentBlack2 text-black font-bold"
+                      >
+                        Anime & Manga
+                      </option>
+                      <option
+                        value="moviesAndTv"
+                        className="border-discord-transparentBlack1 focus:ring-2 bg-discord-transparentBlack2 text-black font-bold"
+                      >
+                        Movies & TV
+                      </option>
+                      <option
+                        value="other"
+                        className="border-discord-transparentBlack1 focus:ring-2 bg-discord-transparentBlack2 text-black font-bold"
+                      >
+                        Other
+                      </option>
+                    </Field>
+                  </div>
+                </div>
 
                 <h6 className="text-xs text-white font-light text-left pt-0">
                   By creating a server, you agree to Discord's{" "}

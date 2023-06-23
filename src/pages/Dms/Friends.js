@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getUserDetails } from "../../store/user";
-import { useNavigate } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import client from "../../api/client";
 import AddDmModal from "../Modal/AddDmModal";
 import ErrorModal from "../Modal/ErrorModal";
@@ -25,6 +25,7 @@ const Friends = () => {
   const [dmFriend, setDmFriend] = useState(null);
   const [isUpdated, setIsUpdated] = useState(false);
   const [modal, setModal] = useState(false);
+  const [messageArrived, setMessageArrived] = useState(false);
   const { visible, heading, subHeading } = useSelector(
     (state) => state.errorModal
   );
@@ -36,6 +37,7 @@ const Friends = () => {
   const { toggleScreenShare } = useScreenShare();
   const { getSocket } = useSocket();
   const socket = getSocket();
+  const { dmId } = useParams();
 
   useEffect(() => {
     dispatch(getDmFriends());
@@ -45,6 +47,18 @@ const Friends = () => {
   useEffect(() => {
     setDmFriend(dmFriend1);
   }, [dmFriend1]);
+
+  const handleArrivedMessage = () => {
+    setMessageArrived(true);
+  };
+
+  useEffect(() => {
+    socket?.on("navoMessage", handleArrivedMessage);
+
+    return () => {
+      socket?.off("navoMessage", handleArrivedMessage);
+    };
+  }, [socket]);
 
   const friendsNavigateHandler = () => {
     navigate("/channels/@me");
@@ -89,6 +103,9 @@ const Friends = () => {
   };
 
   const openFriendDm = (dmId) => {
+    if (dmId) {
+      setMessageArrived(false);
+    }
     navigate(`/channels/@me/${dmId}`);
   };
 
@@ -198,14 +215,19 @@ const Friends = () => {
           <div
             key={data._id}
             onClick={() => openFriendDm(data._id)}
-            className="select-none font-medium flex items-center text-discord-500 cursor-pointer hover:bg-gray-600  hover:text-white p-2 pl-0 mt-2  mx-2 rounded-full text-base"
+            className={`select-none font-medium flex items-center ${
+              messageArrived ? "text-white" : "text-discord-500"
+            } cursor-pointer hover:bg-gray-600 hover:text-white p-2 pl-0 mt-2 mx-2 rounded-full text-base`}
           >
             <img
               src={data.userImage}
               alt=""
               className="h-8 w-8 mx-3 rounded-full mr-3"
             />
-            {data.name}
+            <span className="mr-1">{data.name}</span>
+            {messageArrived && (
+              <span className="w-2 h-2 bg-green-500 rounded-full ml-auto"></span>
+            )}
             <svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 20 20"

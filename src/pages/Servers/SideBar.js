@@ -58,6 +58,7 @@ const SideBar = ({ onIdChange }) => {
         avatar,
         privacy: values.privacy,
         description: values.description,
+        serverType: values.serverType,
       });
     } catch (error) {
       console.log(error);

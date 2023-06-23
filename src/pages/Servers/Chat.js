@@ -295,7 +295,7 @@ const Chat = () => {
         <div ref={chatRef} className="pb-16" />
       </main>
       <div className="flex items-center bg-discord-chatInputBg mx-4 mb-5 rounded-lg justify-end mt-auto">
-        <svg
+        {/* <svg
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 20 20"
           fill="currentColor"
@@ -306,7 +306,7 @@ const Chat = () => {
             d="M10 18a8 8 0 100-16 8 8 0 000 16zm.75-11.25a.75.75 0 00-1.5 0v2.5h-2.5a.75.75 0 000 1.5h2.5v2.5a.75.75 0 001.5 0v-2.5h2.5a.75.75 0 000-1.5h-2.5v-2.5z"
             clipRule="evenodd"
           />
-        </svg>
+        </svg> */}
         <form className="flex-grow-default">
           <input
             type="text"
@@ -314,7 +314,7 @@ const Chat = () => {
             placeholder={
               channelId ? `Message #${channelName}` : "Select a channel"
             }
-            className="bg-transparent disabled:cursor-not-allowed focus:outline-none text-discord-mainTextHover w-full placeholder-discord-popOutHeader text-sm"
+            className="bg-transparent disabled:cursor-not-allowed ml-4 focus:outline-none text-discord-mainTextHover w-full placeholder-discord-popOutHeader text-sm"
             value={msg}
             onChange={(e) => setMsg(e.target.value)}
           />
@@ -323,20 +323,6 @@ const Chat = () => {
             Send
           </button>
         </form>
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          strokeWidth={1.5}
-          stroke="currentColor"
-          className="hover:bg-discord-iconHover cursor-pointer text-discord-mainTextHover opacity-75 hover:opacity-100 py-2 rounded-md w-10 h-10"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            d="M15.182 15.182a4.5 4.5 0 01-6.364 0M21 12a9 9 0 11-18 0 9 9 0 0118 0zM9.75 9.75c0 .414-.168.75-.375.75S9 10.164 9 9.75 9.168 9 9.375 9s.375.336.375.75zm-.375 0h.008v.015h-.008V9.75zm5.625 0c0 .414-.168.75-.375.75s-.375-.336-.375-.75.168-.75.375-.75.375.336.375.75zm-.375 0h.008v.015h-.008V9.75z"
-          />
-        </svg>
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="24"
