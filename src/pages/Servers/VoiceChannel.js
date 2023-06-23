@@ -14,7 +14,10 @@ const VoiceChannel = ({ channelName, channelId, roomCode, serverId }) => {
 
   const handleJoiningVcUpdate = (data) => {
     setCurrent((prevState) => {
-      return [...prevState, data.user];
+      const updatedState = prevState?.filter(
+        (user) => user?._id !== data?.user?._id
+      );
+      return [...updatedState, data?.user];
     });
   };
 
@@ -47,6 +50,8 @@ const VoiceChannel = ({ channelName, channelId, roomCode, serverId }) => {
         roomCode: roomCode,
       });
       await hmsActions.join({ userName: user?.name, authToken });
+      await hmsActions.setLocalVideoEnabled(false);
+
       console.log("call started successfully");
 
       socket.emit("user-joined-vc", {

@@ -14,11 +14,11 @@ function ScreenShare() {
   });
 
   return (
-    <div className="w-[100%] h-80 p-5 m-auto">
-      <div className="flex justify-end w-full">
+    <div className="w-[100%] h-80  p-5 m-auto">
+      <div className="flex justify-center  w-full">
         {screenshareOn && (
           <video
-            className="w-[600px]"
+            className="w-[600px] "
             ref={videoRef}
             autoPlay
             muted

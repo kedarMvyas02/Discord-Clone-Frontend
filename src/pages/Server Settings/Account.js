@@ -8,7 +8,7 @@ import DeleteUserModal from "../Modal/DeleteUserModal";
 import client from "../../api/client";
 import UpdateModal from "../Modal/UpdateModal";
 
-const Account = () => {
+const Account = ({ server }) => {
   const [showDelete, setShowDelete] = useState(false);
   const [detail, setDetail] = useState({
     toggle: false,
@@ -50,7 +50,6 @@ const Account = () => {
     });
   };
   const showUpdateModal = (data) => {
-    console.log(data);
     if (data.email) {
       setDetail((prevState) => {
         return {
@@ -87,7 +86,7 @@ const Account = () => {
     };
 
     return (
-      <div className="relative m-auto mt-6">
+      <div className="flex justify-start m-auto mt-6">
         <input
           type="file"
           id={field.name}
@@ -97,7 +96,7 @@ const Account = () => {
           onChange={handleFileChange}
           ref={fileInputRef}
         />
-        <div className="relative">
+        <div className="flex justify-start">
           <label
             htmlFor={field.name}
             className="w-24 h-24 rounded-full overflow-hidden border-2 border-dashed border-blue-400 cursor-pointer flex justify-center items-center"
@@ -111,7 +110,7 @@ const Account = () => {
               />
             ) : (
               <>
-                <div className="ml-12 mb-16 w-6 absolute"></div>
+                <img src={server?.avatar} alt="" />
               </>
             )}
           </label>
@@ -124,8 +123,8 @@ const Account = () => {
     <div className="flex flex-col mt-0">
       <div className="mt-0 flex">
         <CustomFileInput field="serverImage" />
-        <h1>Remove</h1>
       </div>
+      <span>Upload Photo</span>
       <hr className=" border-y-discord-600 border w-full mx-auto mt-12" />
       <div>
         <div className="flex items-center ml-4">

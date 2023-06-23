@@ -3,13 +3,16 @@ import client from "../../api/client";
 import { GetUser } from "../../hooks/redux";
 import { useDispatch } from "react-redux";
 import { showErrorModal } from "../../store/error";
+import { useNavigate } from "react-router";
 
 const Card = ({ size, description, title, profile, bg, _id }) => {
   const user = GetUser();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const joinServer = async () => {
     try {
+      navigate(`/channels/${_id}`);
       await client.post(`/server/join/${_id}`, {
         uniqueCode: user?.uniqueCode,
       });

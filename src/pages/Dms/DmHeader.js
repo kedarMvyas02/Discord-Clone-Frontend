@@ -7,6 +7,8 @@ import IncomingCall from "../Modal/IncomingCallModal";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllFriends } from "../../store/dmFriends";
 import PinnedMsgsModal from "../Modal/PinnedMsgsModal";
+import { hideErrorModal, showErrorModal } from "../../store/error";
+import ErrorModal from "../Modal/ErrorModal";
 
 const DmHeader = ({ data, setContent }) => {
   const [showModal, setShowModal] = useState({
@@ -14,7 +16,9 @@ const DmHeader = ({ data, setContent }) => {
     data: "",
   });
   const [pinnedModal, setPinnedModal] = useState(false);
-
+  const { visible, heading, subHeading } = useSelector(
+    (state) => state.errorModal
+  );
   const hmsActions = useHMSActions();
   const { getSocket } = useSocket();
   const socket = getSocket();
@@ -22,7 +26,6 @@ const DmHeader = ({ data, setContent }) => {
   const { dmId } = useParams();
   const allFriends = useSelector((state) => state?.dmFriends?.allFriends);
   const dispatch = useDispatch();
-
   const friendToFind = allFriends?.find((friend) => friend?._id === data?._id);
 
   useEffect(() => {
@@ -58,7 +61,6 @@ const DmHeader = ({ data, setContent }) => {
       await hmsActions.join({
         userName: user?.name,
         authToken,
-        userIcon: user?.userImage,
       });
       console.log("call started successfully");
     } catch (e) {
@@ -74,12 +76,36 @@ const DmHeader = ({ data, setContent }) => {
     };
   }, []);
 
+  const handleRejectCall = () => {
+    socket.emit("rejected-call", { from: user?._id, to: data?._id });
+    handleCloseModal();
+  };
+
+  const handleCallRejected = async () => {
+    await hmsActions.leave();
+    const heading = `Call Declined`;
+    const subHeading = `Your call was rejected :(`;
+    dispatch(showErrorModal({ heading, subHeading }));
+  };
+
+  useEffect(() => {
+    socket?.on("call-rejected", handleCallRejected);
+
+    return () => {
+      socket?.off("call-rejected", handleCallRejected);
+    };
+  }, []);
+
   const inputSearchHandler = async (e) => {
     e.preventDefault();
     setContent(e.target.value);
   };
 
-  const startCallHandler = async () => {
+  const handleCloseErrorModal = () => {
+    dispatch(hideErrorModal());
+  };
+
+  const startVoiceCallHandler = async () => {
     socket.emit("private-call", { from: user?._id, to: dmId });
 
     const authToken = await hmsActions.getAuthTokenByRoomCode({
@@ -87,7 +113,29 @@ const DmHeader = ({ data, setContent }) => {
     });
 
     try {
-      await hmsActions.join({ userName: user?.name, authToken });
+      await hmsActions.join({
+        userName: user?.name,
+        authToken,
+      });
+      await hmsActions.setLocalVideoEnabled(false);
+      console.log("call started successfully");
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  const startVideoCallHandler = async () => {
+    socket.emit("private-call", { from: user?._id, to: dmId });
+
+    const authToken = await hmsActions.getAuthTokenByRoomCode({
+      roomCode: friendToFind.roomCode,
+    });
+
+    try {
+      await hmsActions.join({
+        userName: user?.name,
+        authToken,
+      });
       console.log("call started successfully");
     } catch (e) {
       console.error(e);
@@ -118,7 +166,7 @@ const DmHeader = ({ data, setContent }) => {
       </div>
 
       <div className="flex items-center">
-        <div onClick={startCallHandler} className="ml-3 cursor-pointer">
+        <div onClick={startVoiceCallHandler} className="ml-3 cursor-pointer">
           <svg
             x="0"
             y="0"
@@ -137,7 +185,7 @@ const DmHeader = ({ data, setContent }) => {
             ></path>
           </svg>
         </div>
-        <div onClick={startCallHandler} className="ml-3 cursor-pointer">
+        <div onClick={startVideoCallHandler} className="ml-3 cursor-pointer">
           <svg
             x="0"
             y="0"
@@ -236,7 +284,7 @@ const DmHeader = ({ data, setContent }) => {
         callerName={showModal?.data?.from_user?.name}
         callerImage={showModal?.data?.from_user?.userImage}
         onAcceptCall={acceptCall}
-        onRejectCall={handleCloseModal}
+        onRejectCall={handleRejectCall}
       />
       {pinnedModal && (
         <PinnedMsgsModal
@@ -246,6 +294,12 @@ const DmHeader = ({ data, setContent }) => {
           id={dmId}
         />
       )}
+      <ErrorModal
+        visible={visible}
+        onClose={handleCloseErrorModal}
+        heading={heading}
+        subHeading={subHeading}
+      />
     </div>
   );
 };

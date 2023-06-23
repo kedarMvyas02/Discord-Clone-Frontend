@@ -2,12 +2,21 @@ import React from "react";
 import client from "../../api/client";
 import { GetUser } from "../../hooks/redux/index";
 
-const Message = ({ name, uniqueCode, content, createdAt, userImage, _id }) => {
+const Message = ({
+  name,
+  uniqueCode,
+  content,
+  createdAt,
+  userImage,
+  _id,
+  onDelete,
+}) => {
   const user = GetUser();
 
   const deleteMessageHandler = async () => {
     try {
       await client.post(`/server/deleteMessage/${_id}`);
+      onDelete(_id);
     } catch (error) {
       console.log(error);
     }

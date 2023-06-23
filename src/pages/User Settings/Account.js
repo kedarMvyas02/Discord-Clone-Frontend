@@ -7,6 +7,7 @@ import { hideErrorModal, showErrorModal } from "../../store/error";
 import DeleteUserModal from "../Modal/DeleteUserModal";
 import client from "../../api/client";
 import UpdateModal from "../Modal/UpdateModal";
+import { getUserDetails } from "../../store/user";
 
 const Account = () => {
   const [showDelete, setShowDelete] = useState(false);
@@ -14,16 +15,19 @@ const Account = () => {
     toggle: false,
     name: "",
   });
-
   const { visible, heading, subHeading } = useSelector(
     (state) => state.errorModal
   );
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const user = GetUser();
 
   const deleteAccountHandler = () => {
     const heading = `Are you sure, you want to delete this account?`;
     const subHeading = `This action is irreversible, you won't be able to recover your account again`;
     dispatch(showErrorModal({ heading, subHeading }));
   };
+
   const deleteUserAccountFinal = async (values) => {
     await client.post("/users/deleteUser", {
       email: user?.email,
@@ -31,10 +35,6 @@ const Account = () => {
     });
     navigate("/login");
   };
-
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
-  const user = GetUser();
 
   const handleCloseErrorModal = () => {
     dispatch(hideErrorModal());
@@ -49,9 +49,9 @@ const Account = () => {
       };
     });
   };
+
   const showUpdateModal = (data) => {
-    console.log(data);
-    if (data.email) {
+    if (data?.email) {
       setDetail((prevState) => {
         return {
           ...prevState,
@@ -59,18 +59,42 @@ const Account = () => {
           toggle: true,
         };
       });
+    } else if (data?.name) {
+      setDetail((prevState) => {
+        return {
+          ...prevState,
+          name: "name",
+          toggle: true,
+        };
+      });
     } else {
       setDetail((prevState) => {
         return {
           ...prevState,
-          name: "username",
+          name: "phoneNumber",
           toggle: true,
         };
       });
     }
   };
-  const updateHandler = (data) => {
-    // TODO
+
+  const updateHandler = async (data) => {
+    try {
+      if (data?.email) {
+        await client.post("/users/updateUser", {
+          email: data?.email,
+        });
+      } else if (data?.name) {
+        await client.post("/users/updateUser", {
+          name: data?.name,
+        });
+      } else {
+        await client.post("/users/updateUser", {
+          phoneNumber: data?.phoneNumber,
+        });
+      }
+    } catch (error) {}
+    dispatch(getUserDetails());
   };
 
   return (
@@ -142,10 +166,15 @@ const Account = () => {
                   PHONE NUMBER
                 </span>
                 <h6 className="text-white text-xm">
-                  You haven't added a phone number yet.
+                  {user?.phoneNumber
+                    ? user?.phoneNumber
+                    : `You haven't added a phone number yet.`}
                 </h6>
               </div>
-              <button className="bg-discord-grayDeep text-white p-1 px-4 rounded text-sm text-center">
+              <button
+                onClick={() => showUpdateModal({ number: user?.number })}
+                className="bg-discord-grayDeep text-white p-1 px-4 rounded text-sm text-center"
+              >
                 Add
               </button>
             </div>

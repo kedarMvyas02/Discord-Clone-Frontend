@@ -83,12 +83,14 @@ const FriendChat = () => {
     }
   };
 
-  const removeFriendHandler = async (e, code) => {
+  const removeFriendHandler = async (e, code, _id) => {
     e.stopPropagation();
     try {
+      await client.post(`/server/removeFromDm/${_id}`);
       const res = await client.post("/users/removeFriend", {
         uniqueCode: code,
       });
+      dispatch(getDmFriends());
       const heading = `${res.data.msg}`;
       dispatch(showErrorModal({ heading }));
       setCurrentBody({});
@@ -132,7 +134,7 @@ const FriendChat = () => {
       )}
       {currentBody?.message && (
         <main className="flex-grow overflow-y-scroll scrollbar-hide">
-          <p className="hover:text-discord-500 select-none font-bold flex items-center rounded-md text-discord-200 space-y-2 mt-4 text-xl justify-center">
+          <p className="hover:text-discord-500 select-none font-bold flex mt-32 items-center justify-center rounded-md text-discord-200 space-y-2  text-xl">
             {currentBody?.message}
           </p>
           <div className="flex items-center justify-center mt-10">
@@ -149,7 +151,7 @@ const FriendChat = () => {
           <p className="hover:text-discord-500 select-none font-medium flex items-center p-1 rounded-md text-discord-200 space-y-2 px-2 mt-2 text-smx ml-3">
             PENDING FRIEND REQUESTS
           </p>
-          {currentBody.pendingReq.map((data) => (
+          {currentBody?.pendingReq?.map((data) => (
             <div
               key={data?.uniqueCode}
               className="select-none font-medium flex items-center  text-discord-500 hover:bg-gray-700 p-2 mt-2 mx-2 rounded-md hover:text-white text-base"
@@ -200,7 +202,9 @@ const FriendChat = () => {
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 20 20"
                 fill="currentColor"
-                onClick={(e) => removeFriendHandler(e, data?.uniqueCode)}
+                onClick={(e) =>
+                  removeFriendHandler(e, data?.uniqueCode, data?._id)
+                }
                 className="w-5 h-5 ml-auto mr-10 hover:text-discord-red2"
               >
                 <path

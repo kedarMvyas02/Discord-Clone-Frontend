@@ -5,6 +5,8 @@ import { useSelector, useDispatch } from "react-redux";
 import { hideErrorModal, showErrorModal } from "../../store/error";
 import ErrorModal from "../Modal/ErrorModal";
 import { getAllFriends } from "../../store/dmFriends";
+import { useSocket } from "../../socket";
+import { GetUser } from "../../hooks/redux/index";
 
 const FriendHeader = ({ setCurrentBody }) => {
   const [modal, setModal] = useState(false);
@@ -14,6 +16,10 @@ const FriendHeader = ({ setCurrentBody }) => {
   );
   const allFriends = useSelector((state) => state.dmFriends);
   const dispatch = useDispatch();
+  const [highlight, setHighlight] = useState(false);
+  const { getSocket } = useSocket();
+  const socket = getSocket();
+  const user = GetUser();
 
   useEffect(() => {
     dispatch(getAllFriends());
@@ -23,7 +29,19 @@ const FriendHeader = ({ setCurrentBody }) => {
       setCurrentBody(data);
       setData(data);
     }
-  }, [data, setCurrentBody]);
+  }, [dispatch]);
+
+  const blinkArrivedReq = () => {
+    setHighlight(true);
+  };
+
+  useEffect(() => {
+    socket?.on("friendReqCame", blinkArrivedReq);
+
+    return () => {
+      socket?.off("friendReqCame", blinkArrivedReq);
+    };
+  }, [socket]);
 
   const fetchPendingData = async () => {
     try {
@@ -40,7 +58,7 @@ const FriendHeader = ({ setCurrentBody }) => {
     try {
       const res = await client.get("/users/getArrivedFriendRequests");
       setData(res?.data);
-      setCurrentBody(res?.data); // Set initial current body to all friends
+      setCurrentBody(res?.data);
     } catch (error) {
       setData(error?.response?.data);
       setCurrentBody(error?.response?.data);
@@ -58,7 +76,11 @@ const FriendHeader = ({ setCurrentBody }) => {
   const addFriendHandler = async (values) => {
     try {
       const res = await client.post("/users/sendFriendRequest", {
-        uniqueCode: values.uniqueCode,
+        uniqueCode: values?.uniqueCode,
+      });
+      socket.emit("friendReqArrived", {
+        from: user?._id,
+        to: values?.uniqueCode,
       });
       dispatch(getAllFriends());
       const heading = `Success`;
@@ -90,6 +112,7 @@ const FriendHeader = ({ setCurrentBody }) => {
   };
 
   const arrivedHandler = async () => {
+    setHighlight(false);
     await fetchArrivedReq();
     setCurrentBody(data);
   };
@@ -152,8 +175,11 @@ const FriendHeader = ({ setCurrentBody }) => {
           >
             <span
               tabIndex="0"
-              className="px-2 py-1 select-none hover:bg-discord-200 focus:bg-discord-200 focus:text-white focus:bg-opacity-50 rounded-mdx hover:bg-opacity-25"
+              className="px-2 py-1 select-none hover:bg-discord-200 focus:bg-discord-200 focus:text-white focus:bg-opacity-50 rounded-mdx hover:bg-opacity-25 relative"
             >
+              {highlight && (
+                <span className="absolute top-0 right-0 w-2 h-2 bg-red-500 rounded-full"></span>
+              )}
               Arrived
             </span>
           </div>

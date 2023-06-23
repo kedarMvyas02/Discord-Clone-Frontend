@@ -39,7 +39,7 @@ function Peer({ peer, data }) {
         )}
       </div>
       <div className="text-sm py-4 text-center text-white">
-        {peer.name} {peer.isLocal ? "(You)" : ""}
+        {peer?.name} {peer.isLocal ? "(You)" : ""}
       </div>
     </div>
   );

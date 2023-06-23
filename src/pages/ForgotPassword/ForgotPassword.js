@@ -61,7 +61,7 @@ const ForgotPassword = () => {
         </svg>
       </Link>
 
-      <div className="z-10 bg-discord-semi600 w-full sm:w-4/6 md:w-4/6 lg:w-2/6 rounded-md p-5 m-12 flex flex-row mx-auto mt-16">
+      <div className="z-0 bg-discord-semi600 w-full sm:w-4/6 md:w-4/6 lg:w-2/6 rounded-md p-5 m-12 flex flex-row mx-auto mt-16">
         <div className="flex flex-col w-full">
           <h4 className="text-xl text-white font-semibold text-center">
             Forgot Password
@@ -121,16 +121,10 @@ const ForgotPassword = () => {
             )}
           </Formik>
           <div className="mt-3 flex">
-            <div className="text-xs text-discord-sideBarChannels ">
-              Didn't receive an email?{" "}
-              <span className="text-discord-textLink hover:underline hover:cursor-pointer">
-                Send email again!
-              </span>
-            </div>
             <Link
               to="/login"
               href="#"
-              className="text-xs text-discord-textLink hover:underline ml-auto"
+              className="text-xs text-discord-textLink hover:underline"
             >
               Remembered your credentials?
             </Link>

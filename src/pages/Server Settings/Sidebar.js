@@ -1,7 +1,6 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { logout } from "../../api/auth";
 import { logoutSuccess } from "../../store/user";
 
 export default function Sidebar() {
@@ -12,13 +11,9 @@ export default function Sidebar() {
   const logoutHandler = async () => {
     if (user) {
       try {
-        await logout(user?.user?.tokens?.refresh?.token);
-
-        // TODO LOGOUT
         dispatch(logoutSuccess());
         navigate("/login");
 
-        //disconnect socket after logout.
         // TODO SOCKET LOGOUT
       } catch (err) {
         console.log("err: ", err);

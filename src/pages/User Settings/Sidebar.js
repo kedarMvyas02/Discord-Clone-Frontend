@@ -1,7 +1,6 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { logout } from "../../api/auth";
 import { logoutSuccess } from "../../store/user";
 
 export default function Sidebar() {
@@ -12,13 +11,9 @@ export default function Sidebar() {
   const logoutHandler = async () => {
     if (user) {
       try {
-        await logout(user?.user?.tokens?.refresh?.token);
-
-        // TODO LOGOUT
         dispatch(logoutSuccess());
         navigate("/login");
 
-        //disconnect socket after logout.
         // TODO SOCKET LOGOUT
       } catch (err) {
         console.log("err: ", err);
@@ -229,10 +224,10 @@ export default function Sidebar() {
       {/* END LOG */}
 
       {/*  LOGOUT */}
-      <ul className="mt-4 border-t-2 border-discord-backgroundModifierAccent py-4 px-2">
-        <li className="text-discord-red hover:bg-discord-selectMuted rounded py-1 mx-2 mt-1">
+      <ul className="mt-4 border-t-2 flex justify-center items-center border-discord-backgroundModifierAccent py-4 px-8 mx-4">
+        <li className="text-discord-red hover:bg-discord-selectMuted rounded py-1 mx-4 mt-1">
           <button onClick={logoutHandler} className="item-centers">
-            <span className="ml-1 flex justify-center items-center text-sm font-medium tracking-tight">
+            <span className="ml-1 text-sm font-medium tracking-tight">
               Log Out
             </span>
           </button>

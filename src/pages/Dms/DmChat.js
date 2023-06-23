@@ -50,7 +50,7 @@ const DmChat = () => {
       setMessages(temp?.data?.messages);
     };
     fetchDmUserData();
-  }, [chatRef, dmId, amIScreenSharing, content]);
+  }, [chatRef, dmId, amIScreenSharing, content, dispatch]);
 
   const scrollToBottom = () => {
     chatRef.current.scrollIntoView({
@@ -59,9 +59,14 @@ const DmChat = () => {
     });
   };
 
+  const handleDeleteMessage = (_id) => {
+    const updatedMessages = messages?.filter((msg) => msg?._id !== _id);
+    setMessages(updatedMessages);
+  };
+
   const handleNavoMessage = (data) => {
-    dispatch(getDmFriends());
     const temp = data?.populatedChat;
+    dispatch(getDmFriends());
     setMessages((prevState) => {
       const filteredMessages = prevState.filter((msg) => msg._id !== temp?._id);
 
@@ -257,18 +262,17 @@ const DmChat = () => {
         ) : (
           messages?.map((msg) => {
             const { name, uniqueCode, userImage } = msg?.sender;
-
             return (
-              <React.Fragment key={msg?._id}>
-                <Message
-                  name={name}
-                  createdAt={msg?.createdAt}
-                  uniqueCode={uniqueCode}
-                  userImage={userImage}
-                  _id={msg?._id}
-                  content={msg?.content}
-                />
-              </React.Fragment>
+              <Message
+                name={name}
+                key={msg?._id}
+                createdAt={msg?.createdAt}
+                uniqueCode={uniqueCode}
+                userImage={userImage}
+                _id={msg?._id}
+                content={msg?.content}
+                onDelete={handleDeleteMessage}
+              />
             );
           })
         )}
@@ -334,7 +338,6 @@ const DmChat = () => {
           strokeWidth="2"
           strokeLinecap="round"
           strokeLinejoin="round"
-          // className=""
           onClick={sendMessage}
           className="feather feather-send hover:bg-discord-iconHover cursor-pointer text-discord-mainTextHover opacity-75 hover:opacity-100 py-2 rounded-md w-10 h-10"
         >

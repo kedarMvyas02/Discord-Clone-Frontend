@@ -124,7 +124,7 @@ export default function Index() {
 
       <Link
         to="/"
-        className="z-10 text-white mt-16 sm:self-start mx-auto sm:ml-8 sm:mt-8"
+        className="z-0 text-white mt-16 sm:self-start mx-auto sm:ml-8 sm:mt-8"
       >
         <svg className="fill-current w-14 h-8" viewBox="0 0 124 34">
           <g fill="currentColor">
@@ -140,7 +140,7 @@ export default function Index() {
           </g>
         </svg>
       </Link>
-      <div className="z-10 bg-discord-semi600 w-full sm:w-4/6 md:w-4/6 lg:w-2/6 rounded-md p-5 m-12 flex flex-row mx-auto mt-16">
+      <div className="z-0 bg-discord-semi600 w-full sm:w-4/6 md:w-4/6 lg:w-2/6 rounded-md p-5 m-12 flex flex-row mx-auto mt-16">
         <div className="flex flex-col w-full">
           <h4 className="text-xl text-white font-semibold text-center">
             Create an account

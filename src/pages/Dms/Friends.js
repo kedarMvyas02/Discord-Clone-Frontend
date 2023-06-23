@@ -94,6 +94,9 @@ const Friends = () => {
 
   const handleOnClose = () => {
     setModal(false);
+  };
+
+  const handleCloseSearchModal = () => {
     setSearchModal(!searchModal);
   };
 
@@ -444,7 +447,7 @@ const Friends = () => {
       )}
       {searchModal && (
         <SearchBarFriendsModal
-          onClose={handleOnClose}
+          onClose={handleCloseSearchModal}
           visible={searchModal}
           submitHandler={navigateToDmHandler}
         />

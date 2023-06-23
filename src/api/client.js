@@ -1,4 +1,5 @@
 import axios from "axios";
+import { useNavigate } from "react-router";
 
 axios.defaults.withCredentials = true;
 
@@ -6,7 +7,7 @@ const client = axios.create({
   baseURL: process.env.API_URL || "http://127.0.0.1:8000",
   withCredentials: true,
 });
-  
+
 client.interceptors.request.use(function (config) {
   if (localStorage.user) {
     const userStorage = JSON.parse(localStorage.getItem("user"));
@@ -20,11 +21,12 @@ client.interceptors.response.use(
   async (err) => {
     const { status } = err.response;
     const originalReq = err.config;
+    const navigate = useNavigate();
 
     if (originalReq.url !== "/users/loginUser" && err.response) {
       if (err.response.status === 401) {
         localStorage.removeItem("user");
-        window.location.replace("/login");
+        navigate("/login");
         return Promise.reject();
       }
     }
@@ -32,7 +34,7 @@ client.interceptors.response.use(
     switch (status) {
       case 403:
         localStorage.removeItem("user");
-        window.location.replace("/login");
+        navigate("/login");
         break;
       default:
         break;

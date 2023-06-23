@@ -11,7 +11,6 @@ const MainComponent = () => {
     const fetchPublicServers = async () => {
       try {
         const res = await client.get(`server/searchServers?name=${value}`);
-        console.log(res?.data);
         setServers(res?.data?.servers);
       } catch (error) {
         console.log(error);

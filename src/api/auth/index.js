@@ -12,6 +12,3 @@ export const forgotPassword = async (data) => {
 export const resetPassword = async (token, data) => {
   return client.patch(`/users/resetPassword/${token}`, data);
 };
-export const logout = (accessToken) => {
-  return client.post("/users/logout", { accessToken });
-};
