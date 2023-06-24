@@ -123,7 +123,7 @@ const ServerModal = ({ visible, onClose, submitHandler }) => {
                     component="div"
                     className="text-red-500 text-sm"
                   />
-                </div>
+                </div>  
                 <TextField
                   fieldClass="mb-4 mt-4"
                   labelClass="block text-discord-sideBarChannels font-semibold text-xs mb-2"

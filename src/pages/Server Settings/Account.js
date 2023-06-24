@@ -86,7 +86,7 @@ const Account = ({ server }) => {
     };
 
     return (
-      <div className="flex justify-start m-auto mt-6">
+      <div className="flex justify-start items-start mt-6">
         <input
           type="file"
           id={field.name}
@@ -121,10 +121,26 @@ const Account = ({ server }) => {
 
   return (
     <div className="flex flex-col mt-0">
-      <div className="mt-0 flex">
+      <span className="text-discord-500 mb-0 mt-2">Upload Photo</span>
+      <div className="mt-0 flex justify-start items-start">
         <CustomFileInput field="serverImage" />
+        <span className="text-discord-500 text-xs ml-4 mb-0 mt-12">
+          We recommend an image of <br /> atleast 512x512 for the server
+        </span>
+        <div>
+          <div className="flex items-center ml-4">
+            <p className="text-xs text-discord-mainText font-semibold">
+              SERVER NAME
+            </p>
+          </div>
+          <div className="flex">
+            <div className="border-discord-transparentBlack1 focus:ring-2 focus:ring-blue-400 bg-discord-transparentBlack2 text-white w-full rounded py-1 px-2 mt-8 ml-3 cursor-default">
+              {server?.name}
+            </div>
+            <div className="mt-8 ml-2 text-black bg-gray-500">Edit</div>
+          </div>
+        </div>
       </div>
-      <span>Upload Photo</span>
       <hr className=" border-y-discord-600 border w-full mx-auto mt-12" />
       <div>
         <div className="flex items-center ml-4">
