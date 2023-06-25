@@ -2,7 +2,8 @@ import { configureStore, getDefaultMiddleware } from "@reduxjs/toolkit";
 import user from "./user";
 import channel from "./channel";
 import errorModal from "./error";
-import dmFriendsReducer from "./dmFriends";
+import dmFriends from "./dmFriends";
+import server from "./server";
 const middleware = getDefaultMiddleware({
   serializableCheck: false, // Disable the default serializableCheck middleware
 });
@@ -12,7 +13,8 @@ const store = configureStore({
     user,
     channel,
     errorModal,
-    dmFriends: dmFriendsReducer,
+    server,
+    dmFriends,
   },
   middleware,
 });

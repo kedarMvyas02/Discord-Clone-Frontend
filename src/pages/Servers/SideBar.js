@@ -3,28 +3,20 @@ import { useNavigate } from "react-router";
 import ServerModal from "../Modal/ServerModal";
 import upload from "../../utils/upload";
 import client from "../../api/client";
+import { getJoinedServers } from "../../store/server";
+import { useDispatch, useSelector } from "react-redux";
 
 const SideBar = ({ onIdChange }) => {
   const navigate = useNavigate();
-  const [data, setData] = useState([]);
+  const data = useSelector((state) => state?.server?.joinedServers);
   const [serverModal, setServerModal] = useState({
-    render: true,
     showModal: false,
   });
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    const fetchServer = async () => {
-      try {
-        const res = await client.get(`/server/joinedServers/`);
-        if (res?.data?.responseWithChannels?.allServers) {
-          setData(res?.data?.responseWithChannels?.allServers);
-        }
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    fetchServer();
-  }, [serverModal.render, onIdChange]);
+    dispatch(getJoinedServers());
+  }, [onIdChange]);
 
   const serverClickHandler = async (e, id) => {
     e.preventDefault();
@@ -51,9 +43,8 @@ const SideBar = ({ onIdChange }) => {
   };
 
   const handleServerSubmit = async (values) => {
-    const avatar = await upload(values?.avatarFile);
-    console.log(values);
     try {
+      const avatar = await upload(values?.avatarFile);
       await client.post("server/createServer", {
         name: values?.serverName,
         avatar,
@@ -61,6 +52,7 @@ const SideBar = ({ onIdChange }) => {
         description: values?.description,
         serverType: values?.serverType,
       });
+      dispatch(getJoinedServers());
     } catch (error) {
       console.log(error);
     }
@@ -68,7 +60,6 @@ const SideBar = ({ onIdChange }) => {
     setServerModal((prevState) => ({
       ...prevState,
       showModal: false,
-      render: !serverModal.render,
     }));
   };
 
@@ -100,7 +91,6 @@ const SideBar = ({ onIdChange }) => {
             className="h-10 cursor-pointer rounded-full transition-all duration-100 ease-out hover:rounded-2xlg"
           />
         ))}
-        {/* TODO discord plus icon hover:rounded-2xl */}
         <div
           onClick={addServerHandler}
           className="h-12 bg-discord-600 rounded-full hover:rounded-2xlg flex justify-center items-center cursor-pointer transition-none duration-100 ease-out hover:bg-discord-green group"

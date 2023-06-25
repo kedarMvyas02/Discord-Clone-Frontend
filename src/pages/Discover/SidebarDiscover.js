@@ -3,24 +3,20 @@ import { useNavigate } from "react-router";
 import ServerModal from "../Modal/ServerModal";
 import upload from "../../utils/upload";
 import client from "../../api/client";
+import { useDispatch, useSelector } from "react-redux";
+import { getJoinedServers } from "../../store/server";
 
 const SideBar = () => {
   const navigate = useNavigate();
-  const [data, setData] = useState([]);
   const [serverModal, setServerModal] = useState({
-    render: true,
     showModal: false,
   });
+  const data = useSelector((state) => state?.server?.joinedServers);
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    const fetchServer = async () => {
-      const res = await client.get(`/server/joinedServers/`);
-      if (res?.data?.responseWithChannels?.allServers) {
-        setData(res?.data?.responseWithChannels?.allServers);
-      }
-    };
-    fetchServer();
-  }, [serverModal.render]);
+    dispatch(getJoinedServers());
+  }, []);
 
   const serverClickHandler = (e, id) => {
     e.preventDefault();
@@ -42,19 +38,22 @@ const SideBar = () => {
   };
 
   const handleServerSubmit = async (values) => {
-    const avatar = await upload(values?.avatarFile);
-    await client.post("server/createServer", {
-      name: values.serverName,
-      avatar,
-      privacy: values.privacy,
-      description: values.description,
-      serverType: values.serverType,
-    });
+    try {
+      const avatar = await upload(values?.avatarFile);
+      await client.post("server/createServer", {
+        name: values.serverName,
+        avatar,
+        privacy: values.privacy,
+        description: values.description,
+        serverType: values.serverType,
+      });
+    } catch (error) {
+      console.log(error);
+    }
 
     setServerModal((prevState) => ({
       ...prevState,
       showModal: false,
-      render: !serverModal.render,
     }));
   };
 
