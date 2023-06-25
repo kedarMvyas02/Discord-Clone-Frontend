@@ -6,25 +6,16 @@ import ErrorModal from "../Modal/ErrorModal";
 import { useDispatch, useSelector } from "react-redux";
 import { hideErrorModal, showErrorModal } from "../../store/error";
 import { useNavigate } from "react-router";
-import { getDmFriends } from "../../store/dmFriends";
+import {
+  getAllFriends,
+  getArrivedFriendRequests,
+  getDmFriends,
+  getPendingRequests,
+} from "../../store/dmFriends";
 
 const FriendChat = () => {
-  const [currentBody, setCurrentBody] = useState(null);
-
-  useEffect(() => {
-    // const getAllFriends = async () => {
-    //   try {
-    //     const res = await client.get("/users/getFriends");
-    //     setData(res?.data);
-    //     setCurrentBody(res?.data);
-    //   } catch (error) {
-    //     setData(error?.response?.data);
-    //     setCurrentBody(error?.response?.data);
-    //   }
-    // };
-    // getAllFriends();
-  }, [currentBody]);
-
+  const [clickedOn, setClickedOn] = useState("all");
+  const allFriends = useSelector((state) => state.dmFriends);
   const { visible, heading, subHeading } = useSelector(
     (state) => state.errorModal
   );
@@ -35,6 +26,16 @@ const FriendChat = () => {
     dispatch(hideErrorModal());
   };
 
+  useEffect(() => {
+    if (clickedOn === "pending") {
+      dispatch(getPendingRequests());
+    } else if (clickedOn === "arrived") {
+      dispatch(getArrivedFriendRequests());
+    } else {
+      dispatch(getAllFriends());
+    }
+  }, [clickedOn]);
+
   const acceptFriendReq = async (code) => {
     try {
       const res = await client.post("/users/acceptFriendRequest", {
@@ -42,12 +43,11 @@ const FriendChat = () => {
       });
       const heading = `${res.data.msg}`;
       dispatch(showErrorModal({ heading }));
-      setCurrentBody({});
+      dispatch(getArrivedFriendRequests());
     } catch (error) {
       const heading = `${error.response.data.status}`;
       const subHeading = `${error.response.data.message}`;
       dispatch(showErrorModal({ heading, subHeading }));
-      setCurrentBody({});
     }
   };
 
@@ -56,14 +56,14 @@ const FriendChat = () => {
       const res = await client.post("/users/cancelFriendReq", {
         uniqueCode: code,
       });
+      dispatch(getPendingRequests());
       const heading = `${res.data.msg}`;
       dispatch(showErrorModal({ heading }));
-      setCurrentBody({});
     } catch (error) {
       const heading = `${error.response.data.status}`;
       const subHeading = `${error.response.data.message}`;
       dispatch(showErrorModal({ heading, subHeading }));
-      setCurrentBody({});
+      dispatch(getPendingRequests());
     }
   };
 
@@ -74,12 +74,11 @@ const FriendChat = () => {
       });
       const heading = `${res.data.msg}`;
       dispatch(showErrorModal({ heading }));
-      setCurrentBody({});
+      dispatch(getArrivedFriendRequests());
     } catch (error) {
       const heading = `${error.response.data.status}`;
       const subHeading = `${error.response.data.message}`;
       dispatch(showErrorModal({ heading, subHeading }));
-      setCurrentBody({});
     }
   };
 
@@ -91,14 +90,13 @@ const FriendChat = () => {
         uniqueCode: code,
       });
       dispatch(getDmFriends());
+      dispatch(getAllFriends());
       const heading = `${res.data.msg}`;
       dispatch(showErrorModal({ heading }));
-      setCurrentBody({});
     } catch (error) {
       const heading = `${error.response.data.status}`;
       const subHeading = `${error.response.data.message}`;
       dispatch(showErrorModal({ heading, subHeading }));
-      setCurrentBody({});
     }
   };
 
@@ -116,11 +114,12 @@ const FriendChat = () => {
     <div className="flex flex-col h-screen ">
       <div className="flex flex-col flex-grow">
         <header>
-          <FriendHeader setCurrentBody={setCurrentBody} />
+          <FriendHeader clickedOn={clickedOn} setClickedOn={setClickedOn} />
         </header>
         <hr className=" border-y-discord-transparentBlack1 border w-full  mx-auto" />
       </div>
-      {!currentBody && (
+      {/* TODO */}
+      {/* {!currentBody && (
         <main className="flex-grow overflow-y-scroll scrollbar-hide">
           <div className="flex justify-center items-center h-screen">
             <div className=" ">
@@ -131,8 +130,8 @@ const FriendChat = () => {
             </div>
           </div>
         </main>
-      )}
-      {currentBody?.message && (
+      )} */}
+      {/* {currentBody?.message && (
         <main className="flex-grow overflow-y-scroll scrollbar-hide">
           <p className="hover:text-discord-500 select-none font-bold flex mt-32 items-center justify-center rounded-md text-discord-200 space-y-2  text-xl">
             {currentBody?.message}
@@ -144,14 +143,13 @@ const FriendChat = () => {
             No one's around here to play with Wumpus
           </span>
         </main>
-      )}
-
-      {currentBody?.pendingReq && (
+      )} */}
+      {clickedOn === "pending" && (
         <>
           <p className="hover:text-discord-500 select-none font-medium flex items-center p-1 rounded-md text-discord-200 space-y-2 px-2 mt-2 text-smx ml-3">
             PENDING FRIEND REQUESTS
           </p>
-          {currentBody?.pendingReq?.map((data) => (
+          {allFriends?.pendingFriendRequests?.map((data) => (
             <div
               key={data?.uniqueCode}
               className="select-none font-medium flex items-center  text-discord-500 hover:bg-gray-700 p-2 mt-2 mx-2 rounded-md hover:text-white text-base"
@@ -178,9 +176,8 @@ const FriendChat = () => {
           ))}
         </>
       )}
-
-      {currentBody?.allFriends &&
-        currentBody?.allFriends?.map((data) => (
+      {clickedOn === "all" &&
+        allFriends?.allFriends?.map((data) => (
           <React.Fragment key={data?.uniqueCode}>
             <p className="hover:text-discord-500 select-none font-medium flex items-center p-1 rounded-md text-discord-200 space-y-2 px-2 mt-2 text-smx ml-3">
               ALL FRIENDS
@@ -189,7 +186,7 @@ const FriendChat = () => {
               onClick={() => navigateDmHandler(data._id)}
               className="select-none cursor-pointer font-medium flex items-center  text-discord-500 hover:bg-gray-700 p-2 mt-2 mx-2 rounded-md hover:text-white text-base"
             >
-              {/* <br /> */}
+              {/* <br />  */}
               <div className="mr-1">
                 <img
                   src={data?.userImage}
@@ -216,47 +213,49 @@ const FriendChat = () => {
             </div>
           </React.Fragment>
         ))}
-      {currentBody?.arrivedReq &&
-        currentBody?.arrivedReq?.map((data) => (
-          <React.Fragment key={data.uniqueCode}>
-            <p className="hover:text-discord-500 select-none font-medium flex items-center p-1 rounded-md text-discord-200 space-y-2 px-2 mt-2 text-smx ml-3">
-              ARRIVED FRIEND REQUESTS
-            </p>
-            <div className="select-none font-medium flex items-center  text-discord-500 hover:bg-discord-700 p-2 mt-2 mx-5 ml-10 rounded-md hover:text-white text-base">
-              <br />
-              <div className="mr-1">
-                <img
-                  src={data?.userImage}
-                  alt=""
-                  className="h-10 w-10 rounded-full mr-2"
-                />
+      {clickedOn === "arrived" &&
+        allFriends?.arrivedFriendRequests?.map((data) => {
+          return (
+            <React.Fragment key={data.uniqueCode}>
+              <p className="hover:text-discord-500 select-none font-medium flex items-center p-1 rounded-md text-discord-200 space-y-2 px-2 mt-2 text-smx ml-3">
+                ARRIVED FRIEND REQUESTS
+              </p>
+              <div className="select-none font-medium flex items-center  text-discord-500 hover:bg-discord-700 p-2 mt-2 mx-5 ml-10 rounded-md hover:text-white text-base">
+                <br />
+                <div className="mr-1">
+                  <img
+                    src={data?.userImage}
+                    alt=""
+                    className="h-10 w-10 rounded-full mr-2"
+                  />
+                </div>
+                {`${data?.user}#${data?.uniqueCode}`}
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                  onClick={() => acceptFriendReq(data?.uniqueCode)}
+                  className="w-6 h-6 cursor-pointer rounded-full ml-auto mr-5 hover:bg-discord-600 "
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                  onClick={() => rejectReqHandler(data?.uniqueCode)}
+                  className="w-6 h-6 cursor-pointer rounded-full hover:bg-discord-600 mr-18"
+                >
+                  <path d="M6.28 5.22a.75.75 0 00-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 101.06 1.06L10 11.06l3.72 3.72a.75.75 0 101.06-1.06L11.06 10l3.72-3.72a.75.75 0 00-1.06-1.06L10 8.94 6.28 5.22z" />
+                </svg>
               </div>
-              {`${data?.user}#${data?.uniqueCode}`}
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 20 20"
-                fill="currentColor"
-                onClick={() => acceptFriendReq(data?.uniqueCode)}
-                className="w-6 h-6 cursor-pointer rounded-full ml-auto mr-5 hover:bg-discord-600 "
-              >
-                <path
-                  fillRule="evenodd"
-                  d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z"
-                  clipRule="evenodd"
-                />
-              </svg>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 20 20"
-                fill="currentColor"
-                onClick={() => rejectReqHandler(data?.uniqueCode)}
-                className="w-6 h-6 cursor-pointer rounded-full hover:bg-discord-600 mr-18"
-              >
-                <path d="M6.28 5.22a.75.75 0 00-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 101.06 1.06L10 11.06l3.72 3.72a.75.75 0 101.06-1.06L11.06 10l3.72-3.72a.75.75 0 00-1.06-1.06L10 8.94 6.28 5.22z" />
-              </svg>
-            </div>
-          </React.Fragment>
-        ))}
+            </React.Fragment>
+          );
+        })}
       <ErrorModal
         visible={visible}
         onClose={handleCloseErrorModal}

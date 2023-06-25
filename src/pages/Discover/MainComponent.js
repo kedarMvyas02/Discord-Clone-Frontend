@@ -6,7 +6,6 @@ import client from "../../api/client";
 const MainComponent = ({ serverType }) => {
   const [servers, setServers] = useState(null);
   const [value, setValue] = useState("");
-  console.log(serverType);
 
   useEffect(() => {
     const fetchPublicServers = async () => {

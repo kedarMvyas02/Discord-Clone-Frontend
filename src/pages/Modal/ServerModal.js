@@ -110,7 +110,7 @@ const ServerModal = ({ visible, onClose, submitHandler }) => {
               avatarFile: null,
               privacy: "private",
               description: "",
-              serverType: "other",
+              serverType: "gaming",
             }}
             onSubmit={forSubmit}
           >
@@ -123,7 +123,7 @@ const ServerModal = ({ visible, onClose, submitHandler }) => {
                     component="div"
                     className="text-red-500 text-sm"
                   />
-                </div>  
+                </div>
                 <TextField
                   fieldClass="mb-4 mt-4"
                   labelClass="block text-discord-sideBarChannels font-semibold text-xs mb-2"
@@ -150,8 +150,8 @@ const ServerModal = ({ visible, onClose, submitHandler }) => {
                     </label>
                     <Field
                       as="select"
-                      id="dropdown"
-                      name="dropdown"
+                      id="privacy"
+                      name="privacy"
                       className="focus:outline-none border-discord-transparentBlack1 mb-4 border-1 focus:ring-2 focus:ring-blue-400 bg-discord-transparentBlack2 text-white w-full rounded py-1 px-2"
                     >
                       <option
@@ -178,8 +178,8 @@ const ServerModal = ({ visible, onClose, submitHandler }) => {
                     </label>
                     <Field
                       as="select"
-                      id="dropdown"
-                      name="dropdown"
+                      id="serverType"
+                      name="serverType"
                       className="focus:outline-none ml-1 border-discord-transparentBlack1 mb-4 border-1 focus:ring-2 focus:ring-blue-400 bg-discord-transparentBlack2 text-white w-full rounded py-1 px-2"
                     >
                       <option

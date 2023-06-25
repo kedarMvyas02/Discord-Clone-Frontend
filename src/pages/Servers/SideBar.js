@@ -52,13 +52,14 @@ const SideBar = ({ onIdChange }) => {
 
   const handleServerSubmit = async (values) => {
     const avatar = await upload(values?.avatarFile);
+    console.log(values);
     try {
       await client.post("server/createServer", {
-        name: values.serverName,
+        name: values?.serverName,
         avatar,
-        privacy: values.privacy,
-        description: values.description,
-        serverType: values.serverType,
+        privacy: values?.privacy,
+        description: values?.description,
+        serverType: values?.serverType,
       });
     } catch (error) {
       console.log(error);

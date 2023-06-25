@@ -20,6 +20,7 @@ import {
   useScreenShare,
 } from "@100mslive/react-sdk";
 import { useSocket } from "../../socket";
+import DeleteServerModal from "../Modal/DeleteServerModal";
 
 const Channels = ({ newId, setMembers }) => {
   const [toggle, setToggle] = useState({
@@ -28,6 +29,7 @@ const Channels = ({ newId, setMembers }) => {
     deafen: false,
   });
   const [data, setData] = useState([]);
+  const [showDelete, setShowDelete] = useState(false);
   const [channelModal, setChannelModal] = useState({
     render: false,
     showModal: false,
@@ -66,6 +68,10 @@ const Channels = ({ newId, setMembers }) => {
     };
     fetchServer();
   }, [newId, dispatch, channelModal.render]);
+
+  const handleCloseDeleteModal = () => {
+    setShowDelete(false);
+  };
 
   const handleAddTextChannel = async () => {
     setChannelModal((prevState) => ({
@@ -131,20 +137,9 @@ const Channels = ({ newId, setMembers }) => {
   };
 
   const menuDeleteConfirmModal = () => {
-    const heading = `Are you sure you want to Delete The Server???`;
-    const subHeading = `This action is irreversible, so make sure you are awake!!!`;
-    dispatch(showErrorModal({ heading, subHeading }));
-    menuDeleteServer();
+    setShowDelete(true);
   };
-
-  const menuLeaveConfirmModal = () => {
-    const heading = `Are you sure you want to Leave The Server???`;
-    const subHeading = `This action is irreversible, so make sure you are awake!!!`;
-    dispatch(showErrorModal({ heading, subHeading }));
-    menuLeaveServer();
-  };
-
-  const menuDeleteServer = async () => {
+  const deleteServerAccountFinal = async () => {
     try {
       await client.post(`/server/deleteServer/${serverId}`);
       navigate("/discover");
@@ -153,6 +148,13 @@ const Channels = ({ newId, setMembers }) => {
       const subHeading = `${error?.response?.data?.message}`;
       dispatch(showErrorModal({ heading, subHeading }));
     }
+  };
+
+  const menuLeaveConfirmModal = () => {
+    const heading = `Are you sure you want to Leave The Server???`;
+    const subHeading = `This action is irreversible, so make sure you are awake!!!`;
+    dispatch(showErrorModal({ heading, subHeading }));
+    menuLeaveServer();
   };
 
   const menuLeaveServer = async () => {
@@ -203,7 +205,7 @@ const Channels = ({ newId, setMembers }) => {
         deafen: !toggle.deafen,
       };
     });
-    hmsActions?.setVolume(toggle.deafen ? 0 : 100);
+    // hmsActions?.setVolume(toggle.deafen ? 0 : 100);
   };
 
   const handleLeaveVc = () => {
@@ -553,7 +555,6 @@ const Channels = ({ newId, setMembers }) => {
                   ? "bg-discord-100  cursor-pointer p-1 m-1 rounded-md flex-grow-default flex justify-center items-center"
                   : "bg-discord-iconHover cursor-pointer hover:text-discord-mainTextHover text-gray-400 hover:text-opacity-50 text-opacity-50 hover:bg-discord-600 p-1 m-1 rounded-md flex-grow-default flex justify-center items-center"
               }
-              // className="bg-discord-iconHover cursor-pointer hover:text-discord-mainTextHover hover:bg-discord-600 p-1 m-1 rounded-md flex-grow-default flex justify-center items-center"
             >
               <svg
                 width="24"
@@ -719,6 +720,11 @@ const Channels = ({ newId, setMembers }) => {
         visible={channelModal.showModal}
         channelName={channelModal.channel}
         submitHandler={handleChannelSubmit}
+      />
+      <DeleteServerModal
+        visible={showDelete}
+        onClose={handleCloseDeleteModal}
+        submitHandler={deleteServerAccountFinal}
       />
       {channelModal.addServerModal && (
         <AddFriendsToServer
