@@ -124,9 +124,9 @@ const Account = () => {
           <div className="flex items-center absolute bottom-0 left-0 -mb-16 ml-4">
             <div className="relative flex justify-center">
               <div
-                className={`relative flex items-center justify-center mx-auto w-20 h-20 bg-discord-indigo text-white rounded-full  p-2 border-6 border-discord-900`}
+                className={`relative flex items-center justify-center mx-auto w-20 h-20 bg-discord-indigo text-white rounded-full border-6 border-discord-900`}
               >
-                <img src={user?.userImage} alt="" className="rounded-full" />
+                <img src={user?.userImage} alt="" className="w-20 rounded-full" />
               </div>
               <span className="bg-discord-green w-6 h-6 rounded-full absolute right-0 bottom-0 border-6 border-discord-900 -mr-1 mb-2"></span>
             </div>
