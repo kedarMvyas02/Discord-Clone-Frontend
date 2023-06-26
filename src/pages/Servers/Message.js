@@ -1,6 +1,8 @@
 import React from "react";
 import client from "../../api/client";
 import { GetUser } from "../../hooks/redux/index";
+import Popup from "reactjs-popup";
+import PopupUser from "../../components/PopupUser";
 
 const Message = ({
   name,
@@ -9,6 +11,10 @@ const Message = ({
   createdAt,
   userImage,
   _id,
+  userId,
+  email,
+  userCreatedAt,
+  phoneNumber,
   onDelete,
 }) => {
   const user = GetUser();
@@ -30,18 +36,34 @@ const Message = ({
     }
   };
 
+  const popUpUser = {
+    name,
+    uniqueCode,
+    userImage,
+    _id: userId,
+    email,
+    phoneNumber,
+    createdAt: userCreatedAt,
+  };
+
   return (
     <div className="flex items-center p-1 pl-5 my-5 mr-2 hover:bg-discord-messageBg group">
       <img
         src={userImage}
         alt=""
-        className="h-10 rounded-full cursor-pointer mr-3 hover:shadow-2xl"
+        className="h-10 rounded-full mr-3 hover:shadow-2xl"
       />
       <div className="flex flex-col ">
         <h4 className="flex items-center space-x-2 font-medium">
-          <span className="hover:underline text-white text-sm cursor-pointer">
-            {`${name}#${uniqueCode}`}
-          </span>
+          <Popup
+            trigger={
+              <span className="hover:underline text-white text-sm cursor-pointer">
+                {`${name}#${uniqueCode}`}
+              </span>
+            }
+          >
+            <PopupUser user={popUpUser} />
+          </Popup>
           <span className="text-discord-popOutHeader text-xs">
             {new Date(createdAt).toLocaleString()}
           </span>

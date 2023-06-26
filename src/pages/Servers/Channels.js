@@ -21,6 +21,7 @@ import {
 } from "@100mslive/react-sdk";
 import { useSocket } from "../../socket";
 import DeleteServerModal from "../Modal/DeleteServerModal";
+import LeaveServerModal from "../Modal/LeaveServerModal";
 
 const Channels = ({ newId, setMembers }) => {
   const [toggle, setToggle] = useState({
@@ -29,13 +30,14 @@ const Channels = ({ newId, setMembers }) => {
     deafen: false,
   });
   const [data, setData] = useState([]);
-  const [showDelete, setShowDelete] = useState(false);
   const [channelModal, setChannelModal] = useState({
     render: false,
     showModal: false,
     channel: null,
     modal: false,
     addServerModal: false,
+    deleteServer: false,
+    leaveServer: false,
   });
   const dispatch = useDispatch();
   const { visible, heading, subHeading } = useSelector(
@@ -58,8 +60,20 @@ const Channels = ({ newId, setMembers }) => {
       try {
         const res = await client.get(`/server/getServer/${newId}`);
         if (res?.data?.server) {
-          setData(res?.data?.server);
-          setMembers(res?.data?.server?.members);
+          const memberExist = await res?.data?.server?.members?.filter(
+            (friend) => friend?.user?._id === user?._id
+          );
+
+          // TODO on refresh going in else block, otherwise in if block!
+
+          if (memberExist?.length > 0) {
+            console.log(memberExist?.length);
+            setData(res?.data?.server);
+            setMembers(res?.data?.server?.members);
+          } else {
+            console.log("I came in else block", memberExist?.length);
+            navigate("/channels/@me");
+          }
         }
         dispatch(getUserDetails());
       } catch (error) {
@@ -70,7 +84,12 @@ const Channels = ({ newId, setMembers }) => {
   }, [newId, dispatch, channelModal.render]);
 
   const handleCloseDeleteModal = () => {
-    setShowDelete(false);
+    setChannelModal((prevState) => {
+      return {
+        ...prevState,
+        deleteServer: false,
+      };
+    });
   };
 
   const handleAddTextChannel = async () => {
@@ -137,8 +156,14 @@ const Channels = ({ newId, setMembers }) => {
   };
 
   const menuDeleteConfirmModal = () => {
-    setShowDelete(true);
+    setChannelModal((prevState) => {
+      return {
+        ...prevState,
+        deleteServer: true,
+      };
+    });
   };
+
   const deleteServerAccountFinal = async () => {
     try {
       await client.post(`/server/deleteServer/${serverId}`);
@@ -150,13 +175,22 @@ const Channels = ({ newId, setMembers }) => {
     }
   };
 
-  const menuLeaveConfirmModal = () => {
-    const heading = `Are you sure you want to Leave The Server???`;
-    const subHeading = `This action is irreversible, so make sure you are awake!!!`;
-    dispatch(showErrorModal({ heading, subHeading }));
-    menuLeaveServer();
+  const menuLeaveCloseConfirmModal = () => {
+    setChannelModal((prevState) => {
+      return {
+        ...prevState,
+        leaveServer: false,
+      };
+    });
   };
-
+  const menuLeaveConfirmModal = () => {
+    setChannelModal((prevState) => {
+      return {
+        ...prevState,
+        leaveServer: true,
+      };
+    });
+  };
   const menuLeaveServer = async () => {
     try {
       await client.post(`/server/leave/${serverId}`, {
@@ -185,6 +219,10 @@ const Channels = ({ newId, setMembers }) => {
       await client.post(`/server/join/${serverId}`, {
         uniqueCode: data?.uniqueCode,
       });
+      setChannelModal((prevState) => ({
+        ...prevState,
+        render: !channelModal.render,
+      }));
     } catch (error) {
       const heading = `${error?.response?.data?.status}`;
       const subHeading = `${error?.response?.data?.message}`;
@@ -722,9 +760,14 @@ const Channels = ({ newId, setMembers }) => {
         submitHandler={handleChannelSubmit}
       />
       <DeleteServerModal
-        visible={showDelete}
+        visible={channelModal.deleteServer}
         onClose={handleCloseDeleteModal}
         submitHandler={deleteServerAccountFinal}
+      />
+      <LeaveServerModal
+        visible={channelModal.leaveServer}
+        onClose={menuLeaveCloseConfirmModal}
+        submitHandler={menuLeaveServer}
       />
       {channelModal.addServerModal && (
         <AddFriendsToServer

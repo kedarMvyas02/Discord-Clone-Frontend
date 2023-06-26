@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from "react";
-import client from "../../api/client";
 import { getAllFriends } from "../../store/dmFriends";
 import { useDispatch, useSelector } from "react-redux";
 
 const SearchBarFriendsModal = ({ visible, onClose, submitHandler }) => {
   const [data, setData] = useState(null);
   const [name, setName] = useState("");
-  const allFriends = useSelector((state) => state.dmFriends.allFriends);
+  const allFriends = useSelector((state) => state?.dmFriends?.allFriends);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -15,8 +14,8 @@ const SearchBarFriendsModal = ({ visible, onClose, submitHandler }) => {
 
   useEffect(() => {
     const regex = new RegExp(name, "i");
-    const filteredFriends = allFriends.filter((friend) =>
-      regex.test(friend.friend)
+    const filteredFriends = allFriends?.filter((friend) =>
+      regex.test(friend?.friend)
     );
     setData(filteredFriends);
   }, [allFriends, name]);

@@ -78,9 +78,6 @@ const AddFriendsToServer = ({ visible, onClose, submitHandler }) => {
                 <h6 className="text-l text-discord-100 font-semibold text-center mt-2">
                   You don't have any friends!
                 </h6>
-                <h6 className="text-l text-discord-100 font-semibold text-center">
-                  Add a friend to start Direct Messaging
-                </h6>
               </>
             )}
           </div>
@@ -88,7 +85,7 @@ const AddFriendsToServer = ({ visible, onClose, submitHandler }) => {
           <hr className=" border-y-discord-transparentBlack1 border w-full mx-auto mt-4 mb-4" />
 
           <h6 className="text-s text-white font-light text-center">
-            You can add people with their unique code
+            You can also add people with their unique code
           </h6>
 
           <Formik

@@ -71,8 +71,6 @@ const SideBar = () => {
         className="flex flex-col space-y-3 bg-discord-900 p-3"
         style={{ width: "70px" }}
       >
-        {/* TODO discord icon hover:rounded-2xl (last option: hover:rounded-xlg)*/}
-        {/* TODO sidebar shouldn't collapse when mobile comes */}
         <div
           onClick={navigateToDm}
           tabIndex="0"
@@ -92,7 +90,6 @@ const SideBar = () => {
             className="h-10 cursor-pointer rounded-full transition-all duration-100 ease-out hover:rounded-2xlg"
           />
         ))}
-        {/* TODO discord plus icon hover:rounded-2xl */}
         <div
           tabIndex="0"
           onClick={addServerHandler}

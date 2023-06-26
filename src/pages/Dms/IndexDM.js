@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Navigate, useParams } from "react-router";
 import Friends from "./Friends";
 import SideBar from "./SideBar";
@@ -9,10 +9,13 @@ import {
   selectIsSomeoneScreenSharing,
   useHMSStore,
 } from "@100mslive/react-sdk";
+import UserProfileSide from "./userProfileSide";
 
 const IndexDM = () => {
   const screenshareOn = useHMSStore(selectIsSomeoneScreenSharing);
   useEffect(() => {}, [screenshareOn]);
+  const [openUserProfile, setOpenUserProfile] = useState(false);
+  const [data, setData] = useState(null);
 
   const { dmId } = useParams();
   const me = GetMe();
@@ -31,8 +34,14 @@ const IndexDM = () => {
       ) : (
         <>
           <div className="bg-discord-semi600 flex-grow-default">
-            <DmChat />
+            <DmChat
+              data={data}
+              setData={setData}
+              openUserProfile={openUserProfile}
+              setOpenUserProfile={setOpenUserProfile}
+            />
           </div>
+          {openUserProfile && <UserProfileSide user={data} />}
         </>
       )}
     </div>

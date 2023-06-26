@@ -1,6 +1,6 @@
 import React from "react";
 
-const Delete = ({ visible, onClose, submitHandler }) => {
+const LeaveServerModal = ({ visible, onClose, submitHandler }) => {
   if (!visible) return null;
 
   const handleOnClose = (e) => {
@@ -20,17 +20,17 @@ const Delete = ({ visible, onClose, submitHandler }) => {
       <div className="z-50 bg-discord-semi600 w-full sm:w-4/6 md:w-4/6 lg:w-2/6 rounded-md p-5 m-12 flex flex-row mx-auto mt-16">
         <div className="flex flex-col w-full">
           <h4 className="text-xl text-white font-semibold text-center">
-            Delete Your Server?
+            Leave Server?
           </h4>
           <h6 className="text-sm text-white font-semibold text-center mt-2">
-            do you hate wumpus..(wumpus will still miss you)
+            please don't leave (wumpus will behave properly now...)
           </h6>
           <div className="flex mt-6">
             <div
               onClick={forSubmit}
               className="bg-transparent border-1 border-red-700 hover:bg-red-700 cursor-pointer text-discord-mainTextHover hover:text-discord-mainTextHover p-1 m-1 rounded-md flex-grow-default flex justify-center items-center"
             >
-              Delete Server
+              Leave Server
             </div>
 
             <div
@@ -46,4 +46,4 @@ const Delete = ({ visible, onClose, submitHandler }) => {
   );
 };
 
-export default Delete;
+export default LeaveServerModal;

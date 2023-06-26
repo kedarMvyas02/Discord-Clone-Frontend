@@ -10,7 +10,12 @@ import PinnedMsgsModal from "../Modal/PinnedMsgsModal";
 import { hideErrorModal, showErrorModal } from "../../store/error";
 import ErrorModal from "../Modal/ErrorModal";
 
-const DmHeader = ({ data, setContent }) => {
+const DmHeader = ({
+  data,
+  setContent,
+  openUserProfile,
+  setOpenUserProfile,
+}) => {
   const [showModal, setShowModal] = useState({
     toggle: false,
     data: "",
@@ -31,6 +36,10 @@ const DmHeader = ({ data, setContent }) => {
   useEffect(() => {
     dispatch(getAllFriends());
   }, []);
+
+  const toggleUserProfile = () => {
+    setOpenUserProfile(!openUserProfile);
+  };
 
   const handleCloseModal = () => {
     setShowModal((prevState) => {
@@ -202,7 +211,6 @@ const DmHeader = ({ data, setContent }) => {
             ></path>
           </svg>
         </div>
-        {/* TODO */}
         <div onClick={openPinnnedMsgs} className="cursor-pointer">
           <svg
             className="w-6 h-6 text-discord-topIcons hover:text-gray-200 ml-3"
@@ -243,21 +251,34 @@ const DmHeader = ({ data, setContent }) => {
             </span>
           </form>
         </div>
-        {/* <a href="#" className="ml-3">
+        <div
+          onClick={toggleUserProfile}
+          className="cursor-pointer sm:invisible md:invisible lg:visible"
+        >
           <svg
-            className="w-6 h-6 text-discord-topIcons hover:text-gray-200"
-            aria-hidden="false"
+            x="0"
+            y="0"
+            aria-hidden="true"
+            className="w-6 h-6 text-discord-topIcons hover:text-gray-200 ml-3"
+            role="img"
             width="24"
             height="24"
             viewBox="0 0 24 24"
-            fill="currentColor"
           >
-            <path
-              d="M19 3H4.99C3.88 3 3.01 3.89 3.01 5L3 19C3 20.1 3.88 21 4.99 21H19C20.1 21 21 20.1 21 19V5C21 3.89 20.1 3 19 3ZM19 15H15C15 16.66 13.65 18 12 18C10.35 18 9 16.66 9 15H4.99V5H19V15Z"
-              fill="currentColor"
-            ></path>
+            <g fill="none">
+              <path
+                fillRule="evenodd"
+                clipRule="evenodd"
+                d="M12 22C12.4883 22 12.9684 21.965 13.438 21.8974C12.5414 20.8489 12 19.4877 12 18C12 17.6593 12.0284 17.3252 12.083 17H6V16.0244C6 14.0732 10 13 12 13C12.6215 13 13.436 13.1036 14.2637 13.305C15.2888 12.4882 16.5874 12 18 12C19.4877 12 20.8489 12.5414 21.8974 13.438C21.965 12.9684 22 12.4883 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22ZM12 12C13.66 12 15 10.66 15 9C15 7.34 13.66 6 12 6C10.34 6 9 7.34 9 9C9 10.66 10.34 12 12 12Z"
+                fill="currentColor"
+              ></path>
+              <path
+                d="M18 22C20.2091 22 22 20.2091 22 18C22 15.7909 20.2091 14 18 14C15.7909 14 14 15.7909 14 18C14 20.2091 15.7909 22 18 22Z"
+                fill="currentColor"
+              ></path>
+            </g>
           </svg>
-        </a> */}
+        </div>
         <a
           target="_blank"
           rel="noopener noreferrer"

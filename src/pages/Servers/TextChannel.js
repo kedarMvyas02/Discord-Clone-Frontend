@@ -7,8 +7,6 @@ import { useSocket } from "../../socket";
 const TextChannel = ({ channelName, channelId, serverId }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { getSocket } = useSocket();
-  const socket = getSocket();
 
   const setTextChannel = () => {
     dispatch(
@@ -17,10 +15,6 @@ const TextChannel = ({ channelName, channelId, serverId }) => {
         channelName: channelName,
       })
     );
-
-    socket?.emit("join-room", {
-      roomName: channelId,
-    });
 
     navigate(`/channels/${serverId}/${channelId}`);
   };

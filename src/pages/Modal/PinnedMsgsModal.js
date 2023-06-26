@@ -105,39 +105,40 @@ const PinnedMsgsModal = ({ visible, where, onClose, id }) => {
             </>
           ) : (
             msgs?.map((data) => (
-              <>
-                <div className="flex items-center p-1 py-2 pl-5 my-2 mx-2 rounded-lg hover:bg-discord-messageBg group">
-                  <img
-                    src={data?.user[0]?.userImage}
-                    alt=""
-                    className="h-10 rounded-full cursor-pointer mr-3 hover:shadow-2xl"
-                  />
-                  <div className="flex flex-col ">
-                    <h4 className="flex items-center space-x-2 font-medium">
-                      <span className="hover:underline text-white text-sm cursor-pointer">
-                        {`${data?.user[0]?.name}#${data?.user[0]?.uniqueCode}`}
-                      </span>
-                      <span className="text-discord-popOutHeader text-xs">
-                        {new Date(data?.createdAt).toLocaleString()}
-                      </span>
-                    </h4>
-                    <p className="text-sm text-discord-100">{data?.content}</p>
-                  </div>
-                  <div
-                    onClick={() => removePinnedMessageHandler(data)}
-                    className="ml-auto mr-2 text-discord-100 text-opacity-75 hover:text-opacity-100 cursor-pointer"
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 20 20"
-                      fill="currentColor"
-                      className="w-6 h-6"
-                    >
-                      <path d="M6.28 5.22a.75.75 0 00-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 101.06 1.06L10 11.06l3.72 3.72a.75.75 0 101.06-1.06L11.06 10l3.72-3.72a.75.75 0 00-1.06-1.06L10 8.94 6.28 5.22z" />
-                    </svg>
-                  </div>
+              <div
+                key={data?._id}
+                className="flex items-center p-1 py-2 pl-5 my-2 mx-2 rounded-lg hover:bg-discord-messageBg group"
+              >
+                <img
+                  src={data?.user[0]?.userImage}
+                  alt=""
+                  className="h-10 rounded-full cursor-pointer mr-3 hover:shadow-2xl"
+                />
+                <div className="flex flex-col ">
+                  <h4 className="flex items-center space-x-2 font-medium">
+                    <span className="hover:underline text-white text-sm cursor-pointer">
+                      {`${data?.user[0]?.name}#${data?.user[0]?.uniqueCode}`}
+                    </span>
+                    <span className="text-discord-popOutHeader text-xs">
+                      {new Date(data?.createdAt).toLocaleString()}
+                    </span>
+                  </h4>
+                  <p className="text-sm text-discord-100">{data?.content}</p>
                 </div>
-              </>
+                <div
+                  onClick={() => removePinnedMessageHandler(data)}
+                  className="ml-auto mr-2 text-discord-100 text-opacity-75 hover:text-opacity-100 cursor-pointer"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                    className="w-6 h-6"
+                  >
+                    <path d="M6.28 5.22a.75.75 0 00-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 101.06 1.06L10 11.06l3.72 3.72a.75.75 0 101.06-1.06L11.06 10l3.72-3.72a.75.75 0 00-1.06-1.06L10 8.94 6.28 5.22z" />
+                  </svg>
+                </div>
+              </div>
             ))
           )}
         </div>

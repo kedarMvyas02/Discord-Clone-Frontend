@@ -163,9 +163,7 @@ const Header = () => {
         </div>
         <ul className="list-none text-discord-notQuiteDark text-sm text-left pl-2 flex-1 space-y-2 mt-4 pt-4 mx-4 border-t-2 border-discord-offWhite">
           <li className="text-discord-textLink bg-discord-offWhite p-2 rounded-lg">
-            <a className="text-discord-textLink" href="#">
-              Home
-            </a>
+            <p className="text-discord-textLink">Home</p>
           </li>
           <li className="p-2 rounded-lg">
             <a
@@ -177,19 +175,18 @@ const Header = () => {
             </a>
           </li>
           <li className="p-2 rounded-lg">
-            <a href="#">Nitro</a>
+            <p>Nitro</p>
           </li>
           <li className="p-2 rounded-lg">
-            <a href="#">Safety</a>
+            <p>Safety</p>
           </li>
           <li className="p-2 rounded-lg">
-            <a href="#">Blog</a>
+            <p>Blog</p>
           </li>
           <li className="p-2 rounded-lg">
-            <a href="#">Careers</a>
+            <p>Careers</p>
           </li>
         </ul>
-        {/* bas aa j che  are aa landing page ma che */}
         <a
           href="https://discord.com/api/downloads/distributions/app/installers/latest?channel=stable&platform=win&arch=x86"
           target="_blank"
@@ -250,13 +247,10 @@ const Header = () => {
                   </g>
                 </svg>
               </span>
-              <a
-                href="https://discord.com/api/downloads/distributions/app/installers/latest?channel=stable&platform=win&arch=x86"
-                target="_blank"
-                rel="noopener noreferrer"
+              <p
               >
                 Download for Windows
-              </a>
+              </p>
             </a>
             <Link
               to={me ? `/channels/@me` : `/login`}

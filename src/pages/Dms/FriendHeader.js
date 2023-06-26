@@ -110,7 +110,7 @@ const FriendHeader = ({ setClickedOn, clickedOn }) => {
         <div className="flex ">
           <div
             onClick={allFriendsHandler}
-            className="text-discord-100 cursor-pointer opacity-75  font-medium  "
+            className="text-discord-100 cursor-pointer opacity-75 font-medium  "
           >
             <span
               tabIndex="0"
@@ -120,7 +120,7 @@ const FriendHeader = ({ setClickedOn, clickedOn }) => {
                   : null
               }`}
             >
-              All Friends
+              All
             </span>
           </div>
           <div
@@ -144,7 +144,7 @@ const FriendHeader = ({ setClickedOn, clickedOn }) => {
           >
             <span
               tabIndex="0"
-              className={`px-2 py-1 select-none hover:bg-discord-200 focus:bg-discord-200 focus:text-white focus:bg-opacity-50 rounded-mdx hover:bg-opacity-25 ${
+              className={`relative px-2 py-1 select-none hover:bg-discord-200 focus:bg-discord-200 focus:text-white focus:bg-opacity-50 rounded-mdx hover:bg-opacity-25 ${
                 clickedOn === "arrived"
                   ? "bg-discord-200 text-white bg-opacity-50"
                   : null
@@ -160,7 +160,7 @@ const FriendHeader = ({ setClickedOn, clickedOn }) => {
             onClick={addFriendClickHandler}
             className="text-white cursor-pointer opacity-75 px-2  font-medium  "
           >
-            <span className="py-1 px-2 md:invisible sm:invisible lg:visible select-none  bg-green-700 rounded-mdx ">
+            <span className="py-1 px-2 sm:invisible md:invisible lg:visible select-none bg-green-700 rounded-mdx ">
               Add Friend
             </span>
           </div>

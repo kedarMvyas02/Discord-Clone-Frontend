@@ -1,12 +1,12 @@
 import React, { useEffect, useRef, useState } from "react";
 import DmHeader from "./DmHeader";
 import wumpus from "../../assets/wumpus.svg";
-import { useDispatch } from "react-redux";
-import { useParams } from "react-router";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate, useParams } from "react-router";
 import client from "../../api/client";
 import Message from "./Message";
 import { useSocket } from "../../socket";
-import { getDmFriends } from "../../store/dmFriends";
+import { getAllFriends, getDmFriends } from "../../store/dmFriends";
 import { GetUser } from "../../hooks/redux";
 
 import {
@@ -20,9 +20,8 @@ import {
 import Conference from "./Conference";
 import ScreenShareComponent from "./ScreenShare";
 
-const DmChat = () => {
+const DmChat = ({ setOpenUserProfile, openUserProfile, data, setData }) => {
   const { dmId } = useParams();
-  const [data, setData] = useState(null);
   const [messages, setMessages] = useState(null);
   const [msg, setMsg] = useState("");
   const chatRef = useRef();
@@ -37,15 +36,23 @@ const DmChat = () => {
   const [content, setContent] = useState("");
   const screenshareOn = useHMSStore(selectIsSomeoneScreenSharing);
   const { toggleScreenShare, amIScreenSharing } = useScreenShare();
+  const allFriends = useSelector((state) => state?.dmFriends?.allFriends);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchDmUserData = async () => {
-      const res = await client.get(`/users/getUser/${dmId}`);
-      setData(res?.data?.userWithId);
-      const temp = await client.get(
-        `/server/getDmMessages/${dmId}?content=${content}`
-      );
-      setMessages(temp?.data?.messages);
+      dispatch(getAllFriends());
+      const friendExists = allFriends?.filter((friend) => friend?._id === dmId);
+      if (friendExists?.length > 0) {
+        const res = await client.get(`/users/getUser/${dmId}`);
+        setData(res?.data?.userWithId);
+        const temp = await client.get(
+          `/server/getDmMessages/${dmId}?content=${content}`
+        );
+        setMessages(temp?.data?.messages);
+      } else {
+        navigate("/channels/@me");
+      }
     };
     fetchDmUserData();
   }, [chatRef, dmId, amIScreenSharing, content, dispatch]);
@@ -84,7 +91,7 @@ const DmChat = () => {
   const sendMessage = (e) => {
     e.preventDefault();
 
-    if (msg !== "") {
+    if (msg !== "" && user?._id !== dmId) {
       socket?.emit("text_message", { from: user?._id, to: dmId, message: msg });
       setMessages((prevState) => {
         return [
@@ -108,7 +115,12 @@ const DmChat = () => {
     <div className="flex flex-col h-screen">
       <div className="flex flex-col flex-grow">
         <header>
-          <DmHeader data={data} setContent={setContent} />
+          <DmHeader
+            data={data}
+            setContent={setContent}
+            setOpenUserProfile={setOpenUserProfile}
+            openUserProfile={openUserProfile}
+          />
         </header>
         <hr className=" border-y-discord-transparentBlack1 border w-full mx-auto" />
       </div>
@@ -259,11 +271,24 @@ const DmChat = () => {
           </>
         ) : (
           messages?.map((msg) => {
-            const { name, uniqueCode, userImage } = msg?.sender;
+            const {
+              name,
+              uniqueCode,
+              userImage,
+              email,
+              createdAt,
+              phoneNumber,
+              _id,
+            } = msg?.sender;
+
             return (
               <Message
                 name={name}
                 key={msg?._id}
+                email={email}
+                userId={_id}
+                phoneNumber={phoneNumber}
+                userCreatedAt={createdAt}
                 createdAt={msg?.createdAt}
                 uniqueCode={uniqueCode}
                 userImage={userImage}
@@ -274,22 +299,10 @@ const DmChat = () => {
             );
           })
         )}
-        <div ref={chatRef} className="pb-16" /> {/* className="pb-16" */}
+        <div ref={chatRef} className="pb-16" />
       </main>
 
       <div className="flex items-center bg-discord-chatInputBg mx-4 mb-5 rounded-lg justify-end mt-auto">
-        {/* <svg
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 20 20"
-          fill="currentColor"
-          className="hover:bg-discord-iconHover cursor-pointer text-discord-mainTextHover opacity-75 hover:opacity-100 mr-4 ml-1 my-1 p-1 rounded-md w-8 h-8"
-        >
-          <path
-            fillRule="evenodd"
-            d="M10 18a8 8 0 100-16 8 8 0 000 16zm.75-11.25a.75.75 0 00-1.5 0v2.5h-2.5a.75.75 0 000 1.5h2.5v2.5a.75.75 0 001.5 0v-2.5h2.5a.75.75 0 000-1.5h-2.5v-2.5z"
-            clipRule="evenodd"
-          />
-        </svg> */}
         <form className="flex-grow-default">
           <input
             type="text"

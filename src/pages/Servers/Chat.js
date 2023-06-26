@@ -277,16 +277,29 @@ const Chat = () => {
           </>
         ) : (
           messages.map((msg) => {
-            const { name, uniqueCode, userImage } = msg.sender;
+            const {
+              name,
+              uniqueCode,
+              userImage,
+              email,
+              _id,
+              createdAt,
+              phoneNumber,
+            } = msg?.sender;
+
             return (
               <Message
                 name={name}
-                createdAt={msg.createdAt}
+                key={msg?._id}
+                userId={_id}
+                email={email}
+                phoneNumber={phoneNumber}
+                userCreatedAt={createdAt}
+                createdAt={msg?.createdAt}
                 uniqueCode={uniqueCode}
                 userImage={userImage}
-                key={msg._id}
-                _id={msg._id}
-                content={msg.content}
+                _id={msg?._id}
+                content={msg?.content}
                 onDelete={handleDeleteMessage}
               />
             );

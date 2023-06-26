@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { GetUser } from "../../hooks/redux";
+import React, { useEffect, useState } from "react";
+import { GetMe, GetUser } from "../../hooks/redux";
 import { useNavigate } from "react-router";
 import ErrorModal from "../Modal/ErrorModal";
 import { useDispatch, useSelector } from "react-redux";
@@ -22,6 +22,13 @@ const Account = () => {
   const navigate = useNavigate();
   const user = GetUser();
 
+  useEffect(() => {
+    const temp = GetMe();
+    if (!temp) {
+      navigate("/login");
+    }
+  }, []);
+
   const logoutHandler = async () => {
     if (user) {
       try {
@@ -30,7 +37,7 @@ const Account = () => {
 
         // TODO SOCKET LOGOUT
       } catch (err) {
-        console.log("err: ", err);
+        console.log(err);
       }
     }
   };
@@ -64,7 +71,6 @@ const Account = () => {
   };
 
   const showUpdateModal = (data) => {
-    console.log("data", data);
     if (data?.email || data?.email === "") {
       setDetail((prevState) => {
         return {
@@ -74,7 +80,6 @@ const Account = () => {
         };
       });
     } else if (data?.name || data?.name === "") {
-      console.log("im here");
       setDetail((prevState) => {
         return {
           ...prevState,
@@ -94,7 +99,6 @@ const Account = () => {
   };
 
   const updateHandler = async (data) => {
-    console.log(data);
     try {
       if (data?.email) {
         await client.post("/users/updateUser", {
@@ -120,7 +124,7 @@ const Account = () => {
           <div className="flex items-center absolute bottom-0 left-0 -mb-16 ml-4">
             <div className="relative flex justify-center">
               <div
-                className={`relative flex items-center mx-auto w-20 h-20 bg-discord-indigo text-white rounded-full inline-block p-2 border-6 border-discord-900`}
+                className={`relative flex items-center justify-center mx-auto w-20 h-20 bg-discord-indigo text-white rounded-full  p-2 border-6 border-discord-900`}
               >
                 <img src={user?.userImage} alt="" className="rounded-full" />
               </div>
@@ -137,9 +141,6 @@ const Account = () => {
           </div>
         </div>
         <div className="w-full flex flex-col bg-discord-900 p-4">
-          {/* <button className="self-end w-24 bg-discord-experiment500 text-white p-1 rounded-md text-xs text-center hover:bg-discord-experiment500Disabled">
-          Edit Profile
-        </button> */}
           <div className="p-4 flex flex-col mt-8  bg-gray-700 rounded-lg">
             <div className="flex justify-between mt-2">
               <div className="flex flex-col">

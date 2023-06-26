@@ -8,6 +8,7 @@ import Footer from "../Landing/Footer";
 const NotFound = () => {
   const [open, setOpen] = useState(false);
   const me = GetMe();
+
   const navClass = classNames(
     "transition transform ease-linear rounded-tl-lg rounded-bl-lg z-30 duration-500 w-4/6 absolute bg-white top-0 right-0 h-screen flex flex-col justify-between",
     {
@@ -96,15 +97,15 @@ const NotFound = () => {
           <div className="flex flex-row justify-between">
             {me ? (
               <Link
-                to="/register"
+                to="/channels/@me"
                 className="sm:px-4 px-2 sm:py-2 flex justify-center items-center duration-300 hover:shadow-lg hover:text-discord-indigo rounded-full bg-white text-black sm:text-sm text-xs"
                 href="#"
               >
-                Sign Up
+                Open Discord
               </Link>
             ) : (
               <Link
-                to={"/login"}
+                to="/login"
                 className="px-4 py-2 duration-300 hover:shadow-lg hover:text-discord-indigo rounded-full bg-white text-black text-sm"
                 href="#"
               >
