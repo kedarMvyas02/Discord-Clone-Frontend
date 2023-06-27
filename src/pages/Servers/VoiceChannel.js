@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { GetUser } from "../../hooks/redux";
 import { useHMSActions } from "@100mslive/react-sdk";
 import { useSocket } from "../../socket";
+import { useDispatch, useSelector } from "react-redux";
+import { setOtherActiveTab } from "../../store/activeTabManagement";
 
 const VoiceChannel = ({ channelName, channelId, roomCode, serverId }) => {
   const [current, setCurrent] = useState([]);
@@ -9,6 +11,8 @@ const VoiceChannel = ({ channelName, channelId, roomCode, serverId }) => {
   const hmsActions = useHMSActions();
   const { getSocket } = useSocket();
   const socket = getSocket();
+  const otherActiveTab = useSelector((state) => state?.tab?.otherActiveTab);
+  const dispatch = useDispatch();
 
   const handleJoiningVcUpdate = (data) => {
     setCurrent((prevState) => {
@@ -20,6 +24,7 @@ const VoiceChannel = ({ channelName, channelId, roomCode, serverId }) => {
   };
 
   const handleLeavingVcUpdate = (data) => {
+    dispatch(setOtherActiveTab(""));
     setCurrent((prevState) => {
       const temp = prevState.filter((user) => user?._id !== data?._id);
       return temp;
@@ -49,6 +54,7 @@ const VoiceChannel = ({ channelName, channelId, roomCode, serverId }) => {
       });
       await hmsActions.join({ userName: user?.name, authToken });
       await hmsActions.setLocalVideoEnabled(false);
+      dispatch(setOtherActiveTab(channelId));
 
       console.log("call started successfully");
 
@@ -65,9 +71,12 @@ const VoiceChannel = ({ channelName, channelId, roomCode, serverId }) => {
   return (
     <>
       <div
-        className="select-none font-medium flex items-center cursor-pointer hover:bg-gray-600 p-1 rounded-md hover:text-white"
-        style={{ marginTop: 0 }}
+        // className="select-none font-medium flex items-center cursor-pointer hover:bg-gray-600 p-1 rounded-md hover:text-white"
         onClick={() => joinVoiceChannel(roomCode)}
+        className={`${
+          otherActiveTab === channelId ? "text-white bg-gray-600" : ""
+        } select-none font-medium flex items-center cursor-pointer hover:bg-gray-600 p-1 rounded-md hover:`}
+        style={{ marginTop: 0 }}
       >
         <div className="h-4 mr-1">
           <svg

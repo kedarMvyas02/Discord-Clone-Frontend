@@ -10,12 +10,18 @@ import {
   useHMSStore,
 } from "@100mslive/react-sdk";
 import UserProfileSide from "./userProfileSide";
+import { useDispatch, useSelector } from "react-redux";
+import { setActiveTab } from "../../store/activeTabManagement";
 
 const IndexDM = () => {
   const screenshareOn = useHMSStore(selectIsSomeoneScreenSharing);
   useEffect(() => {}, [screenshareOn]);
   const [openUserProfile, setOpenUserProfile] = useState(false);
   const [data, setData] = useState(null);
+  const activeTab = useSelector((state) => state?.tab?.activeTab);
+  const otherActiveTab = useSelector((state) => state?.tab?.otherActiveTab);
+  const dispatch = useDispatch();
+  dispatch(setActiveTab("friendChat"));
 
   const { dmId } = useParams();
   const me = GetMe();
@@ -23,8 +29,8 @@ const IndexDM = () => {
 
   return (
     <div className="flex h-screen">
-      <SideBar />
-      <Friends />
+      <SideBar activeTab={activeTab} />
+      <Friends otherActiveTab={otherActiveTab} />
       {!dmId ? (
         <>
           <div className="bg-discord-semi600 flex-grow-default">

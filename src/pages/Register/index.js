@@ -229,7 +229,6 @@ export default function Index() {
           <div className="mt-2">
             <Link
               to="/login"
-              href="#"
               className="text-xs text-discord-textLink hover:underline"
             >
               Already have an account?

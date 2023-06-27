@@ -12,17 +12,19 @@ const Featured = ({ servers }) => {
       </div>
 
       <div className="grid grid-cols-1 xs:grid-cols-2 lg:grid-cols-3 gap-y-8 xs:gap-x-2 sm:gap-x-4 mb-4  ">
-        {servers?.map((card) => (
-          <Card
-            _id={card?._id}
-            bg={card?.avatar}
-            profile={card?.avatar}
-            title={card?.name}
-            description={card?.description}
-            size={card?.members?.length}
-            key={card?.description}
-          />
-        ))}
+        {servers
+          ?.sort((a, b) => b?.members?.length - a?.members?.length)
+          ?.map((card) => (
+            <Card
+              _id={card?._id}
+              bg={card?.avatar}
+              profile={card?.avatar}
+              title={card?.name}
+              description={card?.description}
+              size={card?.members?.length}
+              key={card?.description}
+            />
+          ))}
       </div>
     </div>
   );

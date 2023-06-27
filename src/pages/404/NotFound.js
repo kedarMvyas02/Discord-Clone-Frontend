@@ -99,7 +99,6 @@ const NotFound = () => {
               <Link
                 to="/channels/@me"
                 className="sm:px-4 px-2 sm:py-2 flex justify-center items-center duration-300 hover:shadow-lg hover:text-discord-indigo rounded-full bg-white text-black sm:text-sm text-xs"
-                href="#"
               >
                 Open Discord
               </Link>
@@ -107,7 +106,6 @@ const NotFound = () => {
               <Link
                 to="/login"
                 className="px-4 py-2 duration-300 hover:shadow-lg hover:text-discord-indigo rounded-full bg-white text-black text-sm"
-                href="#"
               >
                 Login
               </Link>
@@ -177,16 +175,16 @@ const NotFound = () => {
               </a>
             </li>
             <li className="p-2 rounded-lg">
-              <a href="#">Nitro</a>
+              <p>Nitro</p>
             </li>
             <li className="p-2 rounded-lg">
-              <a href="#">Safety</a>
+              <p>Safety</p>
             </li>
             <li className="p-2 rounded-lg">
-              <a href="#">Blog</a>
+              <p>Blog</p>
             </li>
             <li className="p-2 rounded-lg">
-              <a href="#">Careers</a>
+              <p>Careers</p>
             </li>
           </ul>
 

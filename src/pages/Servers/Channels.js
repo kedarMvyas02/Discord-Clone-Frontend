@@ -22,6 +22,7 @@ import {
 import { useSocket } from "../../socket";
 import DeleteServerModal from "../Modal/DeleteServerModal";
 import LeaveServerModal from "../Modal/LeaveServerModal";
+import { getJoinedServers, getServer } from "../../store/server";
 
 const Channels = ({ newId, setMembers }) => {
   const [toggle, setToggle] = useState({
@@ -29,9 +30,8 @@ const Channels = ({ newId, setMembers }) => {
     voiceToggle: true,
     deafen: false,
   });
-  const [data, setData] = useState([]);
+  // const [data, setData] = useState([]);
   const [channelModal, setChannelModal] = useState({
-    render: false,
     showModal: false,
     channel: null,
     modal: false,
@@ -54,34 +54,20 @@ const Channels = ({ newId, setMembers }) => {
   const hmsActions = useHMSActions();
   const { getSocket } = useSocket();
   const socket = getSocket();
+  const data = useSelector((state) => state?.server?.serverData);
 
   useEffect(() => {
-    const fetchServer = async () => {
-      try {
-        const res = await client.get(`/server/getServer/${newId}`);
-        if (res?.data?.server) {
-          const memberExist = await res?.data?.server?.members?.filter(
-            (friend) => friend?.user?._id === user?._id
-          );
+    dispatch(getServer(newId));
+    setMembers(data?.members);
+    const memberExist = data?.members?.filter(
+      (friend) => friend?.user?._id === user?._id
+    );
+    if (!memberExist) {
+      navigate("/channels/@me");
+    }
 
-          // TODO on refresh going in else block, otherwise in if block!
-
-          if (memberExist?.length > 0) {
-            console.log(memberExist?.length);
-            setData(res?.data?.server);
-            setMembers(res?.data?.server?.members);
-          } else {
-            console.log("I came in else block", memberExist?.length);
-            navigate("/channels/@me");
-          }
-        }
-        dispatch(getUserDetails());
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    fetchServer();
-  }, [newId, dispatch, channelModal.render]);
+    dispatch(getUserDetails());
+  }, [newId]);
 
   const handleCloseDeleteModal = () => {
     setChannelModal((prevState) => {
@@ -118,8 +104,8 @@ const Channels = ({ newId, setMembers }) => {
 
   const handleChannelSubmit = async (values) => {
     if (!values.channelName) {
-      console.error("Enter a channel name");
-      return;
+      const heading = `Enter a Channel Name`;
+      dispatch(showErrorModal({ heading }));
     }
 
     try {
@@ -127,19 +113,22 @@ const Channels = ({ newId, setMembers }) => {
         await client.post(`/server/createVoiceChannel/${data?._id}`, {
           name: values.channelName,
         });
+        dispatch(getServer(newId));
       } else if (channelModal.channel === "Text Channel") {
         await client.post(`/server/createTextChannel/${data?._id}`, {
           name: values.channelName,
         });
+        dispatch(getServer(newId));
       }
     } catch (error) {
-      console.log(error);
+      const heading = `${error?.response?.data?.status}`;
+      const subHeading = `${error?.response?.data?.message}`;
+      dispatch(showErrorModal({ heading, subHeading }));
     }
 
     setChannelModal((prevState) => ({
       ...prevState,
       showModal: false,
-      render: !channelModal.render,
     }));
   };
 
@@ -167,6 +156,7 @@ const Channels = ({ newId, setMembers }) => {
   const deleteServerAccountFinal = async () => {
     try {
       await client.post(`/server/deleteServer/${serverId}`);
+      dispatch(getJoinedServers());
       navigate("/discover");
     } catch (error) {
       const heading = `${error?.response?.data?.status}`;
@@ -196,6 +186,7 @@ const Channels = ({ newId, setMembers }) => {
       await client.post(`/server/leave/${serverId}`, {
         uniqueCode: user?.uniqueCode,
       });
+      dispatch(getJoinedServers());
       navigate("/discover");
     } catch (error) {
       const heading = `${error?.response?.data?.status}`;
@@ -219,10 +210,7 @@ const Channels = ({ newId, setMembers }) => {
       await client.post(`/server/join/${serverId}`, {
         uniqueCode: data?.uniqueCode,
       });
-      setChannelModal((prevState) => ({
-        ...prevState,
-        render: !channelModal.render,
-      }));
+      dispatch(getJoinedServers());
     } catch (error) {
       const heading = `${error?.response?.data?.status}`;
       const subHeading = `${error?.response?.data?.message}`;

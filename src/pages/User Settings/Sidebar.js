@@ -2,19 +2,21 @@ import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { logoutSuccess } from "../../store/user";
+import { useSocket } from "../../socket";
 
 export default function Sidebar() {
   const user = useSelector((state) => state.user);
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const { getSocket } = useSocket();
+  const socket = getSocket();
 
   const logoutHandler = async () => {
     if (user) {
       try {
         dispatch(logoutSuccess());
         navigate("/login");
-
-        // TODO SOCKET LOGOUT
+        socket.disconnect(socket.id);
       } catch (err) {
         console.log("err: ", err);
       }
@@ -26,46 +28,46 @@ export default function Sidebar() {
       {/* USER SETTINGS */}
       <ul>
         <li className="text-discord-sideBarChannels px-3">
-          <a href="#" className="flex item-centers">
+          <p className="flex item-centers">
             <span className="ml-2 font-bold text-xs tracking-tight">
               USER SETTINGS
             </span>
-          </a>
+          </p>
         </li>
         <li className="text-discord-sideBarChannels hover:bg-discord-selectMuted hover:text-discord-100 rounded py-1 mx-2 px-2 mt-1">
-          <a href="#" className="item-centers">
+          <p className="item-centers">
             <span className="ml-1 text-sm font-medium tracking-tight">
               My Account
             </span>
-          </a>
+          </p>
         </li>
         <li className="text-discord-sideBarChannels hover:bg-discord-selectMuted hover:text-discord-100 rounded py-1 mx-2 px-2">
-          <a href="#" className="flex item-centers">
+          <p className="flex item-centers">
             <span className="ml-1 text-sm font-medium tracking-tight">
               User Profile
             </span>
-          </a>
+          </p>
         </li>
         <li className="text-discord-sideBarChannels hover:bg-discord-selectMuted hover:text-discord-100 rounded py-1 mx-2 px-2">
-          <a href="#" className="flex item-centers">
+          <p className="flex item-centers">
             <span className="ml-1 text-sm font-medium tracking-tight">
               Privacy & Safety
             </span>
-          </a>
+          </p>
         </li>
         <li className="text-discord-sideBarChannels hover:bg-discord-selectMuted hover:text-discord-100 rounded py-1 mx-2 px-2">
-          <a href="#" className="flex item-centers">
+          <p className="flex item-centers">
             <span className="ml-1 text-sm font-medium tracking-tight">
               Authorized Apps
             </span>
-          </a>
+          </p>
         </li>
         <li className="text-discord-sideBarChannels hover:bg-discord-selectMuted hover:text-discord-100 rounded py-1 mx-2 px-2">
-          <a href="#" className="flex item-centers">
+          <p className="flex item-centers">
             <span className="ml-1 text-sm font-medium tracking-tight">
               Connections
             </span>
-          </a>
+          </p>
         </li>
       </ul>
       {/* END USER SETTINGS */}
@@ -73,39 +75,39 @@ export default function Sidebar() {
       {/* BILLING SETTINGS */}
       <ul className="mt-4 border-t-2 border-discord-backgroundModifierAccent py-4 px-2">
         <li className="text-discord-sideBarChannels">
-          <a href="#" className="flex item-centers">
+          <p className="flex item-centers">
             <span className="ml-2 font-bold text-xs tracking-tight">
               BILLING SETTINGS
             </span>
-          </a>
+          </p>
         </li>
         <li className="text-discord-sideBarChannels hover:bg-discord-selectMuted hover:text-discord-100 rounded py-1 mx-2 mt-1">
-          <a href="#" className="item-centers">
+          <p className="item-centers">
             <span className="ml-1 text-sm font-medium tracking-tight">
               Discord Nitro
             </span>
-          </a>
+          </p>
         </li>
         <li className="text-discord-sideBarChannels hover:bg-discord-selectMuted hover:text-discord-100 rounded py-1 mx-2">
-          <a href="#" className="flex item-centers">
+          <p className="flex item-centers">
             <span className="ml-1 text-sm font-medium tracking-tight">
               Server Boost
             </span>
-          </a>
+          </p>
         </li>
         <li className="text-discord-sideBarChannels hover:bg-discord-selectMuted hover:text-discord-100 rounded py-1 mx-2">
-          <a href="#" className="flex item-centers">
+          <p className="flex item-centers">
             <span className="ml-1 text-sm font-medium tracking-tight">
               Gift Inventory
             </span>
-          </a>
+          </p>
         </li>
         <li className="text-discord-sideBarChannels hover:bg-discord-selectMuted hover:text-discord-100 rounded py-1 mx-2">
-          <a href="#" className="flex item-centers">
+          <p className="flex item-centers">
             <span className="ml-1 text-sm font-medium tracking-tight">
               Billing
             </span>
-          </a>
+          </p>
         </li>
       </ul>
       {/* END BILLING SETTINGS */}
@@ -113,74 +115,74 @@ export default function Sidebar() {
       {/* APP SETTINGS */}
       <ul className="mt-4 border-t-2 border-discord-backgroundModifierAccent py-4 px-2">
         <li className="text-discord-sideBarChannels">
-          <a href="#" className="flex item-centers">
+          <p className="flex item-centers">
             <span className="ml-2 font-bold text-xs tracking-tight">
               APP SETTINGS
             </span>
-          </a>
+          </p>
         </li>
         <li className="text-discord-sideBarChannels hover:bg-discord-selectMuted hover:text-discord-100 rounded py-1 mx-2 mt-1">
-          <a href="#" className="item-centers">
+          <p className="item-centers">
             <span className="ml-1 text-sm font-medium tracking-tight">
               Appearance
             </span>
-          </a>
+          </p>
         </li>
         <li className="text-discord-sideBarChannels hover:bg-discord-selectMuted hover:text-discord-100 rounded py-1 mx-2">
-          <a href="#" className="flex item-centers">
+          <p className="flex item-centers">
             <span className="ml-1 text-sm font-medium tracking-tight">
               Accessibility
             </span>
-          </a>
+          </p>
         </li>
         <li className="text-discord-sideBarChannels hover:bg-discord-selectMuted hover:text-discord-100 rounded py-1 mx-2">
-          <a href="#" className="flex item-centers">
+          <p className="flex item-centers">
             <span className="ml-1 text-sm font-medium tracking-tight">
               Voice & Video
             </span>
-          </a>
+          </p>
         </li>
         <li className="text-discord-sideBarChannels hover:bg-discord-selectMuted hover:text-discord-100 rounded py-1 mx-2">
-          <a href="#" className="flex item-centers">
+          <p className="flex item-centers">
             <span className="ml-1 text-sm font-medium tracking-tight">
               Text & Images
             </span>
-          </a>
+          </p>
         </li>
         <li className="text-discord-sideBarChannels hover:bg-discord-selectMuted hover:text-discord-100 rounded py-1 mx-2">
-          <a href="#" className="flex item-centers">
+          <p className="flex item-centers">
             <span className="ml-1 text-sm font-medium tracking-tight">
               Notifications
             </span>
-          </a>
+          </p>
         </li>
         <li className="text-discord-sideBarChannels hover:bg-discord-selectMuted hover:text-discord-100 rounded py-1 mx-2">
-          <a href="#" className="flex item-centers">
+          <p className="flex item-centers">
             <span className="ml-1 text-sm font-medium tracking-tight">
               Keybinds
             </span>
-          </a>
+          </p>
         </li>
         <li className="text-discord-sideBarChannels hover:bg-discord-selectMuted hover:text-discord-100 rounded py-1 mx-2">
-          <a href="#" className="flex item-centers">
+          <p className="flex item-centers">
             <span className="ml-1 text-sm font-medium tracking-tight">
               Language
             </span>
-          </a>
+          </p>
         </li>
         <li className="text-discord-sideBarChannels hover:bg-discord-selectMuted hover:text-discord-100 rounded py-1 mx-2">
-          <a href="#" className="flex item-centers">
+          <p className="flex item-centers">
             <span className="ml-1 text-sm font-medium tracking-tight">
               Streamer Mode
             </span>
-          </a>
+          </p>
         </li>
         <li className="text-discord-sideBarChannels hover:bg-discord-selectMuted hover:text-discord-100 rounded py-1 mx-2">
-          <a href="#" className="flex item-centers">
+          <p className="flex item-centers">
             <span className="ml-1 text-sm font-medium tracking-tight">
               Advanced
             </span>
-          </a>
+          </p>
         </li>
       </ul>
       {/* END APP SETTINGS */}
@@ -188,18 +190,18 @@ export default function Sidebar() {
       {/*  ACTIVITY SETTINGSS */}
       <ul className="mt-4 border-t-2 border-discord-backgroundModifierAccent py-4 px-2">
         <li className="text-discord-sideBarChannels">
-          <a href="#" className="flex item-centers">
+          <p className="flex item-centers">
             <span className="ml-2 font-bold text-xs tracking-tight">
               ACTIVITY SETTINGS
             </span>
-          </a>
+          </p>
         </li>
         <li className="text-discord-sideBarChannels hover:bg-discord-selectMuted hover:text-discord-100 rounded py-1 mx-2 mt-1">
-          <a href="#" className="item-centers">
+          <p className="item-centers">
             <span className="ml-1 text-sm font-medium tracking-tight">
               Activity Status
             </span>
-          </a>
+          </p>
         </li>
       </ul>
       {/* END  ACTIVITY SETTINGS */}
@@ -207,18 +209,18 @@ export default function Sidebar() {
       {/*  LOG */}
       <ul className="mt-4 border-t-2 border-discord-backgroundModifierAccent py-4 px-2">
         <li className="text-discord-sideBarChannels hover:bg-discord-selectMuted hover:text-discord-100 rounded py-1 mx-2 mt-1">
-          <a href="#" className="item-centers">
+          <p className="item-centers">
             <span className="ml-1 text-sm font-medium tracking-tight">
               Change Log
             </span>
-          </a>
+          </p>
         </li>
         <li className="text-discord-sideBarChannels hover:bg-discord-selectMuted hover:text-discord-100 rounded py-1 mx-2 mt-1">
-          <a href="#" className="item-centers">
+          <p className="item-centers">
             <span className="ml-1 text-sm font-medium tracking-tight">
               HypeSquad
             </span>
-          </a>
+          </p>
         </li>
       </ul>
       {/* END LOG */}

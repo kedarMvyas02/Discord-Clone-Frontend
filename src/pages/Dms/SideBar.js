@@ -5,13 +5,15 @@ import upload from "../../utils/upload";
 import client from "../../api/client";
 import { useDispatch, useSelector } from "react-redux";
 import { getJoinedServers } from "../../store/server";
+import {
+  setActiveTab,
+  setOtherActiveTab,
+} from "../../store/activeTabManagement";
 
-const SideBar = () => {
+const SideBar = ({ activeTab }) => {
   const navigate = useNavigate();
   const data = useSelector((state) => state?.server?.joinedServers);
-  const [serverModal, setServerModal] = useState({
-    showModal: false,
-  });
+  const [serverModal, setServerModal] = useState(false);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -21,20 +23,15 @@ const SideBar = () => {
   const serverClickHandler = (e, id) => {
     e.preventDefault();
     navigate(`/channels/${id}`);
+    dispatch(setActiveTab(id));
   };
 
   const addServerHandler = () => {
-    setServerModal((prevState) => ({
-      ...prevState,
-      showModal: true,
-    }));
+    setServerModal(true);
   };
 
   const handleOnClose = () => {
-    setServerModal((prevState) => ({
-      ...prevState,
-      showModal: false,
-    }));
+    setServerModal(false);
   };
 
   const handleServerSubmit = async (values) => {
@@ -51,10 +48,7 @@ const SideBar = () => {
     } catch (error) {
       console.log(error);
     }
-    setServerModal((prevState) => ({
-      ...prevState,
-      showModal: false,
-    }));
+    setServerModal(false);
   };
 
   const navigateToDm = () => {
@@ -63,6 +57,8 @@ const SideBar = () => {
 
   const navigateToDiscover = () => {
     navigate("/discover");
+    dispatch(setActiveTab("discover"));
+    dispatch(setOtherActiveTab("Home"));
   };
 
   return (
@@ -74,7 +70,12 @@ const SideBar = () => {
         <div
           onClick={navigateToDm}
           tabIndex="0"
-          className="h-12  bg-discord-600 rounded-full flex justify-center items-center cursor-pointer transition-none duration-100 ease-out hover:bg-discord-indigo focus:bg-discord-indigo focus:rounded-2xlg focus:text-white hover:rounded-2xlg"
+          className={`h-12 bg-discord-600 flex justify-center items-center cursor-pointer transition-none duration-100 ease-out hover:bg-discord-indigo hover:rounded-2xlg
+          ${
+            activeTab === "friendChat"
+              ? "bg-discord-indigo text-white rounded-2xlg"
+              : "rounded-full"
+          }`}
         >
           <img src="https://rb.gy/kuaslg" alt="" className="h-5 " />
         </div>
@@ -87,7 +88,9 @@ const SideBar = () => {
             onClick={(e) => {
               serverClickHandler(e, item?._id);
             }}
-            className="h-10 cursor-pointer rounded-full transition-all duration-100 ease-out hover:rounded-2xlg"
+            className={`h-10 cursor-pointer transition-all duration-100 ease-out hover:rounded-2xlg
+          ${activeTab === item._id ? "rounded-2xlg" : "rounded-full"}`}
+            // className="h-10 cursor-pointer rounded-full transition-all duration-100 ease-out hover:rounded-2xlg"
           />
         ))}
         <div
@@ -111,7 +114,13 @@ const SideBar = () => {
         <div
           onClick={navigateToDiscover}
           tabIndex="0"
-          className="h-12 bg-discord-600 rounded-full hover:rounded-2xlg focus:bg-discord-green focus:text-white focus:rounded-2xlg flex justify-center items-center cursor-pointer transition-none duration-100 ease-out hover:bg-discord-green group"
+          className={`h-12 bg-discord-600 hover:rounded-2xlg flex justify-center items-center cursor-pointer transition-none duration-100 ease-out hover:bg-discord-green group
+          ${
+            activeTab === "discover"
+              ? "bg-discord-green text-white rounded-2xlg"
+              : "rounded-full"
+          }`}
+          // className="h-12 bg-discord-600 rounded-full hover:rounded-2xlg focus:bg-discord-green focus:text-white focus:rounded-2xlg flex justify-center items-center cursor-pointer transition-none duration-100 ease-out hover:bg-discord-green group"
         >
           <svg
             aria-hidden="true"
@@ -130,7 +139,7 @@ const SideBar = () => {
       </div>
       <ServerModal
         onClose={handleOnClose}
-        visible={serverModal.showModal}
+        visible={serverModal}
         submitHandler={handleServerSubmit}
       />
     </div>

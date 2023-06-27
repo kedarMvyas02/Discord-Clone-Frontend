@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getUserDetails } from "../../store/user";
-import { useNavigate, useParams } from "react-router";
+import { useNavigate } from "react-router";
 import client from "../../api/client";
 import AddDmModal from "../Modal/AddDmModal";
 import ErrorModal from "../Modal/ErrorModal";
@@ -18,8 +18,9 @@ import {
 } from "@100mslive/react-sdk";
 import { useSocket } from "../../socket";
 import SearchBarFriendsModal from "../Modal/SearchBarFriendsModal";
+import { setOtherActiveTab } from "../../store/activeTabManagement";
 
-const Friends = () => {
+const Friends = ({ otherActiveTab }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [dmFriend, setDmFriend] = useState(null);
@@ -38,7 +39,6 @@ const Friends = () => {
   const { toggleScreenShare } = useScreenShare();
   const { getSocket } = useSocket();
   const socket = getSocket();
-  const { dmId } = useParams();
 
   useEffect(() => {
     dispatch(getDmFriends());
@@ -63,6 +63,7 @@ const Friends = () => {
 
   const friendsNavigateHandler = () => {
     navigate("/channels/@me");
+    dispatch(setOtherActiveTab("allFriends"));
   };
 
   const addToDmClickHandler = () => {
@@ -71,6 +72,7 @@ const Friends = () => {
 
   const navigateToDmHandler = async (values) => {
     navigate(`/channels/@me/${values?._id}`);
+    dispatch(setOtherActiveTab(values?._id));
     try {
       await client.post(`/server/addToDm/${values._id}`);
       dispatch(getDmFriends());
@@ -112,6 +114,7 @@ const Friends = () => {
     if (dmId) {
       setMessageArrived(false);
     }
+    dispatch(setOtherActiveTab(dmId));
     navigate(`/channels/@me/${dmId}`);
   };
 
@@ -174,7 +177,12 @@ const Friends = () => {
         <hr className=" border-y-discord-transparentBlack1 border w-full mx-auto" />
         <div
           onClick={friendsNavigateHandler}
-          className="select-none font-medium flex items-center text-discord-500 cursor-pointer hover:bg-gray-600 p-2 mt-2 mx-2 rounded-md hover:text-white text-base"
+          className={`select-none font-medium flex items-center cursor-pointer hover:bg-gray-600 p-2 mt-2 mx-2 rounded-md hover:text-white text-base
+          ${
+            otherActiveTab === "allFriends"
+              ? "text-white bg-gray-600"
+              : "text-discord-500"
+          }`}
         >
           <div className="mr-1">
             <svg
@@ -221,8 +229,10 @@ const Friends = () => {
           <div
             key={data._id}
             onClick={() => openFriendDm(data._id)}
-            className={`select-none font-medium flex items-center ${
+            className={`select-none group font-medium flex items-center ${
               messageArrived ? "text-white" : "text-discord-500"
+            } ${
+              otherActiveTab === data._id ? "bg-gray-600 text-white" : ""
             } cursor-pointer hover:bg-gray-600 hover:text-white p-2 pl-0 mt-2 mx-2 rounded-full text-base`}
           >
             <img
@@ -238,7 +248,7 @@ const Friends = () => {
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 20 20"
               fill="currentColor"
-              className="w-5 h-5 ml-auto text-discord-500 hover:text-white"
+              className="w-5 h-5 ml-auto text-discord-500 hover:text-white hidden group-hover:inline"
               onClick={() => removeFromDm(data._id)}
             >
               <path d="M6.28 5.22a.75.75 0 00-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 101.06 1.06L10 11.06l3.72 3.72a.75.75 0 101.06-1.06L11.06 10l3.72-3.72a.75.75 0 00-1.06-1.06L10 8.94 6.28 5.22z" />

@@ -1,20 +1,23 @@
 import React from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { logoutSuccess } from "../../store/user";
+import { useSocket } from "../../socket";
+import { GetMe } from "../../hooks/redux";
 
 export default function Sidebar() {
-  const user = useSelector((state) => state.user);
+  const user = GetMe();
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const { getSocket } = useSocket();
+  const socket = getSocket();
 
   const logoutHandler = async () => {
     if (user) {
       try {
         dispatch(logoutSuccess());
         navigate("/login");
-
-        // TODO SOCKET LOGOUT
+        socket.disconnect(user._id);
       } catch (err) {
         console.log("err: ", err);
       }

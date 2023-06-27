@@ -8,6 +8,7 @@ import DeleteUserModal from "../Modal/DeleteUserModal";
 import client from "../../api/client";
 import UpdateModal from "../Modal/UpdateModal";
 import { getUserDetails, logoutSuccess } from "../../store/user";
+import { useSocket } from "../../socket";
 
 const Account = () => {
   const [showDelete, setShowDelete] = useState(false);
@@ -21,6 +22,8 @@ const Account = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const user = GetUser();
+  const { getSocket } = useSocket();
+  const socket = getSocket();
 
   useEffect(() => {
     const temp = GetMe();
@@ -34,8 +37,7 @@ const Account = () => {
       try {
         dispatch(logoutSuccess());
         navigate("/login");
-
-        // TODO SOCKET LOGOUT
+        socket.disconnect(0);
       } catch (err) {
         console.log(err);
       }
@@ -126,7 +128,11 @@ const Account = () => {
               <div
                 className={`relative flex items-center justify-center mx-auto w-20 h-20 bg-discord-indigo text-white rounded-full border-6 border-discord-900`}
               >
-                <img src={user?.userImage} alt="" className="w-20 rounded-full" />
+                <img
+                  src={user?.userImage}
+                  alt=""
+                  className="w-20 rounded-full"
+                />
               </div>
               <span className="bg-discord-green w-6 h-6 rounded-full absolute right-0 bottom-0 border-6 border-discord-900 -mr-1 mb-2"></span>
             </div>

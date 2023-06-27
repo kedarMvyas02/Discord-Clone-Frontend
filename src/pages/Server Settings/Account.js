@@ -7,8 +7,9 @@ import client from "../../api/client";
 import UpdateModal from "../Modal/UpdateModal";
 import DeleteServerModal from "../Modal/DeleteServerModal";
 import ConfirmationModal from "../Modal/ConfirmationModal";
+import { getServer } from "../../store/server";
 
-const Account = ({ server, fetchServerDetails }) => {
+const Account = ({ server }) => {
   const [showDelete, setShowDelete] = useState(false);
   const [detail, setDetail] = useState({
     toggle: false,
@@ -136,17 +137,17 @@ const Account = ({ server, fetchServerDetails }) => {
         await client.post(`/server/updateServer/${id}`, {
           name: data?.serverName,
         });
-        fetchServerDetails();
+        dispatch(getServer(id));
       } else if (data?.textChannel) {
         await client.post(`/server/updateTextChannel/${detail._id}`, {
           name: data?.textChannel,
         });
-        fetchServerDetails();
+        dispatch(getServer(id));
       } else {
         await client.post(`/server/updateVoiceChannel/${detail._id}`, {
           name: data?.voiceChannel,
         });
-        fetchServerDetails();
+        dispatch(getServer(id));
       }
     } catch (error) {
       const heading = `${error?.response?.data?.status}`;
@@ -158,13 +159,11 @@ const Account = ({ server, fetchServerDetails }) => {
   const confirmationHandler = async () => {
     try {
       if (detail?.deleteData?.name === "textDelete") {
-        console.log("im here text", detail._id);
         await client.post(`/server/deleteTextChannel/${detail._id}`);
-        fetchServerDetails();
+        dispatch(getServer(id));
       } else {
-        console.log("im here voice", detail._id);
         await client.post(`/server/deleteVoiceChannel/${detail._id}`);
-        fetchServerDetails();
+        dispatch(getServer(id));
       }
     } catch (error) {
       const heading = `${error?.response?.data?.status}`;
@@ -222,7 +221,7 @@ const Account = ({ server, fetchServerDetails }) => {
   };
 
   return (
-    <div className="flex flex-col mt-0">
+    <div className="flex flex-col mt-0 h-screen">
       <span className="text-discord-500 mb-0 mt-2">Upload Photo</span>
       <div className="mt-0 flex justify-start items-start">
         <CustomFileInput field="serverImage" />
@@ -345,7 +344,7 @@ const Account = ({ server, fetchServerDetails }) => {
 
           <button
             onClick={deleteAccountHandler}
-            className="bg-transparent border-1 border-red-700 hover:bg-red-700 px-4 py-1 mt-10  text-white text-xm rounded-md"
+            className="bg-transparent border-1 border-red-700 hover:bg-red-700 px-4 py-1 mt-10 text-white text-xm rounded-md"
           >
             Delete Server
           </button>

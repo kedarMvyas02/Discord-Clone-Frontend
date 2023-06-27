@@ -20,6 +20,8 @@ import {
   useHMSStore,
 } from "@100mslive/react-sdk";
 import { useSocket } from "../../socket";
+import { setOtherActiveTab } from "../../store/activeTabManagement";
+import { useDispatch } from "react-redux";
 
 const Discover = ({ setTopic }) => {
   const [deafen, setDeafen] = useState(false);
@@ -30,6 +32,7 @@ const Discover = ({ setTopic }) => {
   const hmsActions = useHMSActions();
   const { getSocket } = useSocket();
   const socket = getSocket();
+  const dispatch = useDispatch();
 
   const settingNavigateHandler = () => {
     navigate("/userSettings");
@@ -65,6 +68,7 @@ const Discover = ({ setTopic }) => {
 
   const topicClickHandler = (topic) => {
     setTopic(topic.backendName);
+    dispatch(setOtherActiveTab(topic.title));
   };
 
   const toggleDeafen = () => {

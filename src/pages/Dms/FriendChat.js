@@ -14,6 +14,7 @@ import {
   getDmFriends,
   getPendingRequests,
 } from "../../store/dmFriends";
+import { setOtherActiveTab } from "../../store/activeTabManagement";
 
 const WumpusComponent = ({ message, img }) => {
   return (
@@ -99,12 +100,6 @@ const FriendChat = () => {
 
   const removeFriendHandler = async (e, code, _id) => {
     e.stopPropagation();
-    const dmExists = allFriends?.dmFriends?.filter(
-      (friend) => friend?._id === _id
-    );
-    if (dmExists.length > 0) {
-      await client.post(`/server/removeFromDm/${_id}`);
-    }
 
     try {
       const res = await client.post("/users/removeFriend", {
@@ -127,6 +122,7 @@ const FriendChat = () => {
     } catch (error) {
       navigate(`/channels/@me/${dmId}`);
     }
+    dispatch(setOtherActiveTab(dmId));
     dispatch(getDmFriends());
     navigate(`/channels/@me/${dmId}`);
   };

@@ -1,18 +1,29 @@
-import React, { useEffect, useState } from "react";
-import Sidebar from "./Sidebar";
+import React, { useEffect } from "react";
+// import Sidebar from "./Sidebar";
 import { useNavigate, useParams } from "react-router";
 import Account from "./Account";
-import client from "../../api/client";
+import { useDispatch, useSelector } from "react-redux";
+import { getServer } from "../../store/server";
+import { GetUser } from "../../hooks/redux";
+import { getUserDetails } from "../../store/user";
 
 const ServerSetting = () => {
   const navigate = useNavigate();
   const { id } = useParams();
-  const [data, setData] = useState("");
+  const dispatch = useDispatch();
+  const user = GetUser();
+  const data = useSelector((state) => state?.server?.serverData);
 
-  const fetchServerDetails = async () => {
-    const res = await client.get(`server/getServer/${id}`);
-    setData(res?.data?.server);
-  };
+  useEffect(() => {
+    dispatch(getServer(id));
+
+    // TODO authorization not proper ig
+    if (data?.owner !== user?._id) {
+      navigate("/channels/@me");
+    }
+
+    dispatch(getUserDetails());
+  }, [id, dispatch]);
 
   useEffect(() => {
     const handleKeyPress = (event) => {
@@ -25,10 +36,6 @@ const ServerSetting = () => {
       document.removeEventListener("keydown", handleKeyPress);
     };
   }, []);
-
-  useEffect(() => {
-    fetchServerDetails();
-  }, [id]);
 
   return (
     <div className="bg-discord-notQuiteDark flex w-full">
@@ -55,8 +62,7 @@ const ServerSetting = () => {
               </h6>
             </div>
           </div>
-          <Account server={data} fetchServerDetails={fetchServerDetails} />
-          <div className="pb-20"></div>
+          <Account server={data} />
         </div>
       </div>
     </div>

@@ -99,7 +99,6 @@ const Header = () => {
             <Link
               to="/channels/@me"
               className="sm:px-4 px-2 sm:py-2 flex justify-center items-center duration-300 hover:shadow-lg hover:text-discord-indigo rounded-full bg-white text-black sm:text-sm text-xs"
-              href="#"
             >
               Open Discord
             </Link>
@@ -107,7 +106,6 @@ const Header = () => {
             <Link
               to="/login"
               className="px-4 py-2 duration-300 hover:shadow-lg hover:text-discord-indigo rounded-full bg-white text-black text-sm"
-              href="#"
             >
               Login
             </Link>
@@ -247,10 +245,7 @@ const Header = () => {
                   </g>
                 </svg>
               </span>
-              <p
-              >
-                Download for Windows
-              </p>
+              <p>Download for Windows</p>
             </a>
             <Link
               to={me ? `/channels/@me` : `/login`}

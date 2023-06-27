@@ -48,7 +48,7 @@ const PopupUser = ({ user }) => {
       dispatch(showErrorModal({ heading, subHeading }));
     }
   };
-  // TODO SORT DISCOVER PAGE ON MOST MEMBERS
+
   return (
     <div>
       <div className="bg-discord-700 w-85 flex-none scrollbar--show--hide sidebar--users--scrollbar p-3 h-full">

@@ -123,7 +123,6 @@ const ForgotPassword = () => {
           <div className="mt-3 flex">
             <Link
               to="/login"
-              href="#"
               className="text-xs text-discord-textLink hover:underline"
             >
               Remembered your credentials?

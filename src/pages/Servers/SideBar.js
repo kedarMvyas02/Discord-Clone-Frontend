@@ -5,8 +5,12 @@ import upload from "../../utils/upload";
 import client from "../../api/client";
 import { getJoinedServers } from "../../store/server";
 import { useDispatch, useSelector } from "react-redux";
+import {
+  setActiveTab,
+  setOtherActiveTab,
+} from "../../store/activeTabManagement";
 
-const SideBar = ({ onIdChange }) => {
+const SideBar = ({ onIdChange, activeTab }) => {
   const navigate = useNavigate();
   const data = useSelector((state) => state?.server?.joinedServers);
   const [serverModal, setServerModal] = useState({
@@ -32,6 +36,8 @@ const SideBar = ({ onIdChange }) => {
 
   const dmHandler = () => {
     navigate(`/channels/@me`);
+    dispatch(setActiveTab("friendChat"));
+    dispatch(setOtherActiveTab("allFriends"));
   };
 
   const handleOnClose = () => {
@@ -64,6 +70,8 @@ const SideBar = ({ onIdChange }) => {
 
   const navigateToDiscover = () => {
     navigate("/discover");
+    dispatch(setActiveTab("discover"));
+    dispatch(setOtherActiveTab("Home"));
   };
 
   return (
@@ -87,7 +95,9 @@ const SideBar = ({ onIdChange }) => {
             onClick={(e) => {
               serverClickHandler(e, item?._id);
             }}
-            className="h-10 cursor-pointer rounded-full transition-all duration-100 ease-out hover:rounded-2xlg"
+            className={`h-10 cursor-pointer transition-all duration-100 ease-out hover:rounded-2xlg
+          ${activeTab === item._id ? "rounded-2xlg" : "rounded-full"}`}
+            // className="h-10 cursor-pointer rounded-full transition-all duration-100 ease-out hover:rounded-2xlg"
           />
         ))}
         <div

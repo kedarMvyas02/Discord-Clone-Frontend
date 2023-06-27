@@ -5,12 +5,14 @@ import upload from "../../utils/upload";
 import client from "../../api/client";
 import { useDispatch, useSelector } from "react-redux";
 import { getJoinedServers } from "../../store/server";
+import {
+  setActiveTab,
+  setOtherActiveTab,
+} from "../../store/activeTabManagement";
 
-const SideBar = () => {
+const SideBar = ({ activeTab }) => {
   const navigate = useNavigate();
-  const [serverModal, setServerModal] = useState({
-    showModal: false,
-  });
+  const [serverModal, setServerModal] = useState(false);
   const data = useSelector((state) => state?.server?.joinedServers);
   const dispatch = useDispatch();
 
@@ -21,20 +23,15 @@ const SideBar = () => {
   const serverClickHandler = (e, id) => {
     e.preventDefault();
     navigate(`/channels/${id}`);
+    dispatch(setActiveTab(id));
   };
 
   const addServerHandler = () => {
-    setServerModal((prevState) => ({
-      ...prevState,
-      showModal: true,
-    }));
+    setServerModal(true);
   };
 
   const handleOnClose = () => {
-    setServerModal((prevState) => ({
-      ...prevState,
-      showModal: false,
-    }));
+    setServerModal(true);
   };
 
   const handleServerSubmit = async (values) => {
@@ -51,14 +48,13 @@ const SideBar = () => {
       console.log(error);
     }
 
-    setServerModal((prevState) => ({
-      ...prevState,
-      showModal: false,
-    }));
+    setServerModal(false);
   };
 
   const navigateToDm = () => {
     navigate("/channels/@me");
+    dispatch(setActiveTab("friendChat"));
+    dispatch(setOtherActiveTab("allFriends"));
   };
 
   const navigateToDiscover = () => {
@@ -87,7 +83,9 @@ const SideBar = () => {
             onClick={(e) => {
               serverClickHandler(e, item?._id);
             }}
-            className="h-10 cursor-pointer rounded-full transition-all duration-100 ease-out hover:rounded-2xlg"
+            className={`h-10 cursor-pointer transition-all duration-100 ease-out hover:rounded-2xlg
+          ${activeTab === item._id ? "rounded-2xlg" : "rounded-full"}`}
+            // className="h-10 cursor-pointer rounded-full transition-all duration-100 ease-out hover:rounded-2xlg"
           />
         ))}
         <div
@@ -111,12 +109,18 @@ const SideBar = () => {
         <div
           onClick={navigateToDiscover}
           tabIndex="0"
-          className="h-12 bg-discord-600 rounded-full hover:rounded-2xlg focus:bg-discord-green focus:text-white focus:rounded-2xlg flex justify-center items-center cursor-pointer transition-none duration-100 ease-out hover:bg-discord-green group"
+          className={`h-12 bg-discord-600 hover:rounded-2xlg text-white flex justify-center items-center cursor-pointer transition-none duration-100 ease-out hover:bg-discord-green group
+          ${
+            activeTab === "discover"
+              ? "bg-discord-green text-white rounded-2xlg"
+              : "rounded-full "
+          }`}
+          // className="h-12 bg-discord-600 rounded-full hover:rounded-2xlg focus:bg-discord-green focus:text-white focus:rounded-2xlg flex justify-center items-center cursor-pointer transition-none duration-100 ease-out hover:bg-discord-green group"
         >
           <svg
             aria-hidden="true"
             role="img"
-            className="text-discord-green h-6 group-hover:text-white group-focus:text-white"
+            className="text-discord-green h-6 text-white group:text-white"
             width="24"
             height="24"
             viewBox="0 0 24 24"
@@ -130,7 +134,7 @@ const SideBar = () => {
       </div>
       <ServerModal
         onClose={handleOnClose}
-        visible={serverModal.showModal}
+        visible={serverModal}
         submitHandler={handleServerSubmit}
       />
     </div>

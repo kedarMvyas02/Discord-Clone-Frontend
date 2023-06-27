@@ -1,5 +1,4 @@
 import axios from "axios";
-import { useNavigate } from "react-router";
 
 axios.defaults.withCredentials = true;
 

@@ -1,12 +1,13 @@
 import React from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { setChannelInfo } from "../../store/channel";
-import { useSocket } from "../../socket";
+import { setOtherActiveTab } from "../../store/activeTabManagement";
 
 const TextChannel = ({ channelName, channelId, serverId }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const otherActiveTab = useSelector((state) => state?.tab?.otherActiveTab);
 
   const setTextChannel = () => {
     dispatch(
@@ -15,13 +16,16 @@ const TextChannel = ({ channelName, channelId, serverId }) => {
         channelName: channelName,
       })
     );
-
+    dispatch(setOtherActiveTab(channelId));
     navigate(`/channels/${serverId}/${channelId}`);
   };
 
   return (
     <div
-      className="select-none font-medium flex items-center cursor-pointer hover:bg-gray-600 p-1 rounded-md hover:text-white focus:text-white focus:bg-gray-600"
+      // className="select-none font-medium flex items-center cursor-pointer hover:bg-gray-600 p-1 rounded-md hover:text-white focus:text-white focus:bg-gray-600"
+      className={`${
+        otherActiveTab === channelId ? "text-white bg-gray-600" : ""
+      } select-none font-medium flex items-center cursor-pointer hover:bg-gray-600 p-1 rounded-md hover:`}
       onClick={setTextChannel}
     >
       <div className="h-4 mr-1">
