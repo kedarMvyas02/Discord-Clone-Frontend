@@ -23,6 +23,7 @@ import { useSocket } from "../../socket";
 import DeleteServerModal from "../Modal/DeleteServerModal";
 import LeaveServerModal from "../Modal/LeaveServerModal";
 import { getJoinedServers, getServer } from "../../store/server";
+import LoadingSpinner from "../Modal/LoadingSpinner";
 
 const Channels = ({ newId, setMembers }) => {
   const [toggle, setToggle] = useState({
@@ -43,6 +44,7 @@ const Channels = ({ newId, setMembers }) => {
   const { visible, heading, subHeading } = useSelector(
     (state) => state.errorModal
   );
+  const loading = useSelector((state) => state?.server?.loading);
   const { serverId } = useParams();
   const user = GetUser();
   const navigate = useNavigate();
@@ -59,15 +61,28 @@ const Channels = ({ newId, setMembers }) => {
   useEffect(() => {
     dispatch(getServer(newId));
     setMembers(data?.members);
-    const memberExist = data?.members?.filter(
-      (friend) => friend?.user?._id === user?._id
-    );
-    if (!memberExist) {
-      navigate("/channels/@me");
-    }
+    // const memberExist = data?.members?.filter(
+    //   (friend) => friend?.user?._id === user?._id
+    // );
+    // if (!memberExist) {
+    //   navigate("/channels/@me");
+    // }
 
     dispatch(getUserDetails());
   }, [newId]);
+
+  const handleUserOnline = () => {
+    // dispatch(getServer(newId));
+    // setMembers(data?.members);
+  };
+
+  useEffect(() => {
+    socket?.on("user-online", handleUserOnline);
+
+    return () => {
+      socket?.off("user-online", handleUserOnline);
+    };
+  }, [socket]);
 
   const handleCloseDeleteModal = () => {
     setChannelModal((prevState) => {
@@ -764,6 +779,7 @@ const Channels = ({ newId, setMembers }) => {
           submitHandler={addToServerHandler}
         />
       )}
+      <LoadingSpinner visible={loading} />
     </div>
   );
 };

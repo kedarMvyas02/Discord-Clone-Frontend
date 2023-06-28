@@ -50,6 +50,7 @@ const SideBar = ({ onIdChange, activeTab }) => {
   const handleServerSubmit = async (values) => {
     try {
       const avatar = await upload(values?.avatarFile);
+      // console.log("avatar", avatar);
       await client.post("server/createServer", {
         name: values?.serverName,
         avatar,

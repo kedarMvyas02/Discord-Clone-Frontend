@@ -4,6 +4,8 @@ import client from "../api/client";
 const initialState = {
   joinedServers: [],
   serverData: [],
+  loading: false,
+  error: "",
 };
 
 export const getJoinedServers = createAsyncThunk(

@@ -46,6 +46,9 @@ const DmChat = ({ setOpenUserProfile, openUserProfile, data, setData }) => {
       if (friendExists?.length > 0) {
         const res = await client.get(`/users/getUser/${dmId}`);
         setData(res?.data?.userWithId);
+        const sandy = await client.post(`/server/readMessages/${dmId}`);
+        console.log('sandy', sandy);
+
         const temp = await client.get(
           `/server/getDmMessages/${dmId}?content=${content}`
         );

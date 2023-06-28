@@ -6,7 +6,7 @@ import client from "../../api/client";
 import AddDmModal from "../Modal/AddDmModal";
 import ErrorModal from "../Modal/ErrorModal";
 import { hideErrorModal, showErrorModal } from "../../store/error";
-import { getDmFriends } from "../../store/dmFriends";
+import { getDmFriends, getUnreadMessages } from "../../store/dmFriends";
 import { GetUser } from "../../hooks/redux";
 import {
   selectIsConnectedToRoom,
@@ -23,14 +23,14 @@ import { setOtherActiveTab } from "../../store/activeTabManagement";
 const Friends = ({ otherActiveTab }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [dmFriend, setDmFriend] = useState(null);
+  // const [dmFriend, setDmFriend] = useState([]);
   const [isUpdated, setIsUpdated] = useState(false);
   const [modal, setModal] = useState(false);
   const [messageArrived, setMessageArrived] = useState(false);
   const { visible, heading, subHeading } = useSelector(
-    (state) => state.errorModal
+    (state) => state?.errorModal
   );
-  const { dmFriends: dmFriend1 } = useSelector((state) => state.dmFriends);
+  const dmFriend = useSelector((state) => state?.dmFriends?.dmFriends);
   const user = GetUser();
   const [searchModal, setSearchModal] = useState(false);
   const hmsActions = useHMSActions();
@@ -40,14 +40,69 @@ const Friends = ({ otherActiveTab }) => {
   const { getSocket } = useSocket();
   const socket = getSocket();
 
+  const handleUserOnline = (data) => {
+    dispatch(getDmFriends());
+    // console.log("data", data);
+    // data?.forEach((item) => {
+    //   const { userId, status } = item;
+    //   if (userId && status) {
+    //     setDmFriend((prevState) => {
+    //       const updatedDmFriend = prevState?.map((friend) => {
+    //         if (friend._id === userId) {
+    //           console.log('user update kariyo')
+    //           return { ...friend, status: "online" };
+    //         }
+    //         return friend;
+    //       });
+
+    //       console.log("updatedDmFriend online", updatedDmFriend);
+    //       return updatedDmFriend;
+    //     });
+    //   }
+    // });
+  };
+
+  useEffect(() => {
+    socket?.on("user-online", handleUserOnline);
+
+    return () => {
+      socket?.off("user-online", handleUserOnline);
+    };
+  }, [socket]);
+
+  // const handleUserOffline = (data) => {
+  //   dispatch(getDmFriends());
+
+  // data?.forEach((item) => {
+  //   const { userId, status } = item;
+  //   if (userId && status) {
+  //     setDmFriend((prevState) => {
+  //       const updatedDmFriend = prevState?.map((friend) => {
+  //         if (friend._id === userId) {
+  //           return { ...friend, status };
+  //         }
+  //         return friend;
+  //       });
+
+  //       console.log("updatedDmFriend offline", updatedDmFriend);
+  //       return updatedDmFriend;
+  //     });
+  //   }
+  // });
+  // };
+
+  // useEffect(() => {
+  //   socket?.on("user-offline", handleUserOffline);
+
+  //   return () => {
+  //     socket?.off("user-offline", handleUserOffline);
+  //   };
+  // }, [socket]);
+
   useEffect(() => {
     dispatch(getDmFriends());
     dispatch(getUserDetails());
   }, [dispatch]);
-
-  useEffect(() => {
-    setDmFriend(dmFriend1);
-  }, [dmFriend1]);
 
   const handleArrivedMessage = () => {
     setMessageArrived(true);
@@ -76,7 +131,11 @@ const Friends = ({ otherActiveTab }) => {
     try {
       await client.post(`/server/addToDm/${values._id}`);
       dispatch(getDmFriends());
-    } catch (error) {}
+    } catch (error) {
+      const heading = `${error?.response?.data?.status}`;
+      const subHeading = `${error?.response?.data?.message}`;
+      dispatch(showErrorModal({ heading, subHeading }));
+    }
   };
 
   const addToDmHandler = async (values) => {
@@ -225,36 +284,47 @@ const Friends = ({ otherActiveTab }) => {
           </svg>
         </div>
         {/* FRIENDS LIST */}
-        {dmFriend?.map((data) => (
-          <div
-            key={data._id}
-            onClick={() => openFriendDm(data._id)}
-            className={`select-none group font-medium flex items-center ${
-              messageArrived ? "text-white" : "text-discord-500"
-            } ${
-              otherActiveTab === data._id ? "bg-gray-600 text-white" : ""
-            } cursor-pointer hover:bg-gray-600 hover:text-white p-2 pl-0 mt-2 mx-2 rounded-full text-base`}
-          >
-            <img
-              src={data.userImage}
-              alt=""
-              className="h-8 w-8 mx-3 rounded-full mr-3"
-            />
-            <span className="mr-1">{data.name}</span>
-            {messageArrived && (
-              <span className="w-2 h-2 bg-green-500 rounded-full ml-auto"></span>
-            )}
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 20 20"
-              fill="currentColor"
-              className="w-5 h-5 ml-auto text-discord-500 hover:text-white hidden group-hover:inline"
-              onClick={() => removeFromDm(data._id)}
+        {dmFriend?.map((data) => {
+          return (
+            <div
+              key={data?._id}
+              onClick={() => openFriendDm(data?._id)}
+              className={`select-none group font-medium flex items-center ${
+                messageArrived ? "text-white" : "text-discord-500"
+              } ${
+                otherActiveTab === data?._id ? "bg-gray-600 text-white" : ""
+              } cursor-pointer hover:bg-gray-600 hover:text-white p-2 pl-0 mt-2 mx-2 rounded-full text-base`}
             >
-              <path d="M6.28 5.22a.75.75 0 00-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 101.06 1.06L10 11.06l3.72 3.72a.75.75 0 101.06-1.06L11.06 10l3.72-3.72a.75.75 0 00-1.06-1.06L10 8.94 6.28 5.22z" />
-            </svg>
-          </div>
-        ))}
+              <img
+                src={data?.userImage}
+                alt=""
+                className="h-8 w-8 mx-3 rounded-full mr-3"
+              />
+              <span className="relative">
+                {data?.status === "online" ? (
+                  <span className="w-2 h-2 bg-green-500 rounded-full absolute bottom-0 right-0"></span>
+                ) : (
+                  <span className="w-2 h-2 bg-red-500 rounded-full absolute bottom-0 right-0"></span>
+                )}
+              </span>
+              <span className="mr-1">{data?.name}</span>
+              {data?.unreadMessages && (
+                <span className="inline-block bg-green-500 text-white text-xm px-2 ml-auto rounded-full">
+                  {data?.unreadMessages}
+                </span>
+              )}
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+                className="w-5 h-5 ml-auto text-discord-500 hover:text-white hidden group-hover:inline"
+                onClick={() => removeFromDm(data?._id)}
+              >
+                <path d="M6.28 5.22a.75.75 0 00-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 101.06 1.06L10 11.06l3.72 3.72a.75.75 0 101.06-1.06L11.06 10l3.72-3.72a.75.75 0 00-1.06-1.06L10 8.94 6.28 5.22z" />
+              </svg>
+            </div>
+          );
+        })}
 
         {/* USER SECTION */}
         {/* Profile Settings */}
