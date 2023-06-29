@@ -302,13 +302,14 @@ const Friends = ({ otherActiveTab }) => {
                 alt=""
                 className="h-8 w-8 mx-3 rounded-full mr-3"
               />
-              <span className="relative">
+              <span className="absolute">
                 {data?.status === "online" ? (
-                  <span className="w-2 h-2 bg-green-500 rounded-full absolute bottom-0 right-0"></span>
+                  <span className="w-[17px] h-[17px] bg-green-500 rounded-full absolute mt-[3px] ml-[30px] border-discord-700  border-[3.5px]"></span>
                 ) : (
-                  <span className="w-2 h-2 bg-red-500 rounded-full absolute bottom-0 right-0"></span>
+                  <span className="w-[17px] h-[17px] bg-gray-500 rounded-full absolute mt-[3px] ml-[30px] border-discord-700  border-[3.5px]"></span>
                 )}
               </span>
+
               <span className="mr-1">{data?.name}</span>
               {data?.unreadMessages && data?.unreadMessages > 0 ? (
                 <span className="inline-block bg-green-500 text-white text-xm px-2 ml-auto rounded-full">
@@ -445,6 +446,9 @@ const Friends = ({ otherActiveTab }) => {
               alt="userImage"
               className="h-8 rounded-full"
             />
+            <span className="absolute">
+              <span className="w-[17px] h-[17px] bg-green-500 rounded-full absolute mt-[3px] ml-[15px] border-discord-700  border-[3.5px]"></span>
+            </span>
             <h4 className="text-white text-xs font-medium">
               {user?.name}
               <span className="text-discord-200 block">

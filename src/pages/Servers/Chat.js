@@ -27,7 +27,10 @@ const Chat = () => {
   const channelName = useSelector(selectChannelName);
   const user = GetUser();
   const chatRef = useRef();
-  const [isTyping, setIsTyping] = useState("");
+  const [isTyping, setIsTyping] = useState({
+    toggle: false,
+    data: "",
+  });
   const { getSocket } = useSocket();
   const socket = getSocket();
   const [messages, setMessages] = useState([]);
@@ -70,12 +73,24 @@ const Chat = () => {
     };
   };
 
-  const handleUserTyping = (data) => {
-    if (data?.to === channelId) {
-      setIsTyping(data?.from);
+  const handleUserTyping = ({ to, from }) => {
+    if (to === channelId) {
+      // console.log();
+      setIsTyping((prevState) => {
+        return {
+          ...prevState,
+          toggle: true,
+          data: from,
+        };
+      });
 
       const resetTypingIndicator = debounce(() => {
-        setIsTyping("");
+        setIsTyping(() => {
+          return {
+            toggle: false,
+            data: "",
+          };
+        });
       }, 2000);
       resetTypingIndicator();
     }
@@ -386,7 +401,7 @@ const Chat = () => {
           <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
         </svg>
       </div>
-      {isTyping.length > 0 && (
+      {isTyping.toggle && (
         <div className="ml-6 mb-1 flex">
           <div>
             <PulseLoader color="#b9bbbe" size={9} />
@@ -394,7 +409,7 @@ const Chat = () => {
           <span className="text-xs text-discord-500 ml-2 mt-[2px]">
             <span className="font-extrabold">
               {/* TODO */}
-              {isTyping?.toUpperCase()}
+              {isTyping?.data?.toUpperCase()}{" "}
             </span>
             is Typing...
           </span>
