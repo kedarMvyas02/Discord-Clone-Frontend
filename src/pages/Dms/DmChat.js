@@ -8,6 +8,7 @@ import Message from "./Message";
 import { useSocket } from "../../socket";
 import { getAllFriends, getDmFriends } from "../../store/dmFriends";
 import { GetUser } from "../../hooks/redux";
+import PulseLoader from "react-spinners/PulseLoader";
 
 import {
   selectIsConnectedToRoom,
@@ -34,6 +35,7 @@ const DmChat = ({ setOpenUserProfile, openUserProfile, data, setData }) => {
     useAVToggle();
   const hmsActions = useHMSActions();
   const [content, setContent] = useState("");
+  const [isTyping, setIsTyping] = useState(false);
   const screenshareOn = useHMSStore(selectIsSomeoneScreenSharing);
   const { toggleScreenShare, amIScreenSharing } = useScreenShare();
   const allFriends = useSelector((state) => state?.dmFriends?.allFriends);
@@ -46,8 +48,6 @@ const DmChat = ({ setOpenUserProfile, openUserProfile, data, setData }) => {
       if (friendExists?.length > 0) {
         const res = await client.get(`/users/getUser/${dmId}`);
         setData(res?.data?.userWithId);
-        const sandy = await client.post(`/server/readMessages/${dmId}`);
-        console.log('sandy', sandy);
 
         const temp = await client.get(
           `/server/getDmMessages/${dmId}?content=${content}`
@@ -67,6 +67,11 @@ const DmChat = ({ setOpenUserProfile, openUserProfile, data, setData }) => {
     });
   };
 
+  const typingMessageHandler = (e) => {
+    setMsg(e.target.value);
+    socket.emit("typing-event", { from: user?._id, to: dmId });
+  };
+
   const handleDeleteMessage = (_id) => {
     const updatedMessages = messages?.filter((msg) => msg?._id !== _id);
     setMessages(updatedMessages);
@@ -76,7 +81,9 @@ const DmChat = ({ setOpenUserProfile, openUserProfile, data, setData }) => {
     const temp = data?.populatedChat;
     dispatch(getDmFriends());
     setMessages((prevState) => {
-      const filteredMessages = prevState.filter((msg) => msg._id !== temp?._id);
+      const filteredMessages = prevState?.filter(
+        (msg) => msg?._id !== temp?._id
+      );
 
       return [...filteredMessages, temp];
     });
@@ -88,6 +95,37 @@ const DmChat = ({ setOpenUserProfile, openUserProfile, data, setData }) => {
 
     return () => {
       socket?.off("navoMessage", handleNavoMessage);
+    };
+  }, [socket]);
+
+  const debounce = (callback, delay) => {
+    let timeoutId;
+
+    return (...args) => {
+      clearTimeout(timeoutId);
+      timeoutId = setTimeout(() => {
+        callback(...args);
+      }, delay);
+    };
+  };
+
+  const handleUserTyping = (data) => {
+    if (data?.from === dmId) {
+      setIsTyping(true);
+
+      const resetTypingIndicator = debounce(() => {
+        setIsTyping(false);
+      }, 2000);
+
+      resetTypingIndicator();
+    }
+  };
+
+  useEffect(() => {
+    socket?.on("user-typing", handleUserTyping);
+
+    return () => {
+      socket?.off("user-typing", handleUserTyping);
     };
   }, [socket]);
 
@@ -305,14 +343,18 @@ const DmChat = ({ setOpenUserProfile, openUserProfile, data, setData }) => {
         <div ref={chatRef} className="pb-16" />
       </main>
 
-      <div className="flex items-center bg-discord-chatInputBg mx-4 mb-5 rounded-lg justify-end mt-auto">
+      <div
+        className={`flex items-center bg-discord-chatInputBg mx-4 ${
+          isTyping ? "mb-1" : "mb-5"
+        }  rounded-lg justify-end mt-auto`}
+      >
         <form className="flex-grow-default">
           <input
             type="text"
             placeholder={`Message #${data?.name}`}
             className="bg-transparent focus:outline-none ml-4 text-discord-mainTextHover w-full placeholder-discord-popOutHeader text-sm"
             value={msg}
-            onChange={(e) => setMsg(e.target.value)}
+            onChange={(e) => typingMessageHandler(e)}
           />
           <button hidden type="submit" onClick={sendMessage}>
             Send
@@ -335,6 +377,20 @@ const DmChat = ({ setOpenUserProfile, openUserProfile, data, setData }) => {
           <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
         </svg>
       </div>
+      {isTyping && (
+        <div className="ml-6 mb-1 flex">
+          <div>
+            <PulseLoader color="#b9bbbe" size={9} />
+          </div>
+          <span className="text-xs text-discord-500 ml-2 mt-[2px]">
+            {" "}
+            <span className="font-extrabold">
+              {data?.name?.toUpperCase()}
+            </span>{" "}
+            is Typing...
+          </span>
+        </div>
+      )}
     </div>
   );
 };

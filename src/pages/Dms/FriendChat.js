@@ -119,11 +119,12 @@ const FriendChat = () => {
   const navigateDmHandler = async (dmId) => {
     try {
       await client.post(`/server/addToDm/${dmId}`);
+      await client.post(`/server/readMessages/${dmId}`);
+      dispatch(getDmFriends());
     } catch (error) {
       navigate(`/channels/@me/${dmId}`);
     }
     dispatch(setOtherActiveTab(dmId));
-    dispatch(getDmFriends());
     navigate(`/channels/@me/${dmId}`);
   };
 

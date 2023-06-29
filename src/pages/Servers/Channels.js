@@ -31,7 +31,6 @@ const Channels = ({ newId, setMembers }) => {
     voiceToggle: true,
     deafen: false,
   });
-  // const [data, setData] = useState([]);
   const [channelModal, setChannelModal] = useState({
     showModal: false,
     channel: null,
@@ -60,7 +59,9 @@ const Channels = ({ newId, setMembers }) => {
 
   useEffect(() => {
     dispatch(getServer(newId));
-    setMembers(data?.members);
+    if (data?.members) {
+      setMembers(data?.members);
+    }
     // const memberExist = data?.members?.filter(
     //   (friend) => friend?.user?._id === user?._id
     // );
@@ -451,6 +452,7 @@ const Channels = ({ newId, setMembers }) => {
                     key={item?._id}
                     channelId={item?._id}
                     channelName={item?.name}
+                    unreadMessages={item?.unreadMessages}
                     className="pl-4 list-outside list-none"
                   />
                 )}

@@ -91,7 +91,7 @@ const Header = ({ channelName, channelId, setContent }) => {
             type="text"
             onChange={(e) => inputSearchHandler(e)}
             placeholder="Search"
-            className="w-40 rounded-default bg-gray-900 placeholder-discord-200 placeholder:text-sm p-1 font-normal text-discord-500 focus:outline-none leading-normal text-xs ml-4"
+            className="w-40 z-0 rounded-default bg-gray-900 placeholder-discord-200 placeholder:text-sm p-1 font-normal text-discord-500 focus:outline-none leading-normal text-xs ml-4"
             // className="w-40 rounded bg-gray-900 placeholder-discord-200 p-1 focus:outline-none leading-normal text-xs"
           />
           <span>

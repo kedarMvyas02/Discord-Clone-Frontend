@@ -3,13 +3,15 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { setChannelInfo } from "../../store/channel";
 import { setOtherActiveTab } from "../../store/activeTabManagement";
+import client from "../../api/client";
+import { getServer } from "../../store/server";
 
-const TextChannel = ({ channelName, channelId, serverId }) => {
+const TextChannel = ({ channelName, channelId, serverId, unreadMessages }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const otherActiveTab = useSelector((state) => state?.tab?.otherActiveTab);
 
-  const setTextChannel = () => {
+  const setTextChannel = async () => {
     dispatch(
       setChannelInfo({
         channelId: channelId,
@@ -17,6 +19,9 @@ const TextChannel = ({ channelName, channelId, serverId }) => {
       })
     );
     dispatch(setOtherActiveTab(channelId));
+
+    await client.post(`/server/readChannelMessages/${channelId}`);
+    dispatch(getServer(serverId));
     navigate(`/channels/${serverId}/${channelId}`);
   };
 
@@ -43,6 +48,11 @@ const TextChannel = ({ channelName, channelId, serverId }) => {
         </svg>
       </div>
       {channelName}
+      {unreadMessages !== 0 && (
+        <span className="inline-block bg-green-500 text-white text-xs px-[6px] ml-auto rounded-full">
+          {unreadMessages}
+        </span>
+      )}
     </div>
   );
 };

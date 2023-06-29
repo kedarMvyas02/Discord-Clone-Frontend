@@ -169,11 +169,13 @@ const Friends = ({ otherActiveTab }) => {
     // hmsActions?.setVolume(toggle.deafen ? 0 : 100);
   };
 
-  const openFriendDm = (dmId) => {
+  const openFriendDm = async (dmId) => {
     if (dmId) {
       setMessageArrived(false);
     }
     dispatch(setOtherActiveTab(dmId));
+    await client.post(`/server/readMessages/${dmId}`);
+    dispatch(getDmFriends());
     navigate(`/channels/@me/${dmId}`);
   };
 
@@ -308,11 +310,11 @@ const Friends = ({ otherActiveTab }) => {
                 )}
               </span>
               <span className="mr-1">{data?.name}</span>
-              {data?.unreadMessages && (
+              {data?.unreadMessages && data?.unreadMessages > 0 ? (
                 <span className="inline-block bg-green-500 text-white text-xm px-2 ml-auto rounded-full">
                   {data?.unreadMessages}
                 </span>
-              )}
+              ) : null}
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 20 20"

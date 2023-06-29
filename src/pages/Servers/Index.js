@@ -7,9 +7,7 @@ import { GetMe } from "../../hooks/redux";
 import OnlineUsers from "../../components/OnlineUsers";
 import { useDispatch, useSelector } from "react-redux";
 import { selectToggleMemberList } from "../../store/channel";
-import {
-  setActiveTab,
-} from "../../store/activeTabManagement";
+import { setActiveTab } from "../../store/activeTabManagement";
 
 const Index = () => {
   const { serverId } = useParams();

@@ -18,6 +18,7 @@ import {
 } from "@100mslive/react-sdk";
 import Conference from "./Conference";
 import ScreenShareComponent from "../Dms/ScreenShare";
+import PulseLoader from "react-spinners/PulseLoader";
 
 const Chat = () => {
   const { serverId } = useParams();
@@ -26,6 +27,7 @@ const Chat = () => {
   const channelName = useSelector(selectChannelName);
   const user = GetUser();
   const chatRef = useRef();
+  const [isTyping, setIsTyping] = useState("");
   const { getSocket } = useSocket();
   const socket = getSocket();
   const [messages, setMessages] = useState([]);
@@ -57,6 +59,36 @@ const Chat = () => {
     };
   }, [channelId, user, socket]);
 
+  const debounce = (callback, delay) => {
+    let timeoutId;
+
+    return (...args) => {
+      clearTimeout(timeoutId);
+      timeoutId = setTimeout(() => {
+        callback(...args);
+      }, delay);
+    };
+  };
+
+  const handleUserTyping = (data) => {
+    if (data?.to === channelId) {
+      setIsTyping(data?.from);
+
+      const resetTypingIndicator = debounce(() => {
+        setIsTyping("");
+      }, 2000);
+      resetTypingIndicator();
+    }
+  };
+
+  useEffect(() => {
+    socket?.on("typing-channel", handleUserTyping);
+
+    return () => {
+      socket?.off("typing-channel", handleUserTyping);
+    };
+  }, [socket]);
+
   useEffect(() => {
     const fetchMessages = async () => {
       try {
@@ -72,6 +104,15 @@ const Chat = () => {
     };
     fetchMessages();
   }, [channelId, content]);
+
+  const typingMessageHandler = (e) => {
+    setMsg(e.target.value);
+    socket.emit("channel-typing-event", {
+      from: user?._id,
+      to: channelId,
+      server: serverId,
+    });
+  };
 
   const handleDeleteMessage = (_id) => {
     const updatedMessages = messages?.filter((msg) => msg?._id !== _id);
@@ -307,19 +348,11 @@ const Chat = () => {
         )}
         <div ref={chatRef} className="pb-16" />
       </main>
-      <div className="flex items-center bg-discord-chatInputBg mx-4 mb-5 rounded-lg justify-end mt-auto">
-        {/* <svg
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 20 20"
-          fill="currentColor"
-          className="hover:bg-discord-iconHover cursor-pointer text-discord-mainTextHover opacity-75 hover:opacity-100 mr-4 ml-1 my-1 p-1 rounded-md w-8 h-8"
-        >
-          <path
-            fillRule="evenodd"
-            d="M10 18a8 8 0 100-16 8 8 0 000 16zm.75-11.25a.75.75 0 00-1.5 0v2.5h-2.5a.75.75 0 000 1.5h2.5v2.5a.75.75 0 001.5 0v-2.5h2.5a.75.75 0 000-1.5h-2.5v-2.5z"
-            clipRule="evenodd"
-          />
-        </svg> */}
+      <div
+        className={`flex items-center bg-discord-chatInputBg mx-4 ${
+          isTyping.length > 0 ? "mb-1" : "mb-5"
+        }  rounded-lg justify-end mt-auto`}
+      >
         <form className="flex-grow-default">
           <input
             type="text"
@@ -329,7 +362,7 @@ const Chat = () => {
             }
             className="bg-transparent disabled:cursor-not-allowed ml-4 focus:outline-none text-discord-mainTextHover w-full placeholder-discord-popOutHeader text-sm"
             value={msg}
-            onChange={(e) => setMsg(e.target.value)}
+            onChange={(e) => typingMessageHandler(e)}
           />
 
           <button hidden type="submit" onClick={sendMessage}>
@@ -353,6 +386,20 @@ const Chat = () => {
           <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
         </svg>
       </div>
+      {isTyping.length > 0 && (
+        <div className="ml-6 mb-1 flex">
+          <div>
+            <PulseLoader color="#b9bbbe" size={9} />
+          </div>
+          <span className="text-xs text-discord-500 ml-2 mt-[2px]">
+            <span className="font-extrabold">
+              {/* TODO */}
+              {isTyping?.toUpperCase()}
+            </span>
+            is Typing...
+          </span>
+        </div>
+      )}
     </div>
   );
 };
