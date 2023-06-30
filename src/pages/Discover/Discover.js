@@ -196,8 +196,11 @@ const Discover = ({ setTopic }) => {
             src={user?.userImage}
             loading="lazy"
             alt="userImage"
-            className="h-8 rounded-full"
+            className="h-8 w-8 rounded-full"
           />
+          <span className="absolute">
+            <span className="w-[17px] h-[17px] bg-green-500 rounded-full absolute mt-[3px] ml-[15px] border-discord-700  border-[3.5px]"></span>
+          </span>
           <h4 className="text-white text-xs font-medium">
             {user?.name}
             <span className="text-discord-200 block">#{user?.uniqueCode}</span>

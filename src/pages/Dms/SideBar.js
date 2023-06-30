@@ -13,6 +13,7 @@ import {
 const SideBar = ({ activeTab }) => {
   const navigate = useNavigate();
   const data = useSelector((state) => state?.server?.joinedServers);
+
   const [serverModal, setServerModal] = useState(false);
   const dispatch = useDispatch();
 

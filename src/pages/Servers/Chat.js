@@ -315,7 +315,7 @@ const Chat = () => {
           </div>
         ) : !channelId ? (
           <>
-            <div className="flex items-center justify-center mt-10">
+            <div className="flex items-center justify-center mt-40">
               <img src={wumpus} alt="" />
             </div>
             <span className="flex items-center text-xl justify-center text-discord-200 mt-4">
@@ -324,7 +324,7 @@ const Chat = () => {
           </>
         ) : messages === null || messages.length === 0 ? (
           <>
-            <div className="flex items-center justify-center mt-10">
+            <div className="flex items-center justify-center mt-40 flex-col flex-1">
               <img src={wumpus} alt="" />
             </div>
             <span className="flex items-center text-xl justify-center text-discord-200 mt-4">

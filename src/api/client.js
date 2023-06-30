@@ -7,7 +7,7 @@ const client = axios.create({
   withCredentials: true,
 });
 
-client.interceptors.request.use(function (config) {
+client.interceptors.request.use((config) => {
   if (localStorage.user) {
     const userStorage = JSON.parse(localStorage.getItem("user"));
     config.headers.Authorization = `Bearer ${userStorage?.accessToken}`;
@@ -22,20 +22,11 @@ client.interceptors.response.use(
     const originalReq = err.config;
 
     if (originalReq.url !== "/users/loginUser" && err.response) {
-      if (err.response.status === 401) {
+      if (status === 401 || status === 403) {
         localStorage.removeItem("user");
         window.location.replace("/login");
         return Promise.reject();
       }
-    }
-
-    switch (status) {
-      case 403:
-        localStorage.removeItem("user");
-        window.location.replace("/login");
-        break;
-      default:
-        break;
     }
 
     return Promise.reject(err);

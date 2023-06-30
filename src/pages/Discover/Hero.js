@@ -14,7 +14,7 @@ const Hero = ({ setValue }) => {
         />
       </div>
       {/* Overlay */}
-      <div className="absolute  flex   w-full h-full bg-black/20 z-10 "></div>
+      {/* <div className="absolute  flex   w-full h-full bg-black/20 z-10 "></div> */}
 
       {/* Search */}
       <div className="relative z-20   flex flex-col items-center justify-center  h-full font-bold text-white  pb-0 space-y-2">

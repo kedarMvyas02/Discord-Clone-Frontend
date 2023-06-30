@@ -303,7 +303,7 @@ const DmChat = ({ setOpenUserProfile, openUserProfile, data, setData }) => {
           </div>
         ) : messages === "null" || messages?.length === 0 ? (
           <>
-            <div className="flex items-center justify-center mt-10">
+            <div className="flex items-center justify-center mt-40">
               <img src={wumpus} alt="" />
             </div>
             <span className="flex items-center text-xl justify-center text-discord-200 mt-4">

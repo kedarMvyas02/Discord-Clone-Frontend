@@ -15,7 +15,6 @@ import { useHMSActions } from "@100mslive/react-sdk";
 import { GetUser } from "./hooks/redux/index";
 import Setting from "./pages/User Settings";
 import ServerSetting from "./pages/Server Settings";
-// import ChannelSetting from "./pages/Channel Settings";
 
 const App = () => {
   const user = GetUser();
@@ -42,13 +41,11 @@ const App = () => {
         <Route path="/register" element={<Register />} />
         <Route path="/forgotPassword" element={<ForgotPassword />} />
         <Route path="/resetPassword/:token?" element={<ResetPassword />} />
-        <Route path="/channels/:serverId" element={<Index />} />
-        <Route path="/channels/:serverId/:dmId" element={<Index />} />
-        <Route path="/channels/@me" element={<IndexDM />} />
-        <Route path="/channels/@me/:dmId" element={<IndexDM />} />
-        <Route path="/discover" element={<Home />} />
+        <Route path="/channels/:serverId/:dmId?" element={<Index />} />
+        <Route path="/channels/@me/:dmId?" element={<IndexDM />} />
         <Route path="/userSettings" element={<Setting />} />
         <Route path="/serverSettings/:id" element={<ServerSetting />} />
+        <Route path="/discover" element={<Home />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>

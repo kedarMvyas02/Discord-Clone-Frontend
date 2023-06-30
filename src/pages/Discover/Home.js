@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import MainComponent from "./MainComponent";
 import SideBar from "./SidebarDiscover";
 import Discover from "./Discover";
@@ -11,9 +11,13 @@ const Home = () => {
   const [topic, setTopic] = useState("");
   const activeTab = useSelector((state) => state?.tab?.activeTab);
   const dispatch = useDispatch();
-  dispatch(setActiveTab("discover"));
 
   const me = GetMe();
+
+  useEffect(() => {
+    dispatch(setActiveTab("discover"));
+  }, [dispatch]);
+
   if (!me) return <Navigate to="/login" />;
 
   return (

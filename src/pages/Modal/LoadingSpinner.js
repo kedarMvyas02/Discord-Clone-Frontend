@@ -8,7 +8,7 @@ const LoadingSpinner = ({ visible }) => {
   return (
     <div
       id="container"
-      className="fixed inset-0 backdrop-blur-sm flex justify-center items-center pb-[300px] pl-[300px]"
+      className="fixed inset-0 z-50 backdrop-blur-sm flex justify-center pt-48 items-center pb-[300px] pl-[300px]"
     >
       <img
         src="http://res.cloudinary.com/dbi3rrybd/image/upload/v1687949096/Discord/x9r8l0r4fgxbycugrjj6.gif"

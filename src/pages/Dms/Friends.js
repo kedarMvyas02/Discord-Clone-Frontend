@@ -329,7 +329,6 @@ const Friends = ({ otherActiveTab }) => {
           );
         })}
 
-        {/* USER SECTION */}
         {/* Profile Settings */}
         {isConnectedToRoom && (
           <>
@@ -444,7 +443,7 @@ const Friends = ({ otherActiveTab }) => {
               src={user?.userImage}
               loading="lazy"
               alt="userImage"
-              className="h-8 rounded-full"
+              className="h-8 w-8 rounded-full"
             />
             <span className="absolute">
               <span className="w-[17px] h-[17px] bg-green-500 rounded-full absolute mt-[3px] ml-[15px] border-discord-700  border-[3.5px]"></span>

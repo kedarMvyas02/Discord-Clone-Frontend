@@ -21,10 +21,14 @@ const IndexDM = () => {
   const activeTab = useSelector((state) => state?.tab?.activeTab);
   const otherActiveTab = useSelector((state) => state?.tab?.otherActiveTab);
   const dispatch = useDispatch();
-  dispatch(setActiveTab("friendChat"));
 
   const { dmId } = useParams();
   const me = GetMe();
+
+  useEffect(() => {
+    dispatch(setActiveTab("friendChat"));
+  }, [dispatch]);
+
   if (!me) return <Navigate to="/login" />;
 
   return (
