@@ -3,7 +3,8 @@ import axios from "axios";
 axios.defaults.withCredentials = true;
 
 const client = axios.create({
-  baseURL: process.env.API_URL || "http://127.0.0.1:8000",
+  baseURL:
+    "https://discordclonekedar.onrender.com/" || "http://127.0.0.1:8000/",
   withCredentials: true,
 });
 
