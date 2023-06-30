@@ -27,6 +27,7 @@ const Chat = () => {
   const channelId = useSelector(selectChannelId);
   const channelName = useSelector(selectChannelName);
   const user = GetUser();
+  const [toggleEmoji, setToggleEmoji] = useState(false);
   const chatRef = useRef();
   const [isTyping, setIsTyping] = useState({
     toggle: false,
@@ -114,9 +115,7 @@ const Chat = () => {
         if (res?.data?.messages) {
           setMessages(res?.data?.messages);
         }
-      } catch (error) {
-        // console.log(error);
-      }
+      } catch (error) {}
     };
     fetchMessages();
   }, [channelId, content]);
@@ -369,13 +368,15 @@ const Chat = () => {
         <div ref={chatRef} className="pb-16" />
       </main>
 
-      <div className="ml-auto">
-        <Picker
-          theme="dark"
-          emojiStyle="twitter"
-          onEmojiClick={(e) => handleEmojiClick(e)}
-        />
-      </div>
+      {toggleEmoji && (
+        <div className="z-10 absolute mb-16 bottom-0 right-0 mr-4">
+          <Picker
+            theme="dark"
+            emojiStyle="twitter"
+            onEmojiClick={(e) => handleEmojiClick(e)}
+          />
+        </div>
+      )}
       <div
         className={`flex items-center bg-discord-chatInputBg mx-4 ${
           isTyping.length > 0 ? "mb-1" : "mb-5"
@@ -397,7 +398,21 @@ const Chat = () => {
             Send
           </button>
         </form>
-
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          strokeWidth={1.5}
+          stroke="currentColor"
+          onClick={() => setToggleEmoji(!toggleEmoji)}
+          className="hover:bg-discord-iconHover cursor-pointer text-discord-mainTextHover opacity-75 hover:opacity-100 py-2 rounded-md w-10 h-10"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="M15.182 15.182a4.5 4.5 0 01-6.364 0M21 12a9 9 0 11-18 0 9 9 0 0118 0zM9.75 9.75c0 .414-.168.75-.375.75S9 10.164 9 9.75 9.168 9 9.375 9s.375.336.375.75zm-.375 0h.008v.015h-.008V9.75zm5.625 0c0 .414-.168.75-.375.75s-.375-.336-.375-.75.168-.75.375-.75.375.336.375.75zm-.375 0h.008v.015h-.008V9.75z"
+          />
+        </svg>
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="24"
