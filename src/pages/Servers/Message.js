@@ -51,7 +51,7 @@ const Message = ({
       <img
         src={userImage}
         alt=""
-        className="h-10 rounded-full mr-3 hover:shadow-2xl"
+        className="h-10 w-10 rounded-full mr-3 hover:shadow-2xl"
       />
       <div className="flex flex-col ">
         <h4 className="flex items-center space-x-2 font-medium">

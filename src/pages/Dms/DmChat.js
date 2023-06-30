@@ -133,7 +133,9 @@ const DmChat = ({ setOpenUserProfile, openUserProfile, data, setData }) => {
     e.preventDefault();
 
     if (msg !== "" && user?._id !== dmId) {
+      console.log("im here");
       socket?.emit("text_message", { from: user?._id, to: dmId, message: msg });
+      console.log("event emitted");
       setMessages((prevState) => {
         return [
           ...prevState,

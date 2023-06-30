@@ -113,7 +113,7 @@ const PinnedMsgsModal = ({ visible, where, onClose, id }) => {
                   <img
                     src={data?.sender?.userImage}
                     alt=""
-                    className="h-10 rounded-full cursor-pointer mr-3 hover:shadow-2xl"
+                    className="h-10 w-10 rounded-full cursor-pointer mr-3 hover:shadow-2xl"
                   />
                   <div className="flex flex-col ">
                     <h4 className="flex items-center space-x-2 font-medium">

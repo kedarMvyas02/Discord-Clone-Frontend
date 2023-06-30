@@ -7,6 +7,7 @@ import { useSocket } from "../../socket";
 import wumpus from "../../assets/wumpus.svg";
 import client from "../../api/client";
 import { useParams } from "react-router";
+import Picker from "emoji-picker-react";
 import { GetUser } from "../../hooks/redux";
 import {
   selectIsConnectedToRoom,
@@ -127,6 +128,10 @@ const Chat = () => {
       to: channelId,
       server: serverId,
     });
+  };
+
+  const handleEmojiClick = (event) => {
+    setMsg((prevMsg) => prevMsg + event?.emoji);
   };
 
   const handleDeleteMessage = (_id) => {
@@ -363,6 +368,14 @@ const Chat = () => {
         )}
         <div ref={chatRef} className="pb-16" />
       </main>
+
+      <div className="ml-auto">
+        <Picker
+          theme="dark"
+          emojiStyle="twitter"
+          onEmojiClick={(e) => handleEmojiClick(e)}
+        />
+      </div>
       <div
         className={`flex items-center bg-discord-chatInputBg mx-4 ${
           isTyping.length > 0 ? "mb-1" : "mb-5"
@@ -384,6 +397,7 @@ const Chat = () => {
             Send
           </button>
         </form>
+
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="24"
@@ -401,6 +415,7 @@ const Chat = () => {
           <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
         </svg>
       </div>
+
       {isTyping.toggle && (
         <div className="ml-6 mb-1 flex">
           <div>
