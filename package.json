@@ -29,7 +29,6 @@
     "react-spinners": "^0.13.8",
     "reactjs-popup": "^2.0.5",
     "redux": "^4.2.1",
-    "sass": "^1.62.1",
     "socket.io-client": "^4.6.2",
     "tailwind-scrollbar-hide": "^1.1.7",
     "web-vitals": "^2.1.4",

@@ -14,7 +14,8 @@ const SocketContext = createContext();
 const SocketProvider = ({ children }) => {
   let socket;
 
-  socket = io("http://127.0.0.1:8000" || process.env.API_URL);
+  // socket = io("http://127.0.0.1:8000" || process.env.API_URL);
+  socket = io(process.env.API_URL || "http://127.0.0.1:8000");
 
   const disconnectSocket = () => {
     if (socket) {

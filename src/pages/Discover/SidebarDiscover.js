@@ -83,7 +83,7 @@ const SideBar = ({ activeTab }) => {
             onClick={(e) => {
               serverClickHandler(e, item?._id);
             }}
-            className={`h-10 w-10 cursor-pointer transition-all duration-100 ease-out hover:rounded-2xlg
+            className={`h-10 w-12 cursor-pointer transition-all duration-100 ease-out hover:rounded-2xlg
           ${activeTab === item._id ? "rounded-2xlg" : "rounded-full"}`}
             // className="h-10 cursor-pointer rounded-full transition-all duration-100 ease-out hover:rounded-2xlg"
           />

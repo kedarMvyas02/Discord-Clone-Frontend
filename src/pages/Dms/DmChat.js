@@ -21,6 +21,7 @@ import {
 } from "@100mslive/react-sdk";
 import Conference from "./Conference";
 import ScreenShareComponent from "./ScreenShare";
+import Popup from "reactjs-popup";
 
 const DmChat = ({ setOpenUserProfile, openUserProfile, data, setData }) => {
   const { dmId } = useParams();
@@ -350,15 +351,6 @@ const DmChat = ({ setOpenUserProfile, openUserProfile, data, setData }) => {
         )}
         <div ref={chatRef} className="pb-16" />
       </main>
-      {toggleEmoji && (
-        <div className="z-10 absolute mb-16 bottom-0 right-0 mr-4">
-          <Picker
-            theme="dark"
-            emojiStyle="twitter"
-            onEmojiClick={(e) => handleEmojiClick(e)}
-          />
-        </div>
-      )}
       <div
         className={`flex items-center bg-discord-chatInputBg mx-4 ${
           isTyping ? "mb-1" : "mb-5"
@@ -368,7 +360,7 @@ const DmChat = ({ setOpenUserProfile, openUserProfile, data, setData }) => {
           <input
             type="text"
             placeholder={`Message #${data?.name}`}
-            className="bg-transparent focus:outline-none ml-4 text-discord-mainTextHover w-full placeholder-discord-popOutHeader text-sm"
+            className="bg-transparent select-none focus:outline-none ml-4 text-discord-mainTextHover w-full placeholder-discord-popOutHeader text-sm"
             value={msg}
             onChange={(e) => typingMessageHandler(e)}
           />
@@ -376,21 +368,32 @@ const DmChat = ({ setOpenUserProfile, openUserProfile, data, setData }) => {
             Send
           </button>
         </form>
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          strokeWidth={1.5}
-          stroke="currentColor"
-          onClick={() => setToggleEmoji(!toggleEmoji)}
-          className="hover:bg-discord-iconHover cursor-pointer text-discord-mainTextHover opacity-75 hover:opacity-100 py-2 rounded-md w-10 h-10"
+        <Popup
+          position="top right"
+          trigger={
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth={1.5}
+              stroke="currentColor"
+              onClick={() => setToggleEmoji(!toggleEmoji)}
+              className="hover:bg-discord-iconHover cursor-pointer text-discord-mainTextHover opacity-75 hover:opacity-100 py-2 rounded-md w-10 h-10"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M15.182 15.182a4.5 4.5 0 01-6.364 0M21 12a9 9 0 11-18 0 9 9 0 0118 0zM9.75 9.75c0 .414-.168.75-.375.75S9 10.164 9 9.75 9.168 9 9.375 9s.375.336.375.75zm-.375 0h.008v.015h-.008V9.75zm5.625 0c0 .414-.168.75-.375.75s-.375-.336-.375-.75.168-.75.375-.75.375.336.375.75zm-.375 0h.008v.015h-.008V9.75z"
+              />
+            </svg>
+          }
         >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            d="M15.182 15.182a4.5 4.5 0 01-6.364 0M21 12a9 9 0 11-18 0 9 9 0 0118 0zM9.75 9.75c0 .414-.168.75-.375.75S9 10.164 9 9.75 9.168 9 9.375 9s.375.336.375.75zm-.375 0h.008v.015h-.008V9.75zm5.625 0c0 .414-.168.75-.375.75s-.375-.336-.375-.75.168-.75.375-.75.375.336.375.75zm-.375 0h.008v.015h-.008V9.75z"
+          <Picker
+            theme="dark"
+            emojiStyle="twitter"
+            onEmojiClick={(e) => handleEmojiClick(e)}
           />
-        </svg>
+        </Popup>
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="24"
@@ -402,7 +405,7 @@ const DmChat = ({ setOpenUserProfile, openUserProfile, data, setData }) => {
           strokeLinecap="round"
           strokeLinejoin="round"
           onClick={sendMessage}
-          className="feather feather-send hover:bg-discord-iconHover cursor-pointer text-discord-mainTextHover opacity-75 hover:opacity-100 py-2 rounded-md w-10 h-10"
+          className="feather feather-send hover:bg-discord-iconHover cursor-pointer text-discord-mainTextHover opacity-75 hover:opacity-100 py-2 rounded-md w-[36px] h-[36px] mr-1"
         >
           <line x1="22" y1="2" x2="11" y2="13"></line>
           <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
