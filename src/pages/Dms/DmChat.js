@@ -22,6 +22,9 @@ import {
 import Conference from "./Conference";
 import ScreenShareComponent from "./ScreenShare";
 import Popup from "reactjs-popup";
+import upload from "../../utils/upload";
+import ErrorModal from "../Modal/ErrorModal";
+import { hideErrorModal, showErrorModal } from "../../store/error";
 
 const DmChat = ({ setOpenUserProfile, openUserProfile, data, setData }) => {
   const { dmId } = useParams();
@@ -43,6 +46,10 @@ const DmChat = ({ setOpenUserProfile, openUserProfile, data, setData }) => {
   const { toggleScreenShare, amIScreenSharing } = useScreenShare();
   const allFriends = useSelector((state) => state?.dmFriends?.allFriends);
   const navigate = useNavigate();
+  const inputRef = useRef(null);
+  const { visible, heading, subHeading } = useSelector(
+    (state) => state?.errorModal
+  );
 
   useEffect(() => {
     const fetchDmUserData = async () => {
@@ -90,6 +97,7 @@ const DmChat = ({ setOpenUserProfile, openUserProfile, data, setData }) => {
 
       return [...filteredMessages, temp];
     });
+    scrollToBottom();
   };
 
   useEffect(() => {
@@ -112,6 +120,10 @@ const DmChat = ({ setOpenUserProfile, openUserProfile, data, setData }) => {
     };
   };
 
+  const handleCloseErrorModal = () => {
+    dispatch(hideErrorModal());
+  };
+
   const handleUserTyping = (data) => {
     if (data?.from === dmId) {
       setIsTyping(true);
@@ -122,6 +134,42 @@ const DmChat = ({ setOpenUserProfile, openUserProfile, data, setData }) => {
 
       resetTypingIndicator();
     }
+  };
+
+  const handleFileChange = async (event) => {
+    const selectedFile = event.target.files[0];
+    let avatar;
+
+    if (selectedFile.size > 10 * 1024 * 1024) {
+      const heading = `File size exceeded 10mb limit`;
+      const subHeading = `please select a smaller file to continue`;
+      dispatch(showErrorModal({ heading, subHeading }));
+      return;
+    } else {
+      avatar = await upload(selectedFile);
+    }
+
+    socket?.emit("text_message", {
+      from: user?._id,
+      to: dmId,
+      message: avatar,
+    });
+    setMessages((prevState) => {
+      return [
+        ...prevState,
+        {
+          reciever: data,
+          sender: user,
+          createdAt: Date.now(),
+          content: avatar,
+          _id: Date.now(),
+        },
+      ];
+    });
+  };
+
+  const handleDivClick = () => {
+    inputRef.current.click();
   };
 
   const handleEmojiClick = (event) => {
@@ -140,9 +188,7 @@ const DmChat = ({ setOpenUserProfile, openUserProfile, data, setData }) => {
     e.preventDefault();
 
     if (msg !== "" && user?._id !== dmId) {
-      console.log("im here");
       socket?.emit("text_message", { from: user?._id, to: dmId, message: msg });
-      console.log("event emitted");
       setMessages((prevState) => {
         return [
           ...prevState,
@@ -351,16 +397,98 @@ const DmChat = ({ setOpenUserProfile, openUserProfile, data, setData }) => {
         )}
         <div ref={chatRef} className="pb-16" />
       </main>
+      {toggleEmoji && (
+        <div className="z-10 absolute mb-16 bottom-0 right-0 mr-4">
+          <Picker
+            theme="dark"
+            emojiStyle="twitter"
+            onEmojiClick={(e) => handleEmojiClick(e)}
+          />
+        </div>
+      )}
       <div
         className={`flex items-center bg-discord-chatInputBg mx-4 ${
           isTyping ? "mb-1" : "mb-5"
         }  rounded-lg justify-end mt-auto`}
       >
+        <Popup
+          position="top left"
+          trigger={
+            <div onDoubleClick={handleDivClick}>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+                className="hover:bg-discord-iconHover cursor-pointer text-discord-mainTextHover opacity-75 hover:opacity-100 mr-2 ml-1 my-1 p-1 rounded-md w-8 h-8"
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M10 18a8 8 0 100-16 8 8 0 000 16zm.75-11.25a.75.75 0 00-1.5 0v2.5h-2.5a.75.75 0 000 1.5h2.5v2.5a.75.75 0 001.5 0v-2.5h2.5a.75.75 0 000-1.5h-2.5v-2.5z"
+                  clipRule="evenodd"
+                />
+              </svg>
+              <input
+                type="file"
+                accept="image/*,audio/*,video/*"
+                ref={inputRef}
+                style={{ display: "none" }}
+                onChange={handleFileChange}
+              />
+            </div>
+          }
+        >
+          <div
+            className="bg-discord-900 h-16 w-48 text-discord-500"
+            onClick={handleDivClick}
+          >
+            <div className="hover:bg-discord-indigo hover:text-white cursor-pointer py-2 mx-1">
+              <div className="flex">
+                <svg
+                  aria-hidden="true"
+                  className="m-1"
+                  role="img"
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    fill="currentColor"
+                    d="M9 16h6v-6h4l-7-7-7 7h4v6zm-4 2h14v2H5v-2z"
+                  ></path>
+                </svg>
+                <span className="mr-1 text-xs mt-1">Upload a File</span>
+              </div>
+              <span className="text-xs flex ml-2">
+                Tip: Double Click the{" "}
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                  className="h-5 w-5 ml-1"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm.75-11.25a.75.75 0 00-1.5 0v2.5h-2.5a.75.75 0 000 1.5h2.5v2.5a.75.75 0 001.5 0v-2.5h2.5a.75.75 0 000-1.5h-2.5v-2.5z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+              </span>
+            </div>
+          </div>
+          <input
+            type="file"
+            accept="image/*,audio/*,video/*"
+            ref={inputRef}
+            style={{ display: "none" }}
+            onChange={handleFileChange}
+          />
+        </Popup>
         <form className="flex-grow-default">
           <input
             type="text"
             placeholder={`Message #${data?.name}`}
-            className="bg-transparent select-none focus:outline-none ml-4 text-discord-mainTextHover w-full placeholder-discord-popOutHeader text-sm"
+            // className="bg-transparent focus:outline-none ml-4 text-discord-mainTextHover w-full placeholder-discord-popOutHeader text-sm"
+            className="bg-transparent select-none focus:outline-none text-discord-mainTextHover w-full placeholder-discord-popOutHeader text-sm"
             value={msg}
             onChange={(e) => typingMessageHandler(e)}
           />
@@ -425,6 +553,12 @@ const DmChat = ({ setOpenUserProfile, openUserProfile, data, setData }) => {
           </span>
         </div>
       )}
+      <ErrorModal
+        visible={visible}
+        onClose={handleCloseErrorModal}
+        heading={heading}
+        subHeading={subHeading}
+      />
     </div>
   );
 };

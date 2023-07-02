@@ -25,6 +25,14 @@ const PinnedMsgsModal = ({ visible, where, onClose, id }) => {
     if (e.target.id === "container") onClose();
   };
 
+  function formatLinks(text) {
+    let regex = /(https?:\/\/[^\s]+)/g;
+    return text.replace(
+      regex,
+      "<span class=\"text-blue-500 underline cursor-pointer\" onclick=\"window.open('$1', '_blank')\">$1</span>"
+    );
+  }
+
   const removePinnedMessageHandler = async (data) => {
     try {
       if (where === "DM") {
@@ -124,7 +132,12 @@ const PinnedMsgsModal = ({ visible, where, onClose, id }) => {
                         {new Date(data?.createdAt).toLocaleString()}
                       </span>
                     </h4>
-                    <p className="text-sm text-discord-100">{data?.content}</p>
+                    <p
+                      className="text-sm text-discord-100"
+                      dangerouslySetInnerHTML={{
+                        __html: formatLinks(data?.content),
+                      }}
+                    ></p>
                   </div>
                   <div
                     onClick={() => removePinnedMessageHandler(data)}

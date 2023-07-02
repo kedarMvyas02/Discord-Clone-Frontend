@@ -23,7 +23,6 @@ import { setOtherActiveTab } from "../../store/activeTabManagement";
 const Friends = ({ otherActiveTab }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  // const [dmFriend, setDmFriend] = useState([]);
   const [isUpdated, setIsUpdated] = useState(false);
   const [modal, setModal] = useState(false);
   const [messageArrived, setMessageArrived] = useState(false);
@@ -106,6 +105,7 @@ const Friends = ({ otherActiveTab }) => {
 
   const handleArrivedMessage = () => {
     setMessageArrived(true);
+    dispatch(getDmFriends());
   };
 
   useEffect(() => {

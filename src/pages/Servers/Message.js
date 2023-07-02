@@ -46,6 +46,17 @@ const Message = ({
     createdAt: userCreatedAt,
   };
 
+  const isImage = content.startsWith("http://");
+  const isVideo = /\.(mp4|mkv|wmv|m4v|mov|avi|flv|webm)$/i.test(content);
+  const isAudio = /\.(mp3|flac|mka|m4a|aac|ogg)$/i.test(content);
+  function formatLinks(text) {
+    let regex = /(https?:\/\/[^\s]+)/g;
+    return text.replace(
+      regex,
+      "<span class=\"text-blue-500 underline cursor-pointer\" onclick=\"window.open('$1', '_blank')\">$1</span>"
+    );
+  }
+
   return (
     <div className="flex items-center p-1 pl-5 my-5 mr-2 hover:bg-discord-messageBg group">
       <img
@@ -68,7 +79,34 @@ const Message = ({
             {new Date(createdAt).toLocaleString()}
           </span>
         </h4>
-        <p className="text-sm text-discord-100">{content}</p>
+        {isAudio ? (
+          <audio
+            src={content}
+            controls
+            className="max-w-[250px] max-h-[15px]"
+          />
+        ) : isVideo ? (
+          <video
+            src={content}
+            controls
+            className="max-w-[250px] max-h-[250px]"
+          />
+        ) : isImage ? (
+          <a href={content} target="_blank" rel="noopener noreferrer">
+            <img
+              src={content}
+              alt="message"
+              className="max-w-[250px] max-h-[250px] my-2 cursor-pointer"
+            />
+          </a>
+        ) : (
+          <>
+            <p
+              className="text-sm text-discord-100"
+              dangerouslySetInnerHTML={{ __html: formatLinks(content) }}
+            ></p>
+          </>
+        )}
       </div>
 
       <div

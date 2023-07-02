@@ -23,17 +23,13 @@ const Message = ({
     try {
       await client.post(`/server/deleteDmMessage/${_id}`);
       onDelete(_id);
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
 
   const pinMessageHandler = async () => {
     try {
       await client.post(`/server/pinDmMessage/${_id}`);
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
 
   const popUpUser = {
@@ -45,6 +41,21 @@ const Message = ({
     phoneNumber,
     createdAt: userCreatedAt,
   };
+
+  // const isImage = /\.(jpeg|jpg|gif|png)$/;
+  // const isUrl =
+  //   /^(https?:\/\/)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/i;
+
+  const isImage = content?.startsWith("http://");
+  const isAudio = /\.(mp3|flac|mka|m4a|aac|ogg)$/i.test(content);
+  const isVideo = /\.(mp4|mkv|wmv|m4v|mov|avi|flv|webm)$/i.test(content);
+  function formatLinks(text) {
+    let regex = /(https?:\/\/[^\s]+)/g;
+    return text.replace(
+      regex,
+      "<span class=\"text-blue-500 underline cursor-pointer\" onclick=\"window.open('$1', '_blank')\">$1</span>"
+    );
+  }
 
   return (
     <div className="flex items-center p-1 pl-5 my-5 mr-2 hover:bg-discord-messageBg group">
@@ -68,30 +79,63 @@ const Message = ({
             {new Date(createdAt).toLocaleString()}
           </span>
         </h4>
-        <p className="text-sm text-discord-100">{content}</p>
+        {isAudio ? (
+          <audio
+            src={content}
+            controls
+            loading="lazy"
+            className="z-0 max-w-[300px] max-h-[50px] my-2"
+          />
+        ) : isVideo ? (
+          <video
+            src={content}
+            controls
+            loading="lazy"
+            className="z-0 max-w-[250px] max-h-[250px]"
+          />
+        ) : isImage ? (
+          <a href={content} target="_blank" rel="noopener noreferrer">
+            <img
+              src={content}
+              alt="message"
+              className="z-0 max-w-[250px] max-h-[250px] my-2 cursor-pointer"
+            />
+          </a>
+        ) : (
+          <>
+            <p
+              className="text-sm text-discord-100"
+              dangerouslySetInnerHTML={{ __html: formatLinks(content) }}
+            ></p>
+          </>
+        )}
       </div>
 
-      <div
-        onClick={pinMessageHandler}
-        className="hover:bg-discord-indigo text-discord-indigo mr-2 hover:text-white cursor-pointer p-1 ml-auto rounded-2xlg"
-      >
-        <svg
-          className="w-6 h-6 hidden group-hover:inline"
-          aria-hidden="true"
-          role="img"
-          viewBox="0 0 24 24"
+      {!isImage && (
+        <div
+          onClick={pinMessageHandler}
+          className="hover:bg-discord-indigo text-discord-indigo mr-2 hover:text-white cursor-pointer p-1 ml-auto rounded-2xlg"
         >
-          <path
-            fill="currentColor"
-            d="M22 12L12.101 2.10101L10.686 3.51401L12.101 4.92901L7.15096 9.87801V9.88001L5.73596 8.46501L4.32196 9.88001L8.56496 14.122L2.90796 19.778L4.32196 21.192L9.97896 15.536L14.222 19.778L15.636 18.364L14.222 16.95L19.171 12H19.172L20.586 13.414L22 12Z"
-          ></path>
-        </svg>
-      </div>
+          <svg
+            className="w-6 h-6 hidden group-hover:inline"
+            aria-hidden="true"
+            role="img"
+            viewBox="0 0 24 24"
+          >
+            <path
+              fill="currentColor"
+              d="M22 12L12.101 2.10101L10.686 3.51401L12.101 4.92901L7.15096 9.87801V9.88001L5.73596 8.46501L4.32196 9.88001L8.56496 14.122L2.90796 19.778L4.32196 21.192L9.97896 15.536L14.222 19.778L15.636 18.364L14.222 16.95L19.171 12H19.172L20.586 13.414L22 12Z"
+            ></path>
+          </svg>
+        </div>
+      )}
 
       {user?.uniqueCode === uniqueCode && (
         <div
           onClick={deleteMessageHandler}
-          className="hover:bg-discord-red2 text-discord-red2 mr-5 hover:text-white cursor-pointer p-1  rounded-2xlg"
+          className={`${
+            isImage ? "ml-auto" : ""
+          } hover:bg-discord-red2 text-discord-red2 mr-5 hover:text-white cursor-pointer p-1  rounded-2xlg`}
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"

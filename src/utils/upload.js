@@ -6,7 +6,7 @@ const upload = async (file) => {
   data.append("upload_preset", "aijsiaij");
   try {
     const res = await axios.post(
-      "https://api.cloudinary.com/v1_1/dbi3rrybd/image/upload",
+      "https://api.cloudinary.com/v1_1/dbi3rrybd/auto/upload",
       data,
       {
         withCredentials: false,
