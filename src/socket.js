@@ -15,7 +15,7 @@ const SocketProvider = ({ children }) => {
   let socket;
 
   // socket = io("http://127.0.0.1:8000" || process.env.API_URL);
-  socket = io(process.env.API_URL);
+  socket = io("https://discordclonekedar.onrender.com/");
 
   const disconnectSocket = () => {
     if (socket) {
