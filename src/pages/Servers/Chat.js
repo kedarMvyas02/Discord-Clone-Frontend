@@ -40,6 +40,7 @@ const Chat = () => {
   const { getSocket } = useSocket();
   const socket = getSocket();
   const [messages, setMessages] = useState([]);
+  console.log("messages", messages);
   const [content, setContent] = useState("");
   const inputRef = useRef(null);
   const { toggleScreenShare } = useScreenShare();
@@ -373,7 +374,7 @@ const Chat = () => {
             </span>
           </>
         ) : (
-          messages.map((msg) => {
+          messages?.map((msg) => {
             const {
               name,
               uniqueCode,
@@ -427,7 +428,7 @@ const Chat = () => {
               </svg>
               <input
                 type="file"
-                accept="image/*"
+                accept="image/*,audio/*,video/*"
                 ref={inputRef}
                 style={{ display: "none" }}
                 onChange={handleFileChange}
@@ -475,7 +476,7 @@ const Chat = () => {
           </div>
           <input
             type="file"
-            accept="image/*"
+            accept="image/*,audio/*,video/*"
             ref={inputRef}
             style={{ display: "none" }}
             onChange={handleFileChange}

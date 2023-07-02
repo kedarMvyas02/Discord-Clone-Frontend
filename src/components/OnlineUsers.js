@@ -3,7 +3,6 @@ import Popup from "reactjs-popup";
 import PopupUser from "./PopupUser";
 
 const OnlineUsers = ({ allMembers }) => {
-  console.log("allMembers", allMembers);
   return (
     <div className="bg-discord-700 w-64 flex-none scrollbar--show--hide sidebar--users--scrollbar pt-3">
       <h3 className="text-discord-sideBarChannels mb-4 mt-1 font-semibold text-xs uppercase tracking-wide ml-4">
