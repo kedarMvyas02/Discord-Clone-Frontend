@@ -28,6 +28,7 @@ import { hideErrorModal, showErrorModal } from "../../store/error";
 const Chat = () => {
   const { serverId } = useParams();
   const [msg, setMsg] = useState("");
+  const [uploadProgress, setUploadProgress] = useState(0);
   const channelId = useSelector(selectChannelId);
   const channelName = useSelector(selectChannelName);
   const user = GetUser();
@@ -40,7 +41,6 @@ const Chat = () => {
   const { getSocket } = useSocket();
   const socket = getSocket();
   const [messages, setMessages] = useState([]);
-  console.log("messages", messages);
   const [content, setContent] = useState("");
   const inputRef = useRef(null);
   const { toggleScreenShare } = useScreenShare();
@@ -61,6 +61,15 @@ const Chat = () => {
           );
 
           return [...filteredMessages, temp];
+        });
+      }
+
+      if (temp.sender.name === "ChatGPT") {
+        setIsTyping(() => {
+          return {
+            toggle: false,
+            data: "",
+          };
         });
       }
     };
@@ -86,7 +95,6 @@ const Chat = () => {
 
   const handleUserTyping = ({ to, from }) => {
     if (to === channelId) {
-      // console.log();
       setIsTyping((prevState) => {
         return {
           ...prevState,
@@ -156,7 +164,7 @@ const Chat = () => {
       dispatch(showErrorModal({ heading, subHeading }));
       return;
     } else {
-      avatar = await upload(selectedFile);
+      avatar = await upload(selectedFile, setUploadProgress);
     }
 
     socket?.emit("channel-message", {
@@ -186,6 +194,16 @@ const Chat = () => {
         server: serverId,
         message: msg,
       });
+
+      if (msg.startsWith("/chat")) {
+        setIsTyping((prevState) => {
+          return {
+            ...prevState,
+            toggle: true,
+            data: "ChatGPT",
+          };
+        });
+      }
     }
     setMsg("");
   };
@@ -407,7 +425,9 @@ const Chat = () => {
       </main>
       <div
         className={`flex items-center bg-discord-chatInputBg mx-4 ${
-          isTyping.length > 0 ? "mb-1" : "mb-5"
+          isTyping.length > 0 || uploadProgress < 0 || uploadProgress > 100
+            ? "mb-1"
+            : "mb-5"
         }  rounded-lg justify-end mt-auto`}
       >
         <Popup
@@ -568,6 +588,16 @@ const Chat = () => {
           </span>
         </div>
       )}
+      {uploadProgress > 0 && uploadProgress < 100 ? (
+        <div className="ml-6 mb-0 z-10">
+          <div className="bg-discord-600 h-[6px] rounded-md">
+            <div
+              className="bg-discord-indigo h-[6px] rounded-md"
+              style={{ width: `${uploadProgress}%` }}
+            ></div>
+          </div>
+        </div>
+      ) : null}
       <ErrorModal
         visible={visible}
         onClose={handleCloseErrorModal}

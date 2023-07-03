@@ -22,7 +22,7 @@ const MainComponent = ({ serverType }) => {
   }, [value, serverType]);
 
   return (
-    <div className="bg-[#393943] w-full px-5 pt-4">
+    <div className="bg-discord-discoverBg w-full px-5 z-0 pt-4">
       <Hero setValue={setValue} />
       <Featured servers={servers} />
     </div>

@@ -1,6 +1,5 @@
 import React, { useEffect } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import "./App.css";
 import Landing from "./pages/Landing";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
@@ -27,9 +26,9 @@ const App = () => {
   }, [user, socket]);
 
   useEffect(() => {
-    socket.emit("leaving-vc", user);
     window.onunload = () => {
       hmsActions.leave();
+      socket.emit("leaving-vc", user);
     };
   }, [hmsActions, user, socket]);
 

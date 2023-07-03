@@ -83,20 +83,22 @@ const Message = ({
           <audio
             src={content}
             controls
-            className="max-w-[250px] max-h-[15px]"
+            loading="lazy"
+            className="z-0 max-w-[300px] max-h-[50px] my-2"
           />
         ) : isVideo ? (
           <video
             src={content}
             controls
-            className="max-w-[250px] max-h-[250px]"
+            loading="lazy"
+            className="z-0 max-w-[250px] max-h-[250px]"
           />
         ) : isImage ? (
           <a href={content} target="_blank" rel="noopener noreferrer">
             <img
               src={content}
-              alt="message"
-              className="max-w-[250px] max-h-[250px] my-2 cursor-pointer"
+              alt={content}
+              className="z-0 max-w-[250px] max-h-[250px] my-2 cursor-pointer"
             />
           </a>
         ) : (

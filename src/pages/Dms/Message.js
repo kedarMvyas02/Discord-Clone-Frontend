@@ -18,7 +18,6 @@ const Message = ({
   onDelete,
 }) => {
   const user = GetUser();
-
   const deleteMessageHandler = async () => {
     try {
       await client.post(`/server/deleteDmMessage/${_id}`);
@@ -79,6 +78,7 @@ const Message = ({
             {new Date(createdAt).toLocaleString()}
           </span>
         </h4>
+
         {isAudio ? (
           <audio
             src={content}
@@ -97,7 +97,7 @@ const Message = ({
           <a href={content} target="_blank" rel="noopener noreferrer">
             <img
               src={content}
-              alt="message"
+              alt={content}
               className="z-0 max-w-[250px] max-h-[250px] my-2 cursor-pointer"
             />
           </a>

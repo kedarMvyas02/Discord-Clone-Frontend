@@ -21,7 +21,7 @@ const Home = () => {
   if (!me) return <Navigate to="/login" />;
 
   return (
-    <div className="flex bg-[#393943] ">
+    <div className="flex bg-discord-discoverBg z-0">
       <SideBar activeTab={activeTab} />
       <Discover setTopic={setTopic} />
       <MainComponent serverType={topic} />

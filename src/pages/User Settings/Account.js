@@ -198,7 +198,7 @@ const Account = () => {
                 onClick={() => showUpdateModal({ number: user?.number })}
                 className="bg-discord-grayDeep text-white p-1 px-4 rounded text-sm text-center"
               >
-                Add
+                {user?.phoneNumber ? "Edit" : "Add"}
               </button>
             </div>
           </div>

@@ -29,6 +29,7 @@ import { hideErrorModal, showErrorModal } from "../../store/error";
 const DmChat = ({ setOpenUserProfile, openUserProfile, data, setData }) => {
   const { dmId } = useParams();
   const [messages, setMessages] = useState(null);
+  const [uploadProgress, setUploadProgress] = useState(0);
   const [msg, setMsg] = useState("");
   const chatRef = useRef();
   const user = GetUser();
@@ -146,7 +147,7 @@ const DmChat = ({ setOpenUserProfile, openUserProfile, data, setData }) => {
       dispatch(showErrorModal({ heading, subHeading }));
       return;
     } else {
-      avatar = await upload(selectedFile);
+      avatar = await upload(selectedFile, setUploadProgress);
     }
 
     socket?.emit("text_message", {
@@ -395,6 +396,7 @@ const DmChat = ({ setOpenUserProfile, openUserProfile, data, setData }) => {
             );
           })
         )}
+
         <div ref={chatRef} className="pb-16" />
       </main>
       {toggleEmoji && (
@@ -406,9 +408,12 @@ const DmChat = ({ setOpenUserProfile, openUserProfile, data, setData }) => {
           />
         </div>
       )}
+
       <div
         className={`flex items-center bg-discord-chatInputBg mx-4 ${
-          isTyping ? "mb-1" : "mb-5"
+          isTyping || uploadProgress < 0 || uploadProgress > 100
+            ? "mb-1"
+            : "mb-5"
         }  rounded-lg justify-end mt-auto`}
       >
         <Popup
@@ -539,6 +544,7 @@ const DmChat = ({ setOpenUserProfile, openUserProfile, data, setData }) => {
           <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
         </svg>
       </div>
+
       {isTyping && (
         <div className="ml-6 mb-1 flex">
           <div>
@@ -553,6 +559,17 @@ const DmChat = ({ setOpenUserProfile, openUserProfile, data, setData }) => {
           </span>
         </div>
       )}
+
+      {uploadProgress > 0 && uploadProgress < 100 ? (
+        <div className="ml-6 mb-0 z-10">
+          <div className="bg-discord-600 h-[6px] rounded-md">
+            <div
+              className="bg-discord-indigo h-[6px] rounded-md"
+              style={{ width: `${uploadProgress}%` }}
+            ></div>
+          </div>
+        </div>
+      ) : null}
       <ErrorModal
         visible={visible}
         onClose={handleCloseErrorModal}

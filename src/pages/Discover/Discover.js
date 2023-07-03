@@ -78,7 +78,7 @@ const Discover = ({ setTopic }) => {
 
   return (
     <div
-      className="hidden xl:flex flex-col justify-between bg-[#303136] w-[18rem] shrink-0  h-screen sticky top-0"
+      className="hidden xl:flex flex-col justify-between z-0 bg-[#303136] w-[18rem] shrink-0  h-screen sticky top-0"
       style={{ width: "260px" }}
     >
       <div className="p-4">

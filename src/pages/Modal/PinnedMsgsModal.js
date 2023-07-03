@@ -51,7 +51,7 @@ const PinnedMsgsModal = ({ visible, where, onClose, id }) => {
     <div
       id="container"
       onClick={handleOnClose}
-      className="fixed inset-0 bg-opacity-25 flex justify-center items-center"
+      className="fixed inset-0 z-50 bg-opacity-25 flex justify-center items-center"
     >
       <div className="z-50 bg-discord-semi600 w-full sm:w-4/6 md:w-4/6 lg:w-2/6 rounded-md p-5 m-12 flex flex-row mx-auto mt-16 overflow-scroll scrollbar-hide">
         <div className="flex flex-col w-full bg-black bg-opacity-25">

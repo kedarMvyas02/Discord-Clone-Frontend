@@ -229,13 +229,13 @@ const Account = ({ server }) => {
           We recommend an image of <br /> atleast 512x512 for the server
         </span>
         <div>
-          <div className="flex items-center ml-4 mt-6">
+          <div className="flex items-center ml-10 mt-6">
             <p className="text-xs text-discord-mainText font-semibold">
               SERVER NAME
             </p>
           </div>
           <div className="flex">
-            <div className="border-discord-transparentBlack1 focus:ring-2 focus:ring-blue-400 bg-discord-transparentBlack2 text-white w-full rounded pl-2 py-3 pr-40 mt-5 ml-3 cursor-default">
+            <div className="border-discord-transparentBlack1 focus:ring-2 focus:ring-blue-400 bg-discord-transparentBlack2 text-white w-full rounded pl-2 py-3 pr-40 mt-5 ml-10 cursor-default">
               {server?.name}
             </div>
             <button

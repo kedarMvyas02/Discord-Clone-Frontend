@@ -139,7 +139,7 @@ const FriendChat = () => {
 
       {/* ALL FRIENDS */}
       {clickedOn === "all" &&
-        (allFriends?.allFriends === undefined ? (
+        (allFriends?.allFriends.length === 0 ? (
           <WumpusComponent
             img={wumpusAll}
             message="Wumpus is waiting for friends. You don't have to though!"
@@ -229,7 +229,7 @@ const FriendChat = () => {
         (allFriends?.arrivedFriendRequests?.length === 0 ? (
           <WumpusComponent
             img={wumpus2}
-            message="Wumpus is waiting for friends. You don't have to though!"
+            message="Wumpus will always welcome new friends!"
           />
         ) : (
           <>

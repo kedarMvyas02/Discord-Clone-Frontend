@@ -15,7 +15,7 @@ const Delete = ({ visible, onClose, submitHandler }) => {
     <div
       id="container"
       onClick={handleOnClose}
-      className="fixed inset-0 bg-black bg-opacity-25 backdrop-blur-sm flex justify-center items-center"
+      className="fixed inset-0 z-50 bg-black bg-opacity-25 backdrop-blur-sm flex justify-center items-center"
     >
       <div className="z-50 bg-discord-semi600 w-full sm:w-4/6 md:w-4/6 lg:w-2/6 rounded-md p-5 m-12 flex flex-row mx-auto mt-16">
         <div className="flex flex-col w-full">

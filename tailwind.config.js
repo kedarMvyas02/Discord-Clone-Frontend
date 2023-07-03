@@ -45,6 +45,7 @@ module.exports = {
           deepGrayHover: "#5d6269",
           redNotif: "rgb(237, 66, 69)",
           messageBg: "#32353b",
+          discoverBg: "#393943",
           hoverHeader: "hsl(var(--primary-500-hsl))",
           100: "#dcddde",
           200: "#72767c",

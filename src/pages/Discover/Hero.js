@@ -29,7 +29,7 @@ const Hero = ({ setValue }) => {
             type="search"
             onChange={(e) => setValue(e.target.value)}
             placeholder="Explore servers"
-            className="rounded-[0.3rem] pl-4 placeholder:text-[14px] md:placeholder:text-[16px] placeholder:text-gray-500 outline-0 py-2 md:py-3 w-[25rem] md:w-[35rem] text-black"
+            className="rounded-[0.3rem] pl-4 placeholder:text-[14px] md:placeholder:text-[16px] placeholder:text-gray-500 outline-0 py-2 md:py-3 w-full md:w-[25rem] lg:w-[35rem] text-black"
           />
           <FiSearch className="absolute   text-black right-5" />
         </div>

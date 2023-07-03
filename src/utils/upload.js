@@ -1,21 +1,33 @@
 import axios from "axios";
 
-const upload = async (file) => {
+const upload = async (file, onProgress) => {
   const data = new FormData();
   data.append("file", file);
   data.append("upload_preset", "aijsiaij");
+
+  const config = {
+    onUploadProgress: (progressEvent) => {
+      const progress = Math.round(
+        (progressEvent.loaded * 100) / progressEvent.total
+      );
+      console.log(progress);
+      onProgress(progress);
+    },
+    withCredentials: false,
+  };
+
   try {
-    const res = await axios.post(
+    const response = await axios.post(
       "https://api.cloudinary.com/v1_1/dbi3rrybd/auto/upload",
       data,
-      {
-        withCredentials: false,
-      }
+      config
     );
-    const { url } = await res.data;
+    const { url } = response.data;
     return url;
-  } catch (err) {
-    console.log(err);
+  } catch (error) {
+    console.log(error);
+    throw error;
   }
 };
+
 export default upload;
