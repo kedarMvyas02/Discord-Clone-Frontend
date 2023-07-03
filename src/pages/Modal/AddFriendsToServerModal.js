@@ -1,22 +1,17 @@
-import React, { useEffect, useState } from "react";
-import TextField from "../../components";
+import React, { useEffect } from "react";
+import TextField from "../../components/TextField";
 import { Form, Formik } from "formik";
 import * as Yup from "yup";
 import { getAllFriends } from "../../store/dmFriends";
 import { useDispatch, useSelector } from "react-redux";
 
 const AddFriendsToServer = ({ visible, onClose, submitHandler }) => {
-  const [data, setData] = useState(null);
   const allFriends = useSelector((state) => state.dmFriends.allFriends);
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(getAllFriends());
   }, []);
-
-  useEffect(() => {
-    setData(allFriends);
-  }, [allFriends]);
 
   const forSubmit = (values) => {
     submitHandler(values);
@@ -47,9 +42,10 @@ const AddFriendsToServer = ({ visible, onClose, submitHandler }) => {
           </h4>
 
           <div className="">
-            {data ? (
-              data?.map((data) => (
+            {allFriends ? (
+              allFriends?.map((data) => (
                 <div
+                  key={data?._id}
                   onClick={() => forSubmit(data)}
                   className="select-none font-medium flex items-center text-discord-500 cursor-pointer hover:bg-discord-900 hover:bg-opacity-50 p-2 pl-0 mt-2  mx-2 rounded-md hover:text-white text-base"
                 >

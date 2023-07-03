@@ -1,5 +1,5 @@
 import React from "react";
-import TextField from "../../components";
+import TextField from "../../components/TextField";
 import { Form, Formik } from "formik";
 
 const DeleteUserModal = ({ visible, onClose, submitHandler }) => {

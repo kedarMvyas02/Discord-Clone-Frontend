@@ -69,6 +69,7 @@ const SearchBarFriendsModal = ({ visible, onClose, submitHandler }) => {
           {data ? (
             data?.map((data) => (
               <div
+                key={data?._id}
                 onClick={() => forSubmit(data)}
                 className="select-none font-medium flex items-center text-discord-500 cursor-pointer hover:bg-discord-900 hover:bg-opacity-50 p-2 pl-0 mt-2  mx-2 rounded-md hover:text-white text-base"
               >

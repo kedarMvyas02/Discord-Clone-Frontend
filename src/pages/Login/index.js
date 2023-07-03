@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { Formik, Form } from "formik";
 import LoginSchema from "../../validation/login.schema";
-import TextField from "../../components";
+import TextField from "../../components/TextField";
 import { login } from "../../api/auth";
 import { loginSuccess } from "../../store/user";
 import LoadingCircle from "../../assets/loading_circle_icon.svg";

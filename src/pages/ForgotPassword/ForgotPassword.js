@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { Formik, Form } from "formik";
 import ForgotPasswordSchema from "../../validation/forgotPassword.schema";
-import TextField from "../../components";
+import TextField from "../../components/TextField";
 import { forgotPassword } from "../../api/auth";
 import LoginBg from "../../assets/login_bg.svg";
 import { useDispatch, useSelector } from "react-redux";

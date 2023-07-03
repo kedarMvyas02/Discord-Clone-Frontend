@@ -104,9 +104,10 @@ const Message = ({
         ) : (
           <>
             <p
-              className="text-sm text-discord-100"
+              className="text-xm text-discord-100"
               dangerouslySetInnerHTML={{ __html: formatLinks(content) }}
             ></p>
+            {/* text-sm */}
           </>
         )}
       </div>

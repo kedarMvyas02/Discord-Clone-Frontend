@@ -31,7 +31,7 @@ const WumpusComponent = ({ message, img }) => {
 
 const FriendChat = () => {
   const [clickedOn, setClickedOn] = useState("all");
-  const allFriends = useSelector((state) => state.dmFriends);
+  const allFriends = useSelector((state) => state?.dmFriends);
   const { visible, heading, subHeading } = useSelector(
     (state) => state.errorModal
   );
@@ -117,12 +117,18 @@ const FriendChat = () => {
   };
 
   const navigateDmHandler = async (dmId) => {
+    const dmExist = allFriends?.dmFriends?.filter((val) => {
+      return val?._id === dmId;
+    });
+
     try {
-      await client.post(`/server/addToDm/${dmId}`);
+      if (dmExist?.length === 0) {
+        await client.post(`/server/addToDm/${dmId}`);
+      }
       await client.post(`/server/readMessages/${dmId}`);
       dispatch(getDmFriends());
     } catch (error) {
-      navigate(`/channels/@me/${dmId}`);
+      console.log();
     }
     dispatch(setOtherActiveTab(dmId));
     navigate(`/channels/@me/${dmId}`);

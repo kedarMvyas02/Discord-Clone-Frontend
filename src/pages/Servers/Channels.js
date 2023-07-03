@@ -56,34 +56,14 @@ const Channels = ({ newId, setMembers }) => {
   const { getSocket } = useSocket();
   const socket = getSocket();
   const data = useSelector((state) => state?.server?.serverData);
+  if (data?.members) {
+    setMembers(data?.members);
+  }
 
   useEffect(() => {
     dispatch(getServer(newId));
-    if (data?.members) {
-      setMembers(data?.members);
-    }
-    // const memberExist = data?.members?.filter(
-    //   (friend) => friend?.user?._id === user?._id
-    // );
-    // if (!memberExist) {
-    //   navigate("/channels/@me");
-    // }
-
     dispatch(getUserDetails());
   }, [newId]);
-
-  const handleUserOnline = () => {
-    // dispatch(getServer(newId));
-    // setMembers(data?.members);
-  };
-
-  useEffect(() => {
-    socket?.on("user-online", handleUserOnline);
-
-    return () => {
-      socket?.off("user-online", handleUserOnline);
-    };
-  }, [socket]);
 
   const handleCloseDeleteModal = () => {
     setChannelModal((prevState) => {
@@ -202,7 +182,6 @@ const Channels = ({ newId, setMembers }) => {
       await client.post(`/server/leave/${serverId}`, {
         uniqueCode: user?.uniqueCode,
       });
-      console.log("im here");
       navigate("/discover");
       dispatch(getJoinedServers());
     } catch (error) {

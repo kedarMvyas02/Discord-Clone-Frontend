@@ -12,6 +12,7 @@ const OnlineUsers = ({ allMembers }) => {
       <div className="pl-3 pt-3 select-none">
         {allMembers?.map(({ user }) => (
           <Popup
+            key={user?._id}
             position="left top"
             trigger={
               <div className="text-discord-sideBarChannels cursor-pointer mt-2 hover:text-discord-100 flex hover:bg-discord-selectMuted p-2 rounded-md">

@@ -2,7 +2,7 @@ import React from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Formik, Form } from "formik";
 import ResetPasswordSchema from "../../validation/resetPassword.schema";
-import TextField from "../../components";
+import TextField from "../../components/TextField";
 import { resetPassword } from "../../api/auth";
 import LoginBg from "../../assets/login_bg.svg";
 import ErrorModal from "../Modal/ErrorModal";

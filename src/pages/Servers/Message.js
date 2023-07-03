@@ -69,13 +69,13 @@ const Message = ({
           <Popup
             trigger={
               <span className="hover:underline text-white text-sm cursor-pointer">
-                {`${name}#${uniqueCode}`}
+                {`${name} #${uniqueCode}`}
               </span>
             }
           >
             <PopupUser user={popUpUser} />
           </Popup>
-          <span className="text-discord-popOutHeader text-xs">
+          <span className="text-discord-popOutHeader select-none text-xs">
             {new Date(createdAt).toLocaleString()}
           </span>
         </h4>
@@ -104,9 +104,10 @@ const Message = ({
         ) : (
           <>
             <p
-              className="text-sm text-discord-100"
+              className="text-xm text-discord-100"
               dangerouslySetInnerHTML={{ __html: formatLinks(content) }}
             ></p>
+            {/* text-sm */}
           </>
         )}
       </div>

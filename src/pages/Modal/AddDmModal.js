@@ -1,40 +1,14 @@
-import React, { useEffect, useState } from "react";
-import client from "../../api/client";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllFriends } from "../../store/dmFriends";
 
 const AddDmModal = ({ visible, onClose, submitHandler }) => {
-  const [data, setData] = useState(null);
-  const allFriends = useSelector((state) => state.dmFriends.allFriends);
+  const allFriends = useSelector((state) => state?.dmFriends?.allFriends);
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(getAllFriends());
   }, []);
-
-  useEffect(() => {
-    setData(allFriends);
-    // const fetchServer = async () => {
-    //   // socket.emit("get_dm_friends", { user: user_id });
-
-    //   // const res = await client.get("/server/getDmFriends");
-    //   // console.log(res?.data?.dmFriends);
-    //   // socket.on("got_dm_friends", (data) => {
-    //   //   console.log(data);
-    //   // });
-    // };
-    // // fetchServer();
-  }, [allFriends]);
-
-  // useEffect(() => {
-  //   const fetchFriends = async () => {
-  //     try {
-  //       const res = await client.get("/users/getFriends/");
-  //       setData(res?.data?.allFriends);
-  //     } catch (error) {}
-  //   };
-  //   fetchFriends();
-  // }, [render]);
 
   if (!visible) return null;
 
@@ -61,9 +35,10 @@ const AddDmModal = ({ visible, onClose, submitHandler }) => {
           <br />
           <hr className=" border-y-discord-transparentBlack1 border w-full mx-auto" />
 
-          {data ? (
-            data?.map((data) => (
+          {allFriends ? (
+            allFriends?.map((data) => (
               <div
+                key={data?._id}
                 onClick={() => forSubmit(data)}
                 className="select-none font-medium flex items-center text-discord-500 cursor-pointer hover:bg-discord-900 hover:bg-opacity-50 p-2 pl-0 mt-2  mx-2 rounded-md hover:text-white text-base"
               >

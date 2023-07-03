@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { Formik, Form, ErrorMessage, Field } from "formik";
 import RegisterSchema from "../../validation/register.schema";
-import TextField from "../../components";
+import TextField from "../../components/TextField";
 import { register } from "../../api/auth";
 import { loginSuccess } from "../../store/user";
 import LoginBg from "../../assets/login_bg.svg";
@@ -245,27 +245,3 @@ export default function Index() {
     </div>
   );
 }
-/**
- * 
- *   const { visible, heading, subHeading } = useSelector(
-    (state) => state.errorModal
-  );
-
-
-<ErrorModal
-        visible={visible}
-        onClose={handleCloseErrorModal}
-        heading={heading}
-        subHeading={subHeading}
-      />
-
-
-const handleCloseErrorModal = () => {
-    dispatch(hideErrorModal());
-  };
-
-
-const heading = `${error.response.data.status}`;
-      const subHeading = `${error.response.data.message}`;
-      dispatch(showErrorModal({ heading, subHeading }));
- */
