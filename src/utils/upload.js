@@ -10,8 +10,9 @@ const upload = async (file, onProgress) => {
       const progress = Math.round(
         (progressEvent.loaded * 100) / progressEvent.total
       );
-      console.log(progress);
-      onProgress(progress);
+      if (onProgress) {
+        onProgress(progress);
+      }
     },
     withCredentials: false,
   };

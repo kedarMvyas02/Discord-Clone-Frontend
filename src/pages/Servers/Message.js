@@ -72,6 +72,22 @@ const Message = ({
                 {`${name} #${uniqueCode}`}
               </span>
             }
+            position={[
+              'top left',
+              'top center',
+              'top right',
+              'right top',
+              'right center',
+              'right bottom',
+              'bottom left',
+              'bottom center',
+              'bottom right',
+              'left top',
+              'left center',
+              'left bottom',
+              'center center',
+            ]}
+            arrow
           >
             <PopupUser user={popUpUser} />
           </Popup>

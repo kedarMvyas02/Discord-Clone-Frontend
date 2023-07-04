@@ -22,22 +22,31 @@ export default function Index() {
     dispatch(hideErrorModal());
   };
 
-  async function handleRegisterSubmit(values, { setErrors }) {
-    const avatar = await upload(values?.userImage);
+  async function handleRegisterSubmit(values) {
+    let data;
     try {
-      const { data } = await register({
-        name: values.username,
-        email: values.email,
-        userImage: avatar,
-        password: values.password,
-        passwordConfirm: values.password,
-      });
+      if (values?.userImage) {
+        const avatar = await upload(values?.userImage);
+        const res = await register({
+          name: values.username,
+          email: values.email,
+          userImage: avatar,
+          password: values.password,
+          passwordConfirm: values.password,
+        });
+        data = res?.data;
+      } else {
+        const res = await register({
+          name: values.username,
+          email: values.email,
+          password: values.password,
+          passwordConfirm: values.password,
+        });
+        data = res?.data;
+      }
 
       if (data) {
         dispatch(loginSuccess(data));
-
-        const heading = `You have logged in successfully ${values?.username} :)`;
-        dispatch(showErrorModal({ heading }));
 
         navigate("/channels/@me");
       }

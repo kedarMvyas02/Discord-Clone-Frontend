@@ -93,13 +93,14 @@ const Chat = () => {
     };
   };
 
-  const handleUserTyping = ({ to, from }) => {
-    if (to === channelId) {
+  const handleUserTyping = (data) => {
+    console.log(channelId);
+    if (data?.to === channelId) {
       setIsTyping((prevState) => {
         return {
           ...prevState,
           toggle: true,
-          data: from,
+          data: data?.from,
         };
       });
 
@@ -121,7 +122,7 @@ const Chat = () => {
     return () => {
       socket?.off("typing-channel", handleUserTyping);
     };
-  }, [socket]);
+  }, [socket, channelId]);
 
   useEffect(() => {
     const fetchMessages = async () => {
@@ -176,7 +177,9 @@ const Chat = () => {
   };
 
   const handleDivClick = () => {
-    inputRef.current.click();
+    try {
+      inputRef.current.click();
+    } catch (error) {}
   };
 
   const handleDeleteMessage = (_id) => {

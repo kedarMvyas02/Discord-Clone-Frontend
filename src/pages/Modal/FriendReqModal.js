@@ -33,7 +33,7 @@ const FriendReqModal = ({ visible, onClose, submitHandler }) => {
             Send a Friend Request!
           </h4>
           <h6 className="text-s text-white font-light text-center">
-            You can add friends with their unique code : )
+            You have to add friends with their unique code : )
           </h6>
 
           <Formik

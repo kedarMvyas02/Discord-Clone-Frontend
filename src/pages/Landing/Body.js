@@ -73,9 +73,9 @@ const Body = () => {
               RELIABLE TECH FOR STAYING CLOSE
             </h1>
             <p className="w-full md:w-9/12 px-2 sm:px-4 mt-8 md:text-center text-left text-base text-discord-notQuiteDark ">
-              Low-latency voice and video feels like you’re in the same room.
-              Wave hello over video, watch friends stream their games, or gather
-              up and have a drawing session with screen share.
+              Voice, video and screen-sharing features makes you feel like
+              you’re in the same room. Watch friends stream their games, or
+              gather up and have a drawing session with screen share.
             </p>
           </div>
 

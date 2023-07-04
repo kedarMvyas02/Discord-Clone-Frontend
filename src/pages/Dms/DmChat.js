@@ -170,7 +170,9 @@ const DmChat = ({ setOpenUserProfile, openUserProfile, data, setData }) => {
   };
 
   const handleDivClick = () => {
-    inputRef.current.click();
+    try {
+      inputRef.current.click();
+    } catch (error) {}
   };
 
   const handleEmojiClick = (event) => {

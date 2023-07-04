@@ -71,6 +71,22 @@ const Message = ({
                 {`${name}#${uniqueCode}`}
               </span>
             }
+            position={[
+              "top left",
+              "top center",
+              "top right",
+              "right top",
+              "right center",
+              "right bottom",
+              "bottom left",
+              "bottom center",
+              "bottom right",
+              "left top",
+              "left center",
+              "left bottom",
+              "center center",
+            ]}
+            arrow
           >
             <PopupUser user={popUpUser} />
           </Popup>
@@ -112,7 +128,7 @@ const Message = ({
         )}
       </div>
 
-      {!isImage && (
+      {!isImage && !isVideo && !isAudio ? (
         <div
           onClick={pinMessageHandler}
           className="hover:bg-discord-indigo text-discord-indigo mr-2 hover:text-white cursor-pointer p-1 ml-auto rounded-2xlg"
@@ -129,7 +145,7 @@ const Message = ({
             ></path>
           </svg>
         </div>
-      )}
+      ) : null}
 
       {user?.uniqueCode === uniqueCode && (
         <div
