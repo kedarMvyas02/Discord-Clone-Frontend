@@ -14,8 +14,8 @@ const SocketContext = createContext();
 const SocketProvider = ({ children }) => {
   let socket;
 
-  socket = io("http://127.0.0.1:8000");
-  // socket = io("https://discordclonekedar.onrender.com/");
+  // socket = io("http://127.0.0.1:8000");
+  socket = io("https://discordclonekedar.onrender.com/");
 
   const disconnectSocket = () => {
     if (socket) {
