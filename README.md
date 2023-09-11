@@ -1,70 +1,103 @@
-# Getting Started with Create React App
+# Discord Clone
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Discord clone is made with MERN stack (MongoDB, Express.js, React.js & Node.js) and made realtime with Socket.io
 
-## Available Scripts
+## Installation
 
-In the project directory, you can run:
+first of all clone this repo
 
-### `npm start`
+```bash
+git clone git@github.com:kedarMvyas02/Discord-Clone-Frontend.git
+```
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+```bash
+git clone git@github.com:kedarMvyas02/Discord-Clone-Backend.git
+```
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+then change directory to both backend and frontend in two terminals
 
-### `npm test`
+```bash
+cd frontend
+```
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+install node modules
 
-### `npm run build`
+```bash
+npm i
+```
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+start the application on your localhost
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+```bash
+npm start
+```
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## Contributing
 
-### `npm run eject`
+Pull requests are welcome. For major changes, please open an issue first
+to discuss what you would like to change.
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+## Tech Stack
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+**Client:** React, Redux Toolkit, TailwindCSS
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+**Server:** Node, Express
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+**Database:** Mongodb
 
-## Learn More
+## Demo
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+https://discord-clone-kedarmvyas02.vercel.app/
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+## Authors
 
-### Code Splitting
+- [@kedarMvyas02](https://github.com/kedarMvyas02)
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+## Environment Variables
 
-### Analyzing the Bundle Size
+To run this project, you will need to add the following environment variables to your .env file in `backend folder`
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+`PORT`
 
-### Making a Progressive Web App
+#### jsonwebtoken (jwt) configurations
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+`JWT_SALT`
+`JWT_SECRET`
 
-### Advanced Configuration
+#### mongodb configurations
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+`CONNECTION_STRING`
 
-### Deployment
+#### gmail configurations
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+`EMAIL_USERNAME`
+`EMAIL_PASSWORD`
+`EMAIL_HOST`
+`EMAIL_PORT`
 
-### `npm run build` fails to minify
+#### cloudinary configurations
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+`CLOUDINARY_URL`
+`CLOUD_NAME`
+`CLOUD_API_KEY`
+`CLOUD_API_SECRET`
+
+#### 100ms management token
+
+`MANAGEMENT_TOKEN`
+`APP_ACCESS_KEY`
+`APP_SECRET`
+`TEMPLATE_ID`
+
+#### encryption
+
+`ENCRYPTION_ALGORITHM`
+`ENCRYPTION_SECRET_KEY`
+
+#### open ai api key
+
+`OPENAI_API_KEY`
+
+## 🚀 About Me
+
+I'm a passionate full stack MERN developer...
