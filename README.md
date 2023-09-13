@@ -45,6 +45,8 @@ to discuss what you would like to change.
 
 **Database:** Mongodb
 
+**Realtime:** Socket.io
+
 ## Demo
 
 https://discord-clone-kedarmvyas02.vercel.app/
