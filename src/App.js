@@ -1,5 +1,5 @@
 import React, { Suspense, lazy, useEffect } from "react";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Route, Routes, useNavigate } from "react-router-dom";
 import { useHMSActions } from "@100mslive/react-sdk";
 import { useSocket } from "./socket";
 import { GetUser } from "./hooks/redux/index";
@@ -28,6 +28,33 @@ const App = () => {
   useEffect(() => {
     socket.emit("add-user", { user_id: user?._id });
   }, [user, socket]);
+
+  const handleNewMessageNotification = ({ populatedChat }) => {
+    Notification.requestPermission().then((perm) => {
+      if (perm === "granted") {
+        new Notification(`New Message from ${populatedChat?.sender?.name}`, {
+          body: populatedChat?.content,
+          data: populatedChat?.sender?._id,
+        });
+      }
+    });
+  };
+
+  useEffect(() => {
+    socket?.on("navoMessage", handleNewMessageNotification);
+
+    return () => {
+      socket?.off("navoMessage", handleNewMessageNotification);
+    };
+  }, [socket]);
+
+  useEffect(() => {
+    socket?.on("message", handleNewMessageNotification);
+
+    return () => {
+      socket?.off("message", handleNewMessageNotification);
+    };
+  }, [socket]);
 
   useEffect(() => {
     window.onunload = () => {
